@@ -9,6 +9,10 @@ import copy
 import Particle as PA
 
 
+class PSO:
+    def __repr__(self):
+        return "PSO";
+'''
 # Global variables
 g_swarm_size  = 5
 g_Dimention   = 3
@@ -38,7 +42,11 @@ def main():
         
         g_swarm.append(copy.deepcopy(particle.getPosition()))
 
-        particle.printing()
+    particle.print()
+
+    #for i in range(g_repeatation):
+
+        #particle.update()
 
     print("the swarm ", g_swarm)
 
@@ -47,3 +55,4 @@ if __name__ == '__main__':
     main()
 
 
+'''
