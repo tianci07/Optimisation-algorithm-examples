@@ -3,9 +3,11 @@ import math
 import numpy as np
 import copy
 import sys
+import PSO
+
 
 class Particle:
-    def __init__(self):
+    def __init__(self, aNumberOfDimentions, aBoundarySet, aCostFunction, aPSO):
         self.position = []
         self.velocity = []
         self.cost = float('inf')
@@ -13,7 +15,10 @@ class Particle:
         self.best_known_cost = float('inf')
         self.boundary_set = []
     
-    def Particle(self, aNumberOfDimentions, aBoundarySet, aCostFunction, aPSO):
+        # Inconsistencies between the number of boundaries and the number of dimensions
+        if len(aBoundarySet) != aNumberOfDimentions:
+            print("ERROR");
+        
         # Store the boundary set
         # e.g. [[min_0, max_0][min_1, max_1][min_2, max_2]]
         self.boundary_set = aBoundarySet;
@@ -23,7 +28,8 @@ class Particle:
         
         # Store the PSO
         self.pso = aPSO;
-        self.position = []
+
+        print("aNumberOfDimentions", aNumberOfDimentions)
         # Initialise the particle's position and velocity
         for i in range(aNumberOfDimentions):
             # Get the boundaries
@@ -35,29 +41,22 @@ class Particle:
         
             # Compute the velocity
             self.velocity.append((random.uniform(min_i, max_i) - self.position[i]) / 2.0);
-            
-            # Compute the cost function
-            #self.computeCostFunction();
+        
+        # Compute the cost function
+        self.computeCostFunction();
 
     def getPosition(self):
-    
         return(self.position)
     
     def computeCostFunction(self):
         # Compute the cost function
-        self.cost = self.cost_function(self.getPosition())
+        print(len(self.position), self.position)
+        self.cost = self.cost_function(self.position)
         
         # Update the particle's best known position if needed
         if self.best_known_cost > self.cost:
             self.best_known_cost = self.cost;
             self.best_known_position = self.position;
-
-    def cost_function(self, aPosition):
-
-        #Compute the eqation (2x + y + 5z = 10)
-        sum = (2.0 * aPosition[0]) + aPosition[1] + (5.0 * aPosition[2])
-
-        return (abs(sum - 10))
 
     
     def update(self):
@@ -78,10 +77,12 @@ class Particle:
             pos_i += vel_i;
         
     
-    def printing(self):
-        print("the position", self.position)
-        print()
-        print("the velocity", self.velocity)
-        print()
-        print("the cost", self.cost)
-        print("the boundary", self.boundary_set)
+    def __repr__(self):
+        value = "Position:\t";
+        value += " ".join(str(i) for i in self.position);
+        value = "\tvelocity:\t";
+        value += " ".join(str(i) for i in self.velocity);
+        value = "\tcost:\t";
+        value += str(self.cost);
+        
+        return value;
