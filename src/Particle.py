@@ -1,12 +1,17 @@
-import random;
+import random
+import math
+import numpy as np
+import copy
+import sys
 
 class Particle:
-    self.position = [];
-    self.velocity = [];
-    self.cost = float('inf');
-    self.best_known_position = [];
-    self.best_known_cost = float('inf');
-    self.boundary_set = [];
+    def __init__(self):
+        self.position = []
+        self.velocity = []
+        self.cost = float('inf')
+        self.best_known_position = []
+        self.best_known_cost = float('inf')
+        self.boundary_set = []
     
     def Particle(self, aNumberOfDimentions, aBoundarySet, aCostFunction, aPSO):
         # Store the boundary set
@@ -32,8 +37,8 @@ class Particle:
             self.velocity.append((random.uniform(min_i, max_i) - self.position[i]) / 2.0)
             
             
-        # Compute the cost function
-        computeCostFunction();
+            # Compute the cost function
+            computeCostFunction();
 
     def computeCostFunction(self):
         # Compute the cost function
@@ -44,6 +49,14 @@ class Particle:
             self.best_known_cost = self.cost;
             self.best_known_position = self.position;
 
+    def cost_function(self, aPosition):
+
+        #Compute the eqation (2x + y + 5z = 10)
+        sum = (2.0 * aPosition[0]) + aPosition[1] + (5.0 * aPosition[2])
+
+        return (abs(sum - 10))
+
+    
     def update(self):
         self.updateVelocity();
         self.updatePosition();
@@ -53,9 +66,7 @@ class Particle:
         w = 0.721
         c = 1.193
         for pos_i, part_best_pos_i, swarm_best_pos_i, vel_i in zip(self.position, self.best_known_position, self.pso.best_particle.position, self.velocity):
-            vel_i = w * vel_i +
-                             random.uniform(0.0, c) * (part_best_pos_i - pos_i) +
-                             random.uniform(0.0, c) * (swarm_best_pos_i - pos_i) +
+            vel_i = w * vel_i + random.uniform(0.0, c) * (part_best_pos_i - pos_i) + random.uniform(0.0, c) * (swarm_best_pos_i - pos_i)
 
     def updatePosition(self):
         # for each partical update the position
@@ -63,8 +74,10 @@ class Particle:
             pos_i += vel_i;
         
     
-    def print(self):
-        # Print the position
-        # Print the velocity
-        # Print the cost
-        # Print the position
+    def printing(self):
+        print("the position", self.position)
+        print()
+        print("the velocity", self.velocity)
+        print()
+        print("the cost", self.cost)
+
