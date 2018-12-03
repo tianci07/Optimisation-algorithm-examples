@@ -37,7 +37,7 @@ class Particle:
             self.velocity.append((random.uniform(min_i, max_i) - self.position[i]) / 2.0);
             
             # Compute the cost function
-            self.computeCostFunction();
+            #self.computeCostFunction();
 
     def getPosition(self):
     
@@ -66,8 +66,9 @@ class Particle:
     
     def updateVelocity(self):
     
-        w = 0.721
-        c = 1.193
+        w = 1 / (2 * log(2))
+        c = 1 / 2 + log(2)
+        
         for pos_i, part_best_pos_i, swarm_best_pos_i, vel_i in zip(self.position, self.best_known_position, self.pso.best_particle.position, self.velocity):
             vel_i = w * vel_i + random.uniform(0.0, c) * (part_best_pos_i - pos_i) + random.uniform(0.0, c) * (swarm_best_pos_i - pos_i)
 
