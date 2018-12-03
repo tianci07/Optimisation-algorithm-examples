@@ -19,11 +19,11 @@ class Particle:
         self.boundary_set = aBoundarySet;
         
         # Store the cost function
-        self.cost_function = aCostFunction;
+        self.cost_function = aCostFunction
         
         # Store the PSO
         self.pso = aPSO;
-
+        self.position = []
         # Initialise the particle's position and velocity
         for i in range(aNumberOfDimentions):
             # Get the boundaries
@@ -34,15 +34,18 @@ class Particle:
             self.position.append(random.uniform(min_i, max_i));
         
             # Compute the velocity
-            self.velocity.append((random.uniform(min_i, max_i) - self.position[i]) / 2.0)
-            
+            self.velocity.append((random.uniform(min_i, max_i) - self.position[i]) / 2.0);
             
             # Compute the cost function
-            computeCostFunction();
+            self.computeCostFunction();
 
+    def getPosition(self):
+    
+        return(self.position)
+    
     def computeCostFunction(self):
         # Compute the cost function
-        self.cost = self.cost_function(self.position);
+        self.cost = self.cost_function(self.getPosition())
         
         # Update the particle's best known position if needed
         if self.best_known_cost > self.cost:
@@ -80,4 +83,4 @@ class Particle:
         print("the velocity", self.velocity)
         print()
         print("the cost", self.cost)
-
+        print("the boundary", self.boundary_set)
