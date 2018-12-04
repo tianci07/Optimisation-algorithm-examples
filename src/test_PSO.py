@@ -4,6 +4,8 @@ import PSO;
 import Particle;
 
 g_number_of_dimensions = 3;
+g_number_of_particle   = 10;
+g_iteratio             = 10;
 
 def costFunction(aPosition):
     
@@ -14,12 +16,14 @@ def costFunction(aPosition):
 
 boundaries = [[0, 10],[0, 10],[0, 10]];
 
-#my_pso = PSO.PSO(number_of_particle, dimensions, boundaries, costFunction);
+my_pso = PSO.PSO(g_number_of_dimensions, boundaries, costFunction, g_number_of_particle);
 my_pso = PSO.PSO();
 
 my_particle = Particle.Particle(g_number_of_dimensions, boundaries, costFunction, my_pso);
 print(my_particle);
+print()
+print(my_pso)
 
-#solution = my_pso.run();
+#solution = my_pso.run(g_iteratio);
 #print(solution);
 #print(solution);
