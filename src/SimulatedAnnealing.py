@@ -106,7 +106,7 @@ class SimulatedAnnealing:
             if aRetartFlag:
                 if iteration != 0:
                     if (self.current_energy - self.min_energy) / (self.max_energy - self.min_energy) > 0.9:
-                        print("Restart")
+                        #print("Restart")
                         self.current_solution = self.best_solution;
                         self.current_energy   = self.best_energy;
 
@@ -124,7 +124,7 @@ class SimulatedAnnealing:
 
             # The neighbour is better thant the current element
             if self.best_energy > self.current_energy:
-                print("Best energy was ", self.best_energy, "it is now ", self.current_energy)
+                #print("Best energy was ", self.best_energy, "it is now ", self.current_energy)
                 self.best_solution = copy.deepcopy(self.current_solution);
                 self.best_energy = self.current_energy;
 

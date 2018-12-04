@@ -104,7 +104,6 @@ def plot(anOptimiser):
         global xdata3, ydata3, zdata3;
 
         #positions.append([optimiser.best_solution_set[i][0], optimiser.best_solution_set[i][1], optimiser.best_energy_set[i]]);
-        print(i)
 
         xdata1, ydata1, zdata1 = [], [], [];
         xdata3, ydata3, zdata3 = [], [], [];
@@ -145,11 +144,5 @@ optimiser = SA.SimulatedAnnealing(g_number_of_dimensions, boundaries, costFuncti
 optimiser.run(False, False);
 print(optimiser)
 plot(optimiser);
-
-
-optimiser.run(False, False);
-print(optimiser)
-plot(optimiser);
-
 
 exit();
