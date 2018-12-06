@@ -6,15 +6,17 @@ import Particle as PA
 
 class PSO:
     
-    
-    def __init__(self, aNumberOfDimensions, aBoundarySet, aCostFunction, aNumberOfParticles):
-        
+    def __init__(self):
+        print("__init__(self)")
         # Initialise attributes
         self.particle_set = [];
+        # Save the best partical
         self.best_particle_set = [];
         self.best_cost_set = [];
-        self.best_cost = float('inf')
-        
+
+
+    def PSO(self, aNumberOfDimensions, aBoundarySet, aCostFunction, aNumberOfParticles):
+        print("PSO(...)")
         # and copy input parameters
         self.number_of_dimensions = aNumberOfDimensions;
         self.boundary_set = copy.deepcopy(aBoundarySet);
@@ -24,33 +26,30 @@ class PSO:
         for i in range(aNumberOfParticles):
             self.particle_set.append(PA.Particle(aNumberOfDimensions, aBoundarySet, aCostFunction, self))
 
-    def computeCost(self, aParticle):
-        
-        if self.best_cost > aParticle.cost:
-            self.best_cost = aParticle.cost;
-            self.best_particle = PA.Particle(aParticle);
-            self.best_particle_set.append(copy.deepcopy(aParticle.position))
-            self.best_cost_set.append(cost)
+            if len(self.best_cost_set) == 0:
+                self.best_cost_set.append(self.particle_set[-1].cost)
+                self.best_particle_set.append(copy.deepcopy(self.particle_set[-1].position))
 
-        return cost;
-   
+            elif self.best_cost_set[-1] > self.particle_set[-1].cost:
+                self.best_cost_set.append(self.particle_set[-1].cost)
+                self.best_particle_set.append(copy.deepcopy(self.particle_set[-1].position))
+
     def run(self):
+        
         # For each partical
-        for i in range(aNumberOfParticles):
+        for particle in self.particle_set:
+            
             # update the particales' positions and velocities
-            Particle.update()
+            particle.update()
 
-            if (self.best_cost_set[i] < self.best_cost):
-                #Update partical's best known position
-                self.best_particle = self.best_particle_set[i]
+            if len(self.best_cost_set) == 0:
+                self.best_cost_set.append(particle.cost)
+                self.best_particle_set.append(copy.deepcopy(particle.position))
 
-                if (self.best_cost < self.best_cost_set[i+1]):
-                    # Update the swarm's best known position
-                    self.best_cost_set[i+1] = self.best_cost
+            elif self.best_cost_set[-1] > self.particle_set[-1].cost:
+                self.best_cost_set.append(particle.cost)
+                self.best_particle_set.append(copy.deepcopy(particle.position))
 
-
-                
-    
     def __repr__(self):
         value = "Best particle: ";
         value += ' '.join(str(e) for e in self.best_particle)
