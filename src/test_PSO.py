@@ -1,11 +1,23 @@
 #!/usr/bin/env python3
 
-import PSO;
-import Particle;
+import math;
+
+import numpy as np
+
+import matplotlib
+matplotlib.use("TkAgg")
+
+import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
+from matplotlib import animation
+
+from PSO import PSO
+import Particle
 
 g_number_of_dimensions = 3;
 g_number_of_particle   = 10;
-g_iteratio             = 10;
+g_iteratio             = 100;
+
 
 def costFunction(aPosition):
     
@@ -14,16 +26,38 @@ def costFunction(aPosition):
     
     return (abs(sum - 10))
 
-boundaries = [[0, 10],[0, 10],[0, 10]];
+boundaries = []
 
-my_pso = PSO.PSO(g_number_of_dimensions, boundaries, costFunction, g_number_of_particle);
-my_pso = PSO.PSO();
+for i in range(g_number_of_dimensions):
+    boundaries.append([0,10]);
 
-my_particle = Particle.Particle(g_number_of_dimensions, boundaries, costFunction, my_pso);
-print(my_particle);
-print()
+#my_particle = my_particle.Particle(g_number_of_dimensions, boundaries, costFunction, my_pso);
+
+my_pso = PSO()
+my_pso.set(g_number_of_dimensions, boundaries, costFunction, g_number_of_particle);
+#my_pso = PSO.PSO();
+
+
+#print(my_particle);
+#print()
 print(my_pso)
 
-#solution = my_pso.run(g_iteratio);
+# Run the algorithm for 100 iteration
+for i in range(g_iteratio):
+    solution = my_pso.run();
+    
+    position_x = [];
+    position_y = [];
+    position_z = [];
+    
+    for particle in my_pso.particle_set:
+        position_x.append(particle.position[0]);
+        position_y.append(particle.position[1]);
+        position_z.append(particle.position[2]);
+    
+    # Plot here the swarm
+    
+
+    print(i, solution);
 #print(solution);
-#print(solution);
+print(my_pso)
