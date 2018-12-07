@@ -13,10 +13,17 @@ class PSO:
         # Save the best partical
         self.best_particle_set = [];
         self.best_cost_set = [];
+       
 
-
-    def PSO(self, aNumberOfDimensions, aBoundarySet, aCostFunction, aNumberOfParticles):
+    def set(self, aNumberOfDimensions, aBoundarySet, aCostFunction, aNumberOfParticles):
         print("PSO(...)")
+        # Initialise attributes
+        self.particle_set = [];
+        
+        # Save the best partical
+        self.best_particle_set = [];
+        self.best_cost_set = [];
+        
         # and copy input parameters
         self.number_of_dimensions = aNumberOfDimensions;
         self.boundary_set = copy.deepcopy(aBoundarySet);
@@ -24,7 +31,8 @@ class PSO:
 
         # Create the particles
         for i in range(aNumberOfParticles):
-            self.particle_set.append(PA.Particle(aNumberOfDimensions, aBoundarySet, aCostFunction, self))
+            self.particle_set.append(PA.Particle())
+            self.particle_set[-1].set(aNumberOfDimensions, aBoundarySet, aCostFunction, self)
 
             if len(self.best_cost_set) == 0:
                 self.best_cost_set.append(self.particle_set[-1].cost)
@@ -50,11 +58,13 @@ class PSO:
                 self.best_cost_set.append(particle.cost)
                 self.best_particle_set.append(copy.deepcopy(particle.position))
 
+        return self.best_particle_set[-1]
+
     def __repr__(self):
         value = "Best particle: ";
-        value += ' '.join(str(e) for e in self.best_particle)
+        value += ' '.join(str(e) for e in self.best_particle_set[-1])
         value += "\tCorresponding cost: ";
-        value += str(self.best_cost);
+        value += str(self.best_cost_set[-1]);
         return value;
 
 
