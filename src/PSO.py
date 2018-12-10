@@ -33,6 +33,7 @@ class PSO:
 
         # Store the best particle
         self.best_particle_set.append(copy.deepcopy(best_particle))
+        self.best_particle = copy.deepcopy(best_particle);
 
     def run(self):
 
@@ -52,11 +53,15 @@ class PSO:
         # Store the best particle
         self.best_particle_set.append(copy.deepcopy(best_particle))
 
+        # The new particle is better
+        if self.best_particle.cost > best_particle.cost:
+            self.best_particle = copy.deepcopy(best_particle)
+
         return self.best_particle_set[-1];
 
 
 
     def __repr__(self):
         value = "Best particle: ";
-        value += self.best_particle_set[-1].__repr__();
+        value += self.best_particle.__repr__();
         return value;
