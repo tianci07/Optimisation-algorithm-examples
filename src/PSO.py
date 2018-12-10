@@ -17,7 +17,6 @@ class PSO:
 
         # and copy input parameters
         self.number_of_dimensions = aNumberOfDimensions;
-        self.boundary_set = copy.deepcopy(aBoundarySet);
 
         # Keep track of the best particle
         best_particle = PA.Particle();
