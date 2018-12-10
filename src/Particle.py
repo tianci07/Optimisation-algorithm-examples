@@ -27,6 +27,7 @@ class Particle:
         # Store the PSO
         self.pso = aPSO;
         self.position = []
+
         # Initialise the particle's position and velocity
         for i in range(aNumberOfDimentions):
             # Get the boundaries
@@ -59,7 +60,7 @@ class Particle:
         # Update the particle's best known position if needed
         if self.best_known_cost > self.cost:
             self.best_known_cost = self.cost;
-            self.best_known_position = self.position;
+            self.best_known_position = copy.deepcopy(self.position);
 
         return self.cost;
 
