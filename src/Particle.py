@@ -88,9 +88,14 @@ class Particle:
     def updatePosition(self):
         
         # for each partical update the position
+        new_position = []
+        
         for pos_i, vel_i in zip(self.position, self.velocity):
             pos_i += vel_i;
-
+            new_position.append(pos_i)
+        
+        self.position = copy.deepcopy(new_position)
+                                      
         self.computeCostFunction();
 
     def __repr__(self):
