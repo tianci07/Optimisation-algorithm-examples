@@ -47,6 +47,10 @@ def costFunction(aSolution):
 
 
 def plot(anOptimiser):
+    global best_particle_x;
+    global best_particle_y;
+    global best_particle_z;
+
     fig = plt.figure()
     ax = fig.add_subplot(111, projection='3d')
 
@@ -90,7 +94,7 @@ def plot(anOptimiser):
 
 
 
-    '''numframes = len(optimiser.best_solution_set)
+    numframes = len(best_particle_x)
 
     xdata1, ydata1, zdata1 = [], [], [];
     xdata2, ydata2, zdata2 = [], [], [];
@@ -101,6 +105,7 @@ def plot(anOptimiser):
     scat3 = ax.scatter([], [], [], marker='o', c='black', s=30) # The last current solution
 
     positions = [];
+
     def update(i):
         global xdata1, ydata1, zdata1;
         global xdata2, ydata2, zdata2;
@@ -138,10 +143,19 @@ def plot(anOptimiser):
 
         return
 
-    ani = animation.FuncAnimation(fig, update, frames=range(numframes), repeat=False)'''
+    ani = animation.FuncAnimation(fig, update, frames=range(numframes), repeat=False)
     plt.show()
 
 
 my_pso = PSO(g_number_of_dimensions, boundaries, costFunction, g_number_of_particle);
+best_particle_x = [];
+best_particle_y = [];
+best_particle_z = [];
+for i in range(g_iterations):
+    my_pso.run();
+    best_particle_x.append(my_pso.best_particle.position[0])
+    best_particle_y.append(my_pso.best_particle.position[1])
+    best_particle_z.append(my_pso.best_particle.cost)
+
 plot(my_pso)
 print(my_pso)
