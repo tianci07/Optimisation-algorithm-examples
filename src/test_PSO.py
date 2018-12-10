@@ -79,67 +79,44 @@ def plot(anOptimiser):
         Y.append(Temp_Y);
         Z.append(Temp_Z);
 
-    '''for best_solution, best_energy, current_solution, current_energy in zip(anOptimiser.best_solution_set, anOptimiser.best_energy_set, anOptimiser.current_solution_set, anOptimiser.current_energy_set):
-        linear_x.append(best_solution[0]);
-        linear_y.append(best_solution[1]);
-        linear_z.append(best_energy);
-
-    #    ax.scatter(   best_solution[0],    best_solution[1],    best_energy, c='r');
-    #    ax.scatter(current_solution[0], current_solution[1], current_energy, c='g');'''
-
     # Plot a basic wireframe.
     ax.plot_wireframe(np.array(X), np.array(Y), np.array(Z), rstride=10, cstride=10)
-
-
-
-
 
     numframes = len(best_particle_x)
 
     xdata1, ydata1, zdata1 = [], [], [];
     xdata2, ydata2, zdata2 = [], [], [];
-    xdata3, ydata3, zdata3 = [], [], [];
 
     scat1 = ax.scatter([], [], [], marker='o', c='r', s=30) # Best solution
     scat2 = ax.scatter([], [], [], marker='o', c='g', s=10) # All the current solutions
-    scat3 = ax.scatter([], [], [], marker='o', c='black', s=30) # The last current solution
 
-    positions = [];
 
     def update(i):
         global xdata1, ydata1, zdata1;
         global xdata2, ydata2, zdata2;
-        global xdata3, ydata3, zdata3;
 
-        #positions.append([optimiser.best_solution_set[i][0], optimiser.best_solution_set[i][1], optimiser.best_energy_set[i]]);
+        global best_particle_x;
+        global best_particle_y;
+        global best_particle_z;
+
+        global set_particle_set_x;
+        global set_particle_set_y;
+        global set_particle_set_z;
 
         xdata1, ydata1, zdata1 = [], [], [];
-        xdata3, ydata3, zdata3 = [], [], [];
-
-        if i == 0:
-            xdata2, ydata2, zdata2 = [], [], [];
-
-
-        #xdata1, ydata1, zdata1 = [], [], [];
 
         # Best solution in red
-        xdata1.append(optimiser.best_solution_set[i][0]);
-        ydata1.append(optimiser.best_solution_set[i][1]);
-        zdata1.append(optimiser.best_energy_set[i]);
+        xdata1.append(best_particle_x[i]);
+        ydata1.append(best_particle_y[i]);
+        zdata1.append(best_particle_z[i]);
 
         # All the current solution
-        xdata2.append(optimiser.current_solution_set[i][0]);
-        ydata2.append(optimiser.current_solution_set[i][1]);
-        zdata2.append(optimiser.current_energy_set[i]);
-
-        # The last current solution
-        xdata3.append(optimiser.current_solution_set[i][0]);
-        ydata3.append(optimiser.current_solution_set[i][1]);
-        zdata3.append(optimiser.current_energy_set[i]);
+        xdata2 = set_particle_set_x[i];
+        ydata2 = set_particle_set_y[i];
+        zdata2 = set_particle_set_z[i];
 
         scat1._offsets3d = (xdata1, ydata1, zdata1)
         scat2._offsets3d = (xdata2, ydata2, zdata2)
-        scat3._offsets3d = (xdata3, ydata3, zdata3)
 
         return
 
@@ -147,15 +124,38 @@ def plot(anOptimiser):
     plt.show()
 
 
-my_pso = PSO(g_number_of_dimensions, boundaries, costFunction, g_number_of_particle);
+optimiser = PSO(g_number_of_dimensions, boundaries, costFunction, g_number_of_particle);
 best_particle_x = [];
 best_particle_y = [];
 best_particle_z = [];
-for i in range(g_iterations):
-    my_pso.run();
-    best_particle_x.append(my_pso.best_particle.position[0])
-    best_particle_y.append(my_pso.best_particle.position[1])
-    best_particle_z.append(my_pso.best_particle.cost)
 
-plot(my_pso)
-print(my_pso)
+set_particle_set_x = [];
+set_particle_set_y = [];
+set_particle_set_z = [];
+
+for i in range(g_iterations):
+    optimiser.run();
+
+    # Store the best particle
+    best_particle_x.append(optimiser.best_particle.position[0])
+    best_particle_y.append(optimiser.best_particle.position[1])
+    best_particle_z.append(optimiser.best_particle.cost)
+
+    # Store the current swarm
+    particle_set_x = [];
+    particle_set_y = [];
+    particle_set_z = [];
+
+    for particle in optimiser.particle_set:
+        particle_set_x.append(particle.position[0])
+        particle_set_y.append(particle.position[1])
+        particle_set_z.append(particle.cost)
+
+    set_particle_set_x.append(particle_set_x);
+    set_particle_set_y.append(particle_set_y);
+    set_particle_set_z.append(particle_set_z);
+
+
+
+plot(optimiser)
+print(optimiser)
