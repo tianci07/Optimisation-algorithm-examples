@@ -5,25 +5,23 @@ import random; # For uniform
 import Particle as PA
 
 class PSO:
-    
-    def __init__(self):
+
+    def __init__(self, aNumberOfDimensions, aBoundarySet, aCostFunction, aNumberOfParticles):
         print("__init__(self)")
         # Initialise attributes
         self.particle_set = [];
         # Save the best partical
         self.best_particle_set = [];
         self.best_cost_set = [];
-       
 
-    def set(self, aNumberOfDimensions, aBoundarySet, aCostFunction, aNumberOfParticles):
         print("PSO(...)")
         # Initialise attributes
         self.particle_set = [];
-        
+
         # Save the best partical
         self.best_particle_set = [];
         self.best_cost_set = [];
-        
+
         # and copy input parameters
         self.number_of_dimensions = aNumberOfDimensions;
         self.boundary_set = copy.deepcopy(aBoundarySet);
@@ -43,10 +41,10 @@ class PSO:
                 self.best_particle_set.append(copy.deepcopy(self.particle_set[-1].position))
 
     def run(self):
-        
+
         # For each partical
         for particle in self.particle_set:
-            
+
             # update the particales' positions and velocities
             particle.update()
 
@@ -66,5 +64,3 @@ class PSO:
         value += "\tCorresponding cost: ";
         value += str(self.best_cost_set[-1]);
         return value;
-
-
