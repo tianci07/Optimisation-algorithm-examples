@@ -48,10 +48,12 @@ class Particle:
         self.cost = aParticle.cost
         self.best_known_position = copy.deepcopy(aParticle.best_known_position)
         self.best_known_cost = aParticle.best_known_cost
-        self.boundary_set =copy.deepcopy(aParticle.aParticle.boundary_set)
+        self.boundary_set =copy.deepcopy(aParticle.boundary_set)
         self.pso = aParticle.pso
         self.cost_function = aParticle.cost_function
-
+        print("Input", aParticle)
+        print("Output", self)
+        print()
 
     def computeCostFunction(self):
         # Compute the cost function
