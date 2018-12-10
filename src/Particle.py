@@ -51,9 +51,6 @@ class Particle:
         self.boundary_set =copy.deepcopy(aParticle.boundary_set)
         self.pso = aParticle.pso
         self.cost_function = aParticle.cost_function
-        print("Input", aParticle)
-        print("Output", self)
-        print()
 
     def computeCostFunction(self):
         # Compute the cost function
