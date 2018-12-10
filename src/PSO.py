@@ -1,7 +1,3 @@
-import math; # For exp
-import copy; # For deepcopy
-import random; # For uniform
-
 import Particle as PA
 
 class PSO:
@@ -13,13 +9,14 @@ class PSO:
         self.particle_set = [];
 
         # Save the best particle at each iteration
-        self.best_particle_set = [];
+        #self.best_particle_set = [];
 
         # and copy input parameters
         self.number_of_dimensions = aNumberOfDimensions;
 
         # Keep track of the best particle
         best_particle = PA.Particle();
+        self.best_particle = PA.Particle();
 
         # Create the particles
         for i in range(aNumberOfParticles):
@@ -31,8 +28,8 @@ class PSO:
                 best_particle = self.particle_set[-1];
 
         # Store the best particle
-        self.best_particle_set.append(copy.deepcopy(best_particle))
-        self.best_particle = copy.deepcopy(best_particle);
+        #self.best_particle_set.append(copy.deepcopy(best_particle))
+        self.best_particle.copy(best_particle);
 
     def run(self):
 
@@ -47,16 +44,17 @@ class PSO:
 
             # The new particle is better
             if best_particle.cost > particle.cost:
-                best_particle = particle;
+                best_particle.copy(particle);
 
         # Store the best particle
-        self.best_particle_set.append(copy.deepcopy(best_particle))
+        #self.best_particle_set.append(copy.deepcopy(best_particle))
 
         # The new particle is better
         if self.best_particle.cost > best_particle.cost:
-            self.best_particle = copy.deepcopy(best_particle)
+            self.best_particle.copy(best_particle)
 
-        return self.best_particle_set[-1];
+        return self.best_particle;
+        #return self.best_particle_set[-1];
 
 
 
