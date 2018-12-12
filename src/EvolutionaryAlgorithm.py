@@ -1,3 +1,5 @@
+
+import random
 import Individual as IND
 
 class EvolutionaryAlgorithm:
@@ -35,8 +37,40 @@ class EvolutionaryAlgorithm:
                 best_individual.copy(best_ind)
     
         return best_individual
+    
+    def NewGeneration(self):
+    
+        offspring_ppopulation = []
+        offspring_ppopulation.append(self.best_individual)
+        # Genetic operatore
+        #while (len(offspring_ppopulation) < len(self.individual_set)):
+    
+        # Select the parent from the population
+        offspring1 = self.TournmentSelection()
+        offspring2 = self.TournmentSelection()
+    
+        self.Crossover(offspring1, offspring2)
         
+    
+    def TournmentSelection(self):
+    
+        # Choose the first individual randomly
+        max_ind = self.individual_set[0].boundary_set[0][1]
+        best = random.randint(0, max_ind)
+    
+        # Choose the second individual randomly
+        index = random.randint(0, max_ind)
+    
+        # Find the best individual depened on the fitness
+        if (self.individual_set[index].fitness < self.individual_set[best].fitness):
+            best = index
 
+        # Return the best individual
+        return (self.individual_set[best])
+    
+    def Crossover(aOffspring1, aOffspring2):
+    
+        
     def __repr__(self):
         value = "The population: "
         value += ' '.join(str(e) for e in self.individual_set)
