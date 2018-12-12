@@ -25,9 +25,11 @@ for i in range(g_number_of_genes):
     boundaries.append([0,10]);
 
 
-optimiser = EA.EvolutionaryAlgorithm(g_number_of_population, g_number_of_genes, boundaries)
-
-print(optimiser)
+current_population = EA.EvolutionaryAlgorithm(g_number_of_population, g_number_of_genes, boundaries)
+print("befor crossover",current_population)
+print()
+print()
+current_population.NewGeneration()
 
 '''
 def frange(start, stop, step):
