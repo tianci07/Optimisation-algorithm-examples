@@ -13,7 +13,8 @@ import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 from matplotlib import animation
 
-from Individual import Individual
+import EvolutionaryAlgorithm  as EA
+import Individual
 
 g_number_of_population = 10;
 g_iterations           = 100;
@@ -23,10 +24,10 @@ boundaries = [];
 for i in range(g_number_of_genes):
     boundaries.append([0,10]);
 
-for i in range(g_iterations):
-    optimiser = Individual(g_number_of_genes, boundaries)
 
-    print(optimiser)
+optimiser = EA.EvolutionaryAlgorithm(g_number_of_population, g_number_of_genes, boundaries)
+
+print(optimiser)
 
 '''
 def frange(start, stop, step):
