@@ -16,29 +16,15 @@ from matplotlib import animation
 import EvolutionaryAlgorithm  as EA
 import Individual
 
-g_number_of_population = 10;
-g_iterations           = 100;
-g_number_of_genes      = 3;
+g_number_of_individuals = 10;
+g_iterations            = 100;
+g_number_of_genes       = 3;
 
 boundaries = [];
 for i in range(g_number_of_genes):
     boundaries.append([0,10]);
 
-
-current_population = EA.EvolutionaryAlgorithm(g_number_of_population, g_number_of_genes, boundaries)
-print("befor crossover",current_population)
-print()
-print()
-current_population.NewGeneration()
-
-'''
-def frange(start, stop, step):
-    i = start
-    while i < stop:
-         yield i
-         i += step
-
-def costFunction(aSolution):
+def fitnessFunction(aSolution):
     sum = 0.0;
     #
     #for i in range(g_number_of_dimensions):
@@ -48,13 +34,25 @@ def costFunction(aSolution):
     sum += 2.0 * math.exp(-(math.pow(aSolution[0]-1.7, 2) + math.pow(aSolution[1]-1.7, 2)));
     sum *= -1.0;
     #
-    return sum;
+    return -sum;
+
+optimiser = EA.EvolutionaryAlgorithm(g_number_of_genes, boundaries, fitnessFunction, g_number_of_individuals)
+print("befor crossover", optimiser)
+print()
+print()
+
+
+def frange(start, stop, step):
+    i = start
+    while i < stop:
+         yield i
+         i += step
 
 
 def plot(anOptimiser):
-    global best_particle_x;
-    global best_particle_y;
-    global best_particle_z;
+    global best_individual_x;
+    global best_individual_y;
+    global best_individual_z;
 
     fig = plt.figure()
     ax = fig.add_subplot(111, projection='3d')
@@ -74,8 +72,8 @@ def plot(anOptimiser):
         Temp_Z = [];
         #
         for x in frange(boundaries[1][0], boundaries[1][1], 0.05):
-            position = [x, y];
-            energy = costFunction(position);
+            genes = [x, y];
+            energy = fitnessFunction(genes);
             Temp_X.append(x);
             Temp_Y.append(y);
             Temp_Z.append(energy);
@@ -87,7 +85,7 @@ def plot(anOptimiser):
     # Plot a basic wireframe.
     ax.plot_wireframe(np.array(X), np.array(Y), np.array(Z), rstride=10, cstride=10)
 
-    numframes = len(best_particle_x)
+    numframes = len(best_individual_x)
 
     xdata1, ydata1, zdata1 = [], [], [];
     xdata2, ydata2, zdata2 = [], [], [];
@@ -100,25 +98,25 @@ def plot(anOptimiser):
         global xdata1, ydata1, zdata1;
         global xdata2, ydata2, zdata2;
 
-        global best_particle_x;
-        global best_particle_y;
-        global best_particle_z;
+        global best_individual_x;
+        global best_individual_y;
+        global best_individual_z;
 
-        global set_particle_set_x;
-        global set_particle_set_y;
-        global set_particle_set_z;
+        global set_individual_set_x;
+        global set_individual_set_y;
+        global set_individual_set_z;
 
         xdata1, ydata1, zdata1 = [], [], [];
 
         # Best solution in red
-        xdata1.append(best_particle_x[i]);
-        ydata1.append(best_particle_y[i]);
-        zdata1.append(best_particle_z[i]);
+        xdata1.append(best_individual_x[i]);
+        ydata1.append(best_individual_y[i]);
+        zdata1.append(best_individual_z[i]);
 
         # All the current solution
-        xdata2 = set_particle_set_x[i];
-        ydata2 = set_particle_set_y[i];
-        zdata2 = set_particle_set_z[i];
+        xdata2 = set_individual_set_x[i];
+        ydata2 = set_individual_set_y[i];
+        zdata2 = set_individual_set_z[i];
 
         scat1._offsets3d = (xdata1, ydata1, zdata1)
         scat2._offsets3d = (xdata2, ydata2, zdata2)
@@ -129,36 +127,35 @@ def plot(anOptimiser):
     plt.show()
 
 
-optimiser = PSO(g_number_of_dimensions, boundaries, costFunction, g_number_of_particle);
-best_particle_x = [];
-best_particle_y = [];
-best_particle_z = [];
+best_individual_x = [];
+best_individual_y = [];
+best_individual_z = [];
 
-set_particle_set_x = [];
-set_particle_set_y = [];
-set_particle_set_z = [];
+set_individual_set_x = [];
+set_individual_set_y = [];
+set_individual_set_z = [];
 
 for i in range(g_iterations):
-    optimiser.run();
+    optimiser.run(0.1);
 
-    # Store the best particle
-    best_particle_x.append(optimiser.best_particle.position[0])
-    best_particle_y.append(optimiser.best_particle.position[1])
-    best_particle_z.append(optimiser.best_particle.cost)
+    # Store the best individual
+    best_individual_x.append(optimiser.best_individual.genes[0])
+    best_individual_y.append(optimiser.best_individual.genes[1])
+    best_individual_z.append(optimiser.best_individual.fitness)
 
     # Store the current swarm
-    particle_set_x = [];
-    particle_set_y = [];
-    particle_set_z = [];
+    individual_set_x = [];
+    individual_set_y = [];
+    individual_set_z = [];
 
-    for particle in optimiser.particle_set:
-        particle_set_x.append(particle.position[0])
-        particle_set_y.append(particle.position[1])
-        particle_set_z.append(particle.cost)
+    for individual in optimiser.individual_set:
+        individual_set_x.append(individual.genes[0])
+        individual_set_y.append(individual.genes[1])
+        individual_set_z.append(individual.fitness)
 
-    set_particle_set_x.append(particle_set_x);
-    set_particle_set_y.append(particle_set_y);
-    set_particle_set_z.append(particle_set_z);
+    set_individual_set_x.append(individual_set_x);
+    set_individual_set_y.append(individual_set_y);
+    set_individual_set_z.append(individual_set_z);
+
 
 plot(optimiser)
-'''
