@@ -48,18 +48,22 @@ class EvolutionaryAlgorithm:
         # Select the parent from the population
         offspring1 = self.TournmentSelection()
         offspring2 = self.TournmentSelection()
-    
+        print("offspring1 ", offspring1)
+        print("offspring2 ", offspring2)
+        print()
         self.Crossover(offspring1, offspring2)
-        
+    
+        print("offspring1 ", offspring1)
+        print("offspring2 ", offspring2)
     
     def TournmentSelection(self):
     
         # Choose the first individual randomly
         max_ind = self.individual_set[0].boundary_set[0][1]
-        best = random.randint(0, max_ind)
+        best = random.randint(0, max_ind-1)
     
         # Choose the second individual randomly
-        index = random.randint(0, max_ind)
+        index = random.randint(0, max_ind-1)
     
         # Find the best individual depened on the fitness
         if (self.individual_set[index].fitness < self.individual_set[best].fitness):
@@ -68,9 +72,29 @@ class EvolutionaryAlgorithm:
         # Return the best individual
         return (self.individual_set[best])
     
-    def Crossover(aOffspring1, aOffspring2):
+    def Crossover(self, aOffspring1, aOffspring2):
     
-        
+        ind_len = len(self.individual_set[0].genes)
+        # Choose random position for crossover
+        crossover_cut = random.randint(0, ind_len)
+        print("crossover_cut: ", crossover_cut)
+
+        offspring1 = aOffspring1
+        offspring2 = aOffspring2
+
+        for i in range(ind_len-1):
+            #Replace the genes
+            if (i == crossover_cut):
+                offspring1.genes.append(aOffspring2.genes[i])
+                offspring2.genes.append(aOffspring1.genes[i])
+            else:
+                offspring1.genes.append(aOffspring1.genes[i])
+                offspring2.genes.append(aOffspring2.genes[i])
+
+        aOffspring1.copy(offspring1)
+        aOffspring2.copy(offspring2)
+    
+    
     def __repr__(self):
         value = "The population: "
         value += ' '.join(str(e) for e in self.individual_set)
