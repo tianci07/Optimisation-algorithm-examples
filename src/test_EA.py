@@ -18,7 +18,7 @@ import Individual
 
 g_number_of_individuals = 10;
 g_iterations            = 100;
-g_number_of_genes       = 3;
+g_number_of_genes       = 2;
 
 boundaries = [];
 for i in range(g_number_of_genes):
