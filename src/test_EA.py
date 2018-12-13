@@ -17,12 +17,15 @@ import EvolutionaryAlgorithm  as EA
 import Individual
 
 g_number_of_individuals = 10;
-g_iterations            = 100;
+g_iterations            = 20;
 g_number_of_genes       = 2;
+
+g_max_mutation_sigma = 0.5;
+g_min_mutation_sigma = 0.01;
 
 boundaries = [];
 for i in range(g_number_of_genes):
-    boundaries.append([0,10]);
+    boundaries.append([-5,5]);
 
 def fitnessFunction(aSolution):
     sum = 0.0;
@@ -37,9 +40,6 @@ def fitnessFunction(aSolution):
     return -sum;
 
 optimiser = EA.EvolutionaryAlgorithm(g_number_of_genes, boundaries, fitnessFunction, g_number_of_individuals)
-print("befor crossover", optimiser)
-print()
-print()
 
 
 def frange(start, stop, step):
@@ -76,7 +76,7 @@ def plot(anOptimiser):
             energy = fitnessFunction(genes);
             Temp_X.append(x);
             Temp_Y.append(y);
-            Temp_Z.append(energy);
+            Temp_Z.append(-energy);
         #
         X.append(Temp_X);
         Y.append(Temp_Y);
@@ -136,12 +136,13 @@ set_individual_set_y = [];
 set_individual_set_z = [];
 
 for i in range(g_iterations):
-    optimiser.run(0.1);
+    sigma = g_min_mutation_sigma + (g_iterations - 1 - i) / (g_iterations - 1) * (g_max_mutation_sigma - g_min_mutation_sigma);
+    optimiser.run(sigma);
 
     # Store the best individual
     best_individual_x.append(optimiser.best_individual.genes[0])
     best_individual_y.append(optimiser.best_individual.genes[1])
-    best_individual_z.append(optimiser.best_individual.fitness)
+    best_individual_z.append(-optimiser.best_individual.fitness)
 
     # Store the current swarm
     individual_set_x = [];
@@ -151,11 +152,13 @@ for i in range(g_iterations):
     for individual in optimiser.individual_set:
         individual_set_x.append(individual.genes[0])
         individual_set_y.append(individual.genes[1])
-        individual_set_z.append(individual.fitness)
+        individual_set_z.append(-individual.fitness)
 
     set_individual_set_x.append(individual_set_x);
     set_individual_set_y.append(individual_set_y);
     set_individual_set_z.append(individual_set_z);
 
+print(optimiser)
+print(optimiser.best_individual)
 
 plot(optimiser)

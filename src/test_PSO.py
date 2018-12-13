@@ -17,7 +17,7 @@ from PSO import PSO
 import Particle
 
 g_number_of_particle   = 10;
-g_iterations           = 100;
+g_iterations           = 20;
 
 
 
@@ -157,5 +157,7 @@ for i in range(g_iterations):
 
 
 
-plot(optimiser)
 print(optimiser)
+print(optimiser.best_particle)
+
+plot(optimiser)
