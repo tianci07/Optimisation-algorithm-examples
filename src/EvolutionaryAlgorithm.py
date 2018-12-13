@@ -5,7 +5,6 @@ import Individual as IND
 class EvolutionaryAlgorithm:
 
     def __init__(self, aNumberOfGenes, aBoundarySet, aFitnessFunction, aNumberOfIndividuals):
-        print("__init__(self)")
 
         # Store the population
         self.individual_set = [];
@@ -58,17 +57,9 @@ class EvolutionaryAlgorithm:
             while parent2_index == parent1_index:
                 parent2_index = self.TournmentSelection();
 
-            print("parent1 ", self.individual_set[parent1_index])
-            print("parent2 ", self.individual_set[parent2_index])
-            print();
-
             offspring_population.append(self.BlendCrossover(parent1_index, parent2_index));
-            print("child before mutation ", offspring_population[-1])
 
             offspring_population[-1].gaussianMutation(aMutationRate);
-            print("child after mutation ", offspring_population[-1])
-
-            print()
 
             if (offspring_population[best_individual_index].fitness < offspring_population[-1].fitness):
                 best_individual_index = len(offspring_population) - 1;
