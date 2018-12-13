@@ -65,7 +65,7 @@ class EvolutionaryAlgorithm:
             offspring_population.append(self.BlendCrossover(parent1_index, parent2_index));
             print("child before mutation ", offspring_population[-1])
 
-            offspring_population[-1].mutate(aMutationRate);
+            offspring_population[-1].gaussianMutation(aMutationRate);
             print("child after mutation ", offspring_population[-1])
 
             print()

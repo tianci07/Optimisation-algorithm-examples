@@ -53,7 +53,13 @@ class Individual:
         return self.fitness;
 
 
-    def mutate(self, aMutationRate):
+    def gaussianMutation(self, aMutationRate):
+        for i in range(len(self.genes)):
+            self.genes[i] = random.gauss(self.genes[i], aMutationRate);
+            self.genes[i] = max(self.boundary_set[i][0], self.genes[i]);
+            self.genes[i] = min(self.boundary_set[i][1], self.genes[i]);
+
+        self.FitnessFunction();
 
         return self;
 
