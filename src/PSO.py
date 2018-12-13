@@ -59,6 +59,10 @@ class PSO:
 
 
     def __repr__(self):
-        value = "Best particle: ";
-        value += self.best_particle.__repr__();
+        value = ""
+
+        for particle in self.particle_set:
+            value += particle.__repr__();
+            value += '\n';
+
         return value;
