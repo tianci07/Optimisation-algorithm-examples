@@ -34,7 +34,7 @@ class Individual:
                 self.genes.append(random.uniform(min_i, max_i));
 
         # Store the fitness function
-        self.fitness = self.FitnessFunction()
+        self.fitness = self.computeFitnessFunction()
 
     def copy(self):
 
@@ -45,7 +45,7 @@ class Individual:
                 self.genes
         );
 
-    def FitnessFunction(self):
+    def computeFitnessFunction(self):
 
         # Compute the fitness function
         self.fitness = self.fitness_function(self.genes);
@@ -59,7 +59,7 @@ class Individual:
             self.genes[i] = max(self.boundary_set[i][0], self.genes[i]);
             self.genes[i] = min(self.boundary_set[i][1], self.genes[i]);
 
-        self.FitnessFunction();
+        self.computeFitnessFunction();
 
         return self;
 
