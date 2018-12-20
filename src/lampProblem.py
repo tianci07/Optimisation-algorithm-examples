@@ -8,20 +8,21 @@ lamp_radius = 10;
 
 image_counter = 0;
 
+overlay_image = []
+
 def getArea():
     return room_width * room_height;
 
 def areaEnlightened(aSetOfLamps):
     
     global image_counter;
+    global overlay_image;
     
     number_of_lamps = int(len(aSetOfLamps) / 3);
     
     # Create a black image (float, greyscale) of room_width x room_height pixels
     overlay_image = np.zeros((room_height, room_width, 1), np.float32)
-    
-    
-    
+
     # print the position of all the lamps
     for i in range(number_of_lamps):
         x = int(aSetOfLamps[     i * 3 + 0])
@@ -63,14 +64,26 @@ def areaEnlightened(aSetOfLamps):
             if (overlay_image[i,j] > 0):
                 areaEnlight += min(overlay_image[i,j], 1)
 
-    print(areaEnlight)
+   
     cv2.waitKey(0)
     
-    return 0;
+    return areaEnlight;
 
 def areaOverlap(aSetOfLamps):
-    return 0;
+    
+    global overlay_image
+    
+    areaOver = 0
+    for i in range(room_width):
+        for j in range(room_height):
+            
+            if (overlay_image[i,j] > 1):
+                areaOver += overlay_image[i,j]
+    
+    return areaOver;
 
 def fitnessFunction(aSetOfLamps, W=1):
-    
+    #print("areaEnlightened  ", areaEnlightened(aSetOfLamps))
+    #print("areaOverlap  ", areaOverlap(aSetOfLamps))
+          
     return (areaEnlightened(aSetOfLamps) / getArea()) - W * (areaOverlap(aSetOfLamps) / getArea());
