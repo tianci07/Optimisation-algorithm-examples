@@ -140,7 +140,7 @@ def plot(anOptimiser):
 
 
 
-optimiser = SA.SimulatedAnnealing(g_number_of_dimensions, boundaries, costFunction, 5000, 0.1);
+optimiser = SA.SimulatedAnnealing(g_number_of_dimensions, boundaries, costFunction, 5000, 0.04);
 optimiser.run(False, False);
 print(optimiser)
 plot(optimiser);

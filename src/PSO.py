@@ -14,44 +14,45 @@ class PSO:
         # and copy input parameters
         self.number_of_dimensions = aNumberOfDimensions;
 
+        # Add a particle
+        self.particle_set.append(PA.Particle(aNumberOfDimensions, aBoundarySet, aCostFunction, self))
+
         # Keep track of the best particle
-        best_particle = PA.Particle();
-        self.best_particle = PA.Particle();
+        best_particle_index = 0;
 
         # Create the particles
-        for i in range(aNumberOfParticles):
-            self.particle_set.append(PA.Particle())
-            self.particle_set[-1].set(aNumberOfDimensions, aBoundarySet, aCostFunction, self)
+        while len(self.particle_set) < aNumberOfParticles:
+            self.particle_set.append(PA.Particle(aNumberOfDimensions, aBoundarySet, aCostFunction, self))
 
             # The new particle is better
-            if best_particle.cost > self.particle_set[-1].cost:
-                best_particle = self.particle_set[-1];
+            # Minimisation
+            if self.particle_set[best_particle_index].cost > self.particle_set[-1].cost:
+                best_particle_index = len(self.particle_set) - 1;
 
         # Store the best particle
         #self.best_particle_set.append(copy.deepcopy(best_particle))
-        self.best_particle.copy(best_particle);
+        self.best_particle = self.particle_set[best_particle_index].copy();
 
     def run(self):
 
         # Keep track of the best particle
-        best_particle = PA.Particle();
+        best_cost = self.best_particle.cost;
+        best_particle_index = -1;
 
         # For each partical
-        for particle in self.particle_set:
+        for i in range(len(self.particle_set)):
 
             # update the particales' positions and velocities
-            particle.update()
+            self.particle_set[i].update()
 
             # The new particle is better
-            if best_particle.cost > particle.cost:
-                best_particle.copy(particle);
-
-        # Store the best particle
-        #self.best_particle_set.append(copy.deepcopy(best_particle))
+            if best_cost > self.particle_set[i].cost:
+                best_cost = self.particle_set[i].cost
+                best_particle_index = i;
 
         # The new particle is better
-        if self.best_particle.cost > best_particle.cost:
-            self.best_particle.copy(best_particle)
+        if best_particle_index != -1:
+            self.best_particle = self.particle_set[best_particle_index].copy();
 
         return self.best_particle;
         #return self.best_particle_set[-1];
@@ -59,6 +60,10 @@ class PSO:
 
 
     def __repr__(self):
-        value = "Best particle: ";
-        value += self.best_particle.__repr__();
+        value = ""
+
+        for particle in self.particle_set:
+            value += particle.__repr__();
+            value += '\n';
+
         return value;

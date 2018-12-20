@@ -7,15 +7,13 @@ import sys
 
 class Particle:
 
-    def __init__(self):
+    def __init__(self, aNumberOfDimentions, aBoundarySet, aCostFunction, aPSO, aPosition = [], aVelocity = []):
+
         self.position = []
         self.velocity = []
         self.cost = float('inf')
         self.best_known_position = []
         self.best_known_cost = float('inf')
-        self.boundary_set = []
-
-    def set(self, aNumberOfDimentions, aBoundarySet, aCostFunction, aPSO):
 
         # Store the boundary set
         # e.g. [[min_0, max_0][min_1, max_1][min_2, max_2]]
@@ -26,32 +24,37 @@ class Particle:
 
         # Store the PSO
         self.pso = aPSO;
-        self.position = []
 
-        # Initialise the particle's position and velocity
-        for i in range(aNumberOfDimentions):
-            # Get the boundaries
-            min_i = self.boundary_set[i][0];
-            max_i = self.boundary_set[i][1];
+        if len(aPosition) == aNumberOfDimentions and len(aVelocity) == aNumberOfDimentions:
+            self.position = copy.deepcopy(aPosition);
+            self.velocity = copy.deepcopy(aVelocity);
 
-            # Compute the position
-            self.position.append(random.uniform(min_i, max_i));
 
-            # Compute the velocity
-            self.velocity.append((random.uniform(min_i, max_i) - self.position[i]) / 2.0);
+        else:
+            # Initialise the particle's position and velocity
+            for i in range(aNumberOfDimentions):
+                # Get the boundaries
+                min_i = self.boundary_set[i][0];
+                max_i = self.boundary_set[i][1];
+
+                # Compute the position
+                self.position.append(random.uniform(min_i, max_i));
+
+                # Compute the velocity
+                self.velocity.append((random.uniform(min_i, max_i) - self.position[i]) / 2.0);
 
         # Compute the cost function
         self.computeCostFunction();
 
-    def copy(self, aParticle):
-        self.position = copy.deepcopy(aParticle.position)
-        self.velocity = copy.deepcopy(aParticle.velocity)
-        self.cost = aParticle.cost
-        self.best_known_position = copy.deepcopy(aParticle.best_known_position)
-        self.best_known_cost = aParticle.best_known_cost
-        self.boundary_set =copy.deepcopy(aParticle.boundary_set)
-        self.pso = aParticle.pso
-        self.cost_function = aParticle.cost_function
+    def copy(self):
+
+        return (Particle(
+                len(self.boundary_set),
+                self.boundary_set,
+                self.cost_function,
+                self.pso,
+                self.position,
+                self.velocity));
 
     def computeCostFunction(self):
         # Compute the cost function
