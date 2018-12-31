@@ -19,7 +19,7 @@ number_of_lamps = 10;
 
 LP.room_width = 100;
 LP.room_height = 100;
-LP.lamp_radius = 10;
+LP.lamp_radius = 15;
 
 
 boundaries = [];
