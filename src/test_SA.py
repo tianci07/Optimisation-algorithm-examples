@@ -36,6 +36,10 @@ def costFunction(aSolution):
     #for i in range(g_number_of_dimensions):
     #    sum += aSolution[i] * aSolution[i];
     #
+    # Function:
+    #   -((exp(-(x^2 + y^2))) + 2 (exp(-((x-1.7)^2 + (y-1.7)^2))))
+    # In LaTeX
+    #
     sum += math.exp(-(math.pow(aSolution[0], 2) + math.pow(aSolution[1], 2)));
     sum += 2.0 * math.exp(-(math.pow(aSolution[0]-1.7, 2) + math.pow(aSolution[1]-1.7, 2)));
     sum *= -1.0;
@@ -136,6 +140,17 @@ def plot(anOptimiser):
         return
 
     ani = animation.FuncAnimation(fig, update, frames=range(numframes), repeat=False)
+
+    # Set up formatting for the movie files
+    '''Writer = animation.writers['ffmpeg']
+    writer = Writer(fps=15, metadata=dict(artist='Me'), bitrate=1800)
+    ani.save('test_SA.mp4', writer=writer)'''
+
+    # Set up formatting for the movie files
+    '''Writer = animation.writers['imagemagick']
+    writer = Writer()
+    ani.save('test_SA.gif', writer=writer)'''
+
     plt.show()
 
 
