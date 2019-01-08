@@ -50,10 +50,10 @@ def areaEnlightened(aSetOfLamps):
     # Save the image (use image_counter in the file name)
     filename = "lamp_" + str(image_counter) + ".png";
     image_counter += 1;
-    cv2.imwrite(filename, temp_image)
+    #cv2.imwrite(filename, temp_image)
     
-    cv2.imshow("Window", overlay_image)
-    cv2.imshow("Window1", temp_image)
+    #cv2.imshow("Window", overlay_image)
+    #cv2.imshow("Window1", temp_image)
 
     overlay_image = np.array(overlay_image)
 
@@ -65,7 +65,7 @@ def areaEnlightened(aSetOfLamps):
                 areaEnlight += min(overlay_image[i,j], 1)
 
    
-    cv2.waitKey(0)
+    #cv2.waitKey(1)
     
     return areaEnlight;
 
@@ -85,5 +85,9 @@ def areaOverlap(aSetOfLamps):
 def fitnessFunction(aSetOfLamps, W=1):
     #print("areaEnlightened  ", areaEnlightened(aSetOfLamps))
     #print("areaOverlap  ", areaOverlap(aSetOfLamps))
-          
-    return (areaEnlightened(aSetOfLamps) / getArea()) - W * (areaOverlap(aSetOfLamps) / getArea());
+    #print(aSetOfLamps)
+    
+    area_enlightened = areaEnlightened(aSetOfLamps) / getArea();
+    overlap          = areaOverlap(aSetOfLamps)     / getArea();
+    
+    return area_enlightened - W * overlap;
