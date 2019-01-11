@@ -10,17 +10,28 @@ image_counter = 0;
 
 overlay_image = []
 
+global_fitness = -float('inf');
+
 def getArea():
     return room_width * room_height;
 
-def areaEnlightened(aSetOfLamps):
+def addLampToImage(x, y, l):
+    global overlay_image;
 
+    # Draw circles corresponding to the lamps
+    black_image = np.zeros((room_height, room_width, 1), np.float32)
+    cv2.circle(black_image, (x,y), lamp_radius, (l, l, l), -1)
+    np.add(overlay_image, black_image, overlay_image);
+
+
+
+def createLampMap(aSetOfLamps):
     global image_counter;
     global overlay_image;
 
     number_of_lamps = int(len(aSetOfLamps) / 3);
 
-    # Create a black image (float, greyscale) of room_width x room_height pixels
+    # Create a black image (float32, greyscale) of room_width x room_height pixels
     overlay_image = np.zeros((room_height, room_width, 1), np.float32)
 
     # print the position of all the lamps
@@ -31,9 +42,7 @@ def areaEnlightened(aSetOfLamps):
 
         if on_off > 0.5:
             # Draw circles corresponding to the lamps
-            black_image = np.zeros((room_height, room_width, 1), np.float32)
-            cv2.circle(black_image, (x,y), lamp_radius, (1,1,1), -1)
-            np.add(overlay_image, black_image, overlay_image);
+            addLampToImage(x, y, 1);
 
     # Copy the image into a temp image for debug
     temp_image = np.copy(overlay_image);
@@ -52,8 +61,11 @@ def areaEnlightened(aSetOfLamps):
     image_counter += 1;
     #cv2.imwrite(filename, temp_image)
 
-    #cv2.imshow("Window", overlay_image)
-    #cv2.imshow("Window1", temp_image)
+    cv2.imshow("Window", overlay_image)
+    cv2.imshow("Window1", temp_image)
+
+def areaEnlightened():
+    global overlay_image;
 
     overlay_image = np.array(overlay_image)
 
@@ -69,7 +81,7 @@ def areaEnlightened(aSetOfLamps):
 
     return areaEnlight;
 
-def areaOverlap(aSetOfLamps):
+def areaOverlap():
 
     global overlay_image
 
@@ -82,12 +94,14 @@ def areaOverlap(aSetOfLamps):
 
     return areaOver;
 
+def computeFitnessFunction(W):
+    area_enlightened = areaEnlightened();
+    overlap          = areaOverlap();
+
+    return ((area_enlightened - W * overlap) / getArea());
+
 def fitnessFunction(aSetOfLamps, W=1):
-    #print("areaEnlightened  ", areaEnlightened(aSetOfLamps))
-    #print("areaOverlap  ", areaOverlap(aSetOfLamps))
-    #print(aSetOfLamps)
-
-    area_enlightened = areaEnlightened(aSetOfLamps);
-    overlap          = areaOverlap(aSetOfLamps);
-
-    return (area_enlightened - W * overlap) / getArea();
+    global global_fitness;
+    createLampMap(aSetOfLamps);
+    global_fitness = computeFitnessFunction(W);
+    return global_fitness;
