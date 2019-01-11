@@ -7,13 +7,13 @@ import sys
 
 class Individual:
 
-    def __init__(self, aNumberOfGenes, aBoundarySet, aFitnessFunction, aGeneSet = []):
+    def __init__(self, aNumberOfGenes, aBoundarySet, aFitnessFunction, aGeneSet = [], aFitness = -float('inf')):
 
         # Set the genes
         self.genes = [];
 
         # Set fitness value
-        self.fitness = -float('inf')
+        self.fitness = aFitness;
 
         # Set the fitness function
         self.fitness_function = aFitnessFunction;
@@ -33,8 +33,6 @@ class Individual:
                 # Get random value to each gene
                 self.genes.append(random.uniform(min_i, max_i));
 
-        # Store the fitness function
-        self.fitness = self.computeFitnessFunction()
 
     def copy(self):
 
@@ -42,14 +40,15 @@ class Individual:
                 len(self.genes),
                 self.boundary_set,
                 self.fitness_function,
-                self.genes
+                self.genes,
+                self.fitness
         );
+
 
     def computeFitnessFunction(self):
 
         # Compute the fitness function
         self.fitness = self.fitness_function(self.genes);
-
         return self.fitness;
 
 
