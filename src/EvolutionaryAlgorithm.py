@@ -7,9 +7,9 @@ class EvolutionaryAlgorithm:
     def __init__(self, aNumberOfGenes, aBoundarySet, aFitnessFunction, aNumberOfIndividuals, aGlobalFitnessFunction = 0):
 
         # Probability of operators
-        sef.cross_over_probability  = 0.8;
-        sef.mutation_probability  = 0.0;
-        sef.new_blood_probability  = 0.2;
+        self.cross_over_probability  = 0.8;
+        self.mutation_probability  = 0.0;
+        self.new_blood_probability  = 0.2;
 
         # Store the population
         self.individual_set = [];
@@ -73,29 +73,22 @@ class EvolutionaryAlgorithm:
         while (len(offspring_population) < len(self.individual_set)):
 
             # Draw a random number between 0 and 1
+            crossover_probability = random.randint(0.0, 1.0)
+            
+            if (crossover_probability > self.cross_over_probability):
 
 
+                # Select the parents from the population
+                parent1_index = parent2_index = self.TournmentSelection()
 
+                # Make sure parent 1 is different from parent2
+                while parent2_index == parent1_index:
+                    parent2_index = self.TournmentSelection();
 
+                    offspring_population.append(self.BlendCrossover(parent1_index, parent2_index));
 
-            # Select the parents from the population
-            parent1_index = parent2_index = self.TournmentSelection()
-
-            # Make sure parent 1 is different from parent2
-            while parent2_index == parent1_index:
-                parent2_index = self.TournmentSelection();
-
-            offspring_population.append(self.BlendCrossover(parent1_index, parent2_index));
-
-            offspring_population[-1].gaussianMutation(aMutationRate);
-
-
-
-
-
-
-
-
+                    offspring_population[-1].gaussianMutation(aMutationRate)
+            
 
         # Compute the global fitness
         if self.global_fitness:
