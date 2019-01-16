@@ -7,9 +7,14 @@ class EvolutionaryAlgorithm:
     def __init__(self, aNumberOfGenes, aBoundarySet, aFitnessFunction, aNumberOfIndividuals, aGlobalFitnessFunction = 0):
 
         # Probability of operators
-        sef.cross_over_probability  = 0.8;
-        sef.mutation_probability  = 0.0;
-        sef.new_blood_probability  = 0.2;
+        self.cross_over_probability  = 0.8;
+        self.mutation_probability  = 0.0;
+        self.new_blood_probability  = 0.2;
+        
+        #Set the individual operater
+        self.genes_number = aNumberOfGenes
+        self.boundary_set = aBoundarySet
+        self.local_fitness = aFitnessFunction
 
         # Store the population
         self.individual_set = [];
@@ -69,32 +74,43 @@ class EvolutionaryAlgorithm:
         offspring_population.append(self.best_individual.copy())
         best_individual_index = 0;
 
-        # Genetic operatore
+        # Evolutionary loop
         while (len(offspring_population) < len(self.individual_set)):
 
             # Draw a random number between 0 and 1
+            chosen_operator = random.uniform(0.0, 1.0)
+            
+            # Crossover
+            if (chosen_operator < self.cross_over_probability):
 
+                # Select the parents from the population
+                parent1_index = parent2_index = self.TournmentSelection()
 
+                # Make sure parent 1 is different from parent2
+                while parent2_index == parent1_index:
+                    parent2_index = self.TournmentSelection();
 
+                # Perform the crossover
+                offspring_population.append(self.BlendCrossover(parent1_index, parent2_index));
 
+                # Mutate the child
+                offspring_population[-1].gaussianMutation(aMutationRate)
 
-            # Select the parents from the population
-            parent1_index = parent2_index = self.TournmentSelection()
+            # Mutation only
+            elif (chosen_operator < self.cross_over_probability +  self.mutation_probability ):
+    
+                # Select the parents from the population
+                parent_index = self.TournmentSelection()
+                
+                # Copy the parent into a child
+                offspring_population.append(self.set_of_individuals[parent_index]);
 
-            # Make sure parent 1 is different from parent2
-            while parent2_index == parent1_index:
-                parent2_index = self.TournmentSelection();
+                # Mutate the child
+                offspring_population[-1].gaussianMutation(aMutationRate)
 
-            offspring_population.append(self.BlendCrossover(parent1_index, parent2_index));
-
-            offspring_population[-1].gaussianMutation(aMutationRate);
-
-
-
-
-
-
-
+            # New blood
+            else:
+                offspring_population.append(IND.Individual(self.genes_number, self.boundary_set, self.local_fitness))
 
 
         # Compute the global fitness
