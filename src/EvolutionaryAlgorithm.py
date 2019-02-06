@@ -1,6 +1,9 @@
 
 import random
 import Individual as IND
+import numpy as np
+import math
+import copy
 
 class EvolutionaryAlgorithm:
 
@@ -70,10 +73,34 @@ class EvolutionaryAlgorithm:
     def run(self, aMutationRate):
 
         offspring_population = [];
+        fitness_parents = []
 
         offspring_population.append(self.best_individual.copy())
         best_individual_index = 0;
+        
+        # Ellitism
+        for indi in range(len(self.individual_set)):
+            fitness_parents.append(self.individual_set[indi].fitness)
+            #print("fitness  ",self.individual_set[indi].fitness)
+        
+        index_sorted = np.argsort(np.array(fitness_parents))
+        
+        ellitism_probability = random.uniform(0.0, 1.0)
+        
+        number_of_individual_by_ellitism = math.floor(ellitism_probability * len(self.individual_set))
+        
+        
+        if ellitism_probability > 0.01:
+            number_of_individuals_by_ellitism =  1
+        
+        print(number_of_individuals_by_ellitism)
 
+        for i in range(number_of_individuals_by_ellitism):
+            
+            individual =self.individual_set[index_sorted[len(index_sorted) - i - 1]]
+            offspring_population.append(copy.deepcopy(individual))
+        
+        
         # Evolutionary loop
         while (len(offspring_population) < len(self.individual_set)):
 
