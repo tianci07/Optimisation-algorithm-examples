@@ -150,7 +150,7 @@ class EvolutionaryAlgorithm:
         if self.global_fitness:
 
             set_of_individuals = [];
-            for ind in self.individual_set:
+            for ind in offspring_population:
                 for gene in ind.genes:
                     set_of_individuals.append(gene);
 
