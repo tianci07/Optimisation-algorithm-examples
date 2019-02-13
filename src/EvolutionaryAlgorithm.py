@@ -10,9 +10,10 @@ class EvolutionaryAlgorithm:
     def __init__(self, aNumberOfGenes, aBoundarySet, aFitnessFunction, aNumberOfIndividuals, aGlobalFitnessFunction = 0):
 
         # Probability of operators
-        self.cross_over_probability  = 0.8;
-        self.mutation_probability  = 0.0;
-        self.new_blood_probability  = 0.2;
+        self.elitism_probability     = 0.1;
+        self.cross_over_probability  = 0.7;
+        self.mutation_probability    = 0.0;
+        self.new_blood_probability   = 0.2;
         
         #Set the individual operater
         self.genes_number = aNumberOfGenes
@@ -32,6 +33,7 @@ class EvolutionaryAlgorithm:
         # Compute the global fitness
         self.global_fitness = 0;
         self.global_fitness_function = 0;
+        
         if aGlobalFitnessFunction:
 
             set_of_individuals = [];
@@ -73,39 +75,43 @@ class EvolutionaryAlgorithm:
     def run(self, aMutationRate):
 
         offspring_population = [];
-        fitness_parents = []
+        negative_fitness_parents = []
 
         offspring_population.append(self.best_individual.copy())
         best_individual_index = 0;
         
-        # Ellitism
-        for indi in range(len(self.individual_set)):
-            fitness_parents.append(self.individual_set[indi].fitness)
-            #print("fitness  ",self.individual_set[indi].fitness)
+        # Sort index of individuals based on their fitness
+        # (we use the negative of the fitness so that np.argsort returns
+        # the array of indices in the right order)
+        for i in range(len(self.individual_set)):
+            negative_fitness_parents.append(-self.individual_set[i].fitness)
+            #print("fitness  ",self.individual_set[i].fitness)
         
-        index_sorted = np.argsort(np.array(fitness_parents))
+        # Sort the array of negative fitnesses
+        index_sorted = np.argsort((negative_fitness_parents))
         
-        ellitism_probability = random.uniform(0.0, 1.0)
+        # Retrieve the number of individuals to be created by elitism
+        number_of_individuals_by_elitism = math.floor(self.elitism_probability * len(self.individual_set))
         
-        number_of_individual_by_ellitism = math.floor(ellitism_probability * len(self.individual_set))
+        # Make sure we keep the best individual
+        # EVEN if self.elitism_probability is null
+        # (we don't want to lose the best one)
+        if number_of_individuals_by_elitism == 0:
+            number_of_individuals_by_elitism =  1
         
-        
-        if ellitism_probability > 0.01:
-            number_of_individuals_by_ellitism =  1
-        
-        print(number_of_individuals_by_ellitism)
+        #print(number_of_individuals_by_elitism)
 
-        for i in range(number_of_individuals_by_ellitism):
-            
-            individual =self.individual_set[index_sorted[len(index_sorted) - i - 1]]
-            offspring_population.append(copy.deepcopy(individual))
-        
-        
+        # Copy the best parents into the population of children
+        for i in range(number_of_individuals_by_elitism):
+            #print(i, index_sorted[i], index_sorted)
+            individual = self.individual_set[index_sorted[i]]
+            offspring_population.append(individual.copy())
+
         # Evolutionary loop
         while (len(offspring_population) < len(self.individual_set)):
 
-            # Draw a random number between 0 and 1
-            chosen_operator = random.uniform(0.0, 1.0)
+            # Draw a random number between 0 and 1 minus the probability of elitism
+            chosen_operator = random.uniform(0.0, 1.0 - self.elitism_probability)
             
             # Crossover
             if (chosen_operator < self.cross_over_probability):
