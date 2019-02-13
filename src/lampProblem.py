@@ -5,6 +5,7 @@ import cv2
 room_width = 100;
 room_height = 100;
 lamp_radius = 15;
+W = 1;
 
 image_counter = 0;
 
@@ -40,7 +41,8 @@ def createLampMap(aSetOfLamps):
         y = int(aSetOfLamps[     i * 3 + 1])
         on_off = aSetOfLamps[i * 3 + 2];
 
-        if on_off > 0.5:
+        if True:
+        #if on_off > 0.5:
             # Draw circles corresponding to the lamps
             addLampToImage(x, y, 1);
 
@@ -52,7 +54,8 @@ def createLampMap(aSetOfLamps):
         y = int(aSetOfLamps[     i * 3 + 1])
         on_off = aSetOfLamps[i * 3 + 2];
 
-        if on_off > 0.5:
+        if True:
+        #if on_off > 0.5:
             # Plot the center of all the lamp (small radius) in black
             cv2.circle(temp_image, (x,y), 2, (0,0,0), -1)
 
@@ -61,25 +64,13 @@ def createLampMap(aSetOfLamps):
     image_counter += 1;
     #cv2.imwrite(filename, temp_image)
 
-    cv2.imshow("Window", overlay_image)
-    cv2.imshow("Window1", temp_image)
+    #cv2.imshow("Window", overlay_image)
+    #cv2.imshow("Window1", temp_image)
 
 def areaEnlightened():
     global overlay_image;
-
-    overlay_image = np.array(overlay_image)
-
-    areaEnlight = 0
-    for i in range(room_width):
-        for j in range(room_height):
-            pixel_intensity = overlay_image[i,j][0]
-            if (pixel_intensity > 0):
-                areaEnlight += min(pixel_intensity, 1)
-
-
-    #cv2.waitKey(1)
-
-    return areaEnlight;
+    temp_image = np.array(overlay_image)
+    return temp_image.sum();
 
 def areaOverlap():
 
@@ -89,20 +80,19 @@ def areaOverlap():
     for i in range(room_width):
         for j in range(room_height):
 
-            if (overlay_image[i,j] > 1):
+            if (overlay_image[i,j] > 1.5):
                 areaOver += overlay_image[i,j][0]
 
     return areaOver;
 
-def computeFitnessFunction(W):
+def computeFitnessFunction():
     area_enlightened = areaEnlightened();
     overlap          = areaOverlap();
 
-    #print(area_enlightened, overlap)
     return ((area_enlightened - W * overlap) / getArea());
 
-def fitnessFunction(aSetOfLamps, W=1):
+def fitnessFunction(aSetOfLamps):
     global global_fitness;
     createLampMap(aSetOfLamps);
-    global_fitness = computeFitnessFunction(W);
+    global_fitness = computeFitnessFunction();
     return global_fitness;

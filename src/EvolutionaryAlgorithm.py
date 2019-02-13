@@ -43,7 +43,6 @@ class EvolutionaryAlgorithm:
 
             self.global_fitness_function = aGlobalFitnessFunction;
             self.global_fitness = self.global_fitness_function(set_of_individuals);
-            print (self.global_fitness)
 
         # Compute the fitness value of all the individual
         # And keep track of who is the best individual
@@ -72,12 +71,17 @@ class EvolutionaryAlgorithm:
         return best_individual
         '''
 
+    def deleteAdd(self, aMutationRate):
+        print("steady state");
+        
+        
+        
+        
     def run(self, aMutationRate):
 
         offspring_population = [];
         negative_fitness_parents = []
 
-        offspring_population.append(self.best_individual.copy())
         best_individual_index = 0;
         
         # Sort index of individuals based on their fitness
@@ -103,7 +107,6 @@ class EvolutionaryAlgorithm:
 
         # Copy the best parents into the population of children
         for i in range(number_of_individuals_by_elitism):
-            #print(i, index_sorted[i], index_sorted)
             individual = self.individual_set[index_sorted[i]]
             offspring_population.append(individual.copy())
 
@@ -136,15 +139,14 @@ class EvolutionaryAlgorithm:
                 parent_index = self.TournmentSelection()
                 
                 # Copy the parent into a child
-                offspring_population.append(self.set_of_individuals[parent_index]);
+                offspring_population.append(self.individual_set[parent_index]);
 
                 # Mutate the child
                 offspring_population[-1].gaussianMutation(aMutationRate)
-
+                
             # New blood
             else:
                 offspring_population.append(IND.Individual(self.genes_number, self.boundary_set, self.local_fitness))
-
 
         # Compute the global fitness
         if self.global_fitness:
@@ -173,7 +175,7 @@ class EvolutionaryAlgorithm:
         # Return the best individual
         return self.best_individual;
 
-    def TournmentSelection(self):
+    def TournmentSelection(self, findBest = True):
 
         max_ind = len(self.individual_set) - 1;
 
@@ -185,8 +187,12 @@ class EvolutionaryAlgorithm:
 
         # Find the best individual depened on the fitness
         # (maxiumisation)
-        if (self.individual_set[index].fitness > self.individual_set[best].fitness):
+        if (self.individual_set[index].fitness > self.individual_set[best].fitness and findBest):
             best = index
+
+        elif (self.individual_set[index].fitness < self.individual_set[best].fitness and !findBest):
+            best = index
+
 
         # Return the index of the best individual
         return (best)
