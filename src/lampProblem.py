@@ -4,7 +4,7 @@ import cv2
 
 room_width = 100;
 room_height = 100;
-lamp_radius = 10;
+lamp_radius = 15;
 
 image_counter = 0;
 
@@ -72,9 +72,9 @@ def areaEnlightened():
     areaEnlight = 0
     for i in range(room_width):
         for j in range(room_height):
-
-            if (overlay_image[i,j] > 0):
-                areaEnlight += min(overlay_image[i,j], 1)
+            pixel_intensity = overlay_image[i,j][0]
+            if (pixel_intensity > 0):
+                areaEnlight += min(pixel_intensity, 1)
 
 
     #cv2.waitKey(1)
@@ -90,7 +90,7 @@ def areaOverlap():
         for j in range(room_height):
 
             if (overlay_image[i,j] > 1):
-                areaOver += overlay_image[i,j]
+                areaOver += overlay_image[i,j][0]
 
     return areaOver;
 
@@ -98,6 +98,7 @@ def computeFitnessFunction(W):
     area_enlightened = areaEnlightened();
     overlap          = areaOverlap();
 
+    #print(area_enlightened, overlap)
     return ((area_enlightened - W * overlap) / getArea());
 
 def fitnessFunction(aSetOfLamps, W=1):

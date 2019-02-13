@@ -49,6 +49,7 @@ class Individual:
 
         # Compute the fitness function
         self.fitness = self.fitness_function(self.genes);
+
         return self.fitness;
 
 
