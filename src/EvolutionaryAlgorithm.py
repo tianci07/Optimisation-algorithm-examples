@@ -73,9 +73,24 @@ class EvolutionaryAlgorithm:
 
     def deleteAdd(self, aMutationRate):
         print("steady state");
-        
-        
-        
+    
+        for i in range(len(self.individual_set)):
+            parent = []
+            child  = []
+
+            # Select good Individual
+            good = self.TournmentSelection(0)
+            # Selecr bad individual
+            bad  = self.TournmentSelection(0)
+            
+            # Copy parent individual
+            parent = copy.deepcopy(self.individual_set[good])
+           
+            # Mutate the good individual
+            child = copy.deepcopy(parent.gaussianMutation(aMutationRate))
+
+            # Replace bad fly in the population with new one
+            self.individual_set[bad] = copy.deepcopy(child)
         
     def run(self, aMutationRate):
 
@@ -120,11 +135,11 @@ class EvolutionaryAlgorithm:
             if (chosen_operator < self.cross_over_probability):
 
                 # Select the parents from the population
-                parent1_index = parent2_index = self.TournmentSelection()
+                parent1_index = parent2_index = self.TournmentSelection(0)
 
                 # Make sure parent 1 is different from parent2
                 while parent2_index == parent1_index:
-                    parent2_index = self.TournmentSelection();
+                    parent2_index = self.TournmentSelection(0);
 
                 # Perform the crossover
                 offspring_population.append(self.BlendCrossover(parent1_index, parent2_index));
@@ -136,7 +151,7 @@ class EvolutionaryAlgorithm:
             elif (chosen_operator < self.cross_over_probability +  self.mutation_probability ):
     
                 # Select the parents from the population
-                parent_index = self.TournmentSelection()
+                parent_index = self.TournmentSelection(0)
                 
                 # Copy the parent into a child
                 offspring_population.append(self.individual_set[parent_index]);
@@ -175,7 +190,7 @@ class EvolutionaryAlgorithm:
         # Return the best individual
         return self.best_individual;
 
-    def TournmentSelection(self, findBest = True):
+    def TournmentSelection(self, BestBad):
 
         max_ind = len(self.individual_set) - 1;
 
@@ -187,13 +202,22 @@ class EvolutionaryAlgorithm:
 
         # Find the best individual depened on the fitness
         # (maxiumisation)
-        if (self.individual_set[index].fitness > self.individual_set[best].fitness and findBest):
+        # good individual
+        if BestBad == 0:
+            if (self.individual_set[index].fitness > self.individual_set[best].fitness):
+                best = index
+
+            elif (self.individual_set[index].fitness < self.individual_set[best].fitness):
+                best = index
+        
+        # bad individual
+        else:
+          if (self.individual_set[index].fitness < self.individual_set[best].fitness):
             best = index
-
-        elif (self.individual_set[index].fitness < self.individual_set[best].fitness and !findBest):
+          
+          elif (self.individual_set[index].fitness > self.individual_set[best].fitness):
             best = index
-
-
+                  
         # Return the index of the best individual
         return (best)
 

@@ -19,7 +19,7 @@ import EvolutionaryAlgorithm as EA;
 import lampProblem as LP;
 
 g_number_of_individuals = 10;
-g_iterations            = 200;
+g_iterations            = 20;
 g_max_mutation_sigma = 0.25;
 g_min_mutation_sigma = 0.01;
 
@@ -86,7 +86,7 @@ cv2.imwrite("current_population_0.png", LP.overlay_image)
 
 print(0, optimiser.global_fitness, best_population_fitness);
 
-steady_state = False;
+steady_state = True;
 
 # Compute g_iterations new generations
 for i in range(g_iterations):
@@ -131,6 +131,7 @@ for ind in best_population:
 
 # Regenerate the image here
 final_image = np.zeros((LP.room_height, LP.room_width, 1), np.float32)
+population  = copy.deepcopy(optimiser.individual_set);
 
 for i in range(len(population)):
 
@@ -144,7 +145,7 @@ for i in range(len(population)):
         np.add(final_image, black_image, final_image);
 
 
-cv2.imshow("Regenerate", final_image / final_image.max());
+cv2.imshow("Regenerate", final_image );
 
 
 # print global fitness
