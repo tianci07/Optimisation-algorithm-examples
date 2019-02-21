@@ -7,7 +7,7 @@ import copy
 
 class EvolutionaryAlgorithm:
 
-    def __init__(self, aNumberOfGenes, aBoundarySet, aFitnessFunction, aNumberOfIndividuals, aGlobalFitnessFunction = 0):
+    def __init__(self, aNumberOfGenes, aBoundarySet, aFitnessFunction, aNumberOfIndividuals, aGlobalFitnessFunction = 0, aUpdateIndividualContribution = 0):
 
         # Probability of operators
         self.elitism_probability     = 0.1;
@@ -23,6 +23,11 @@ class EvolutionaryAlgorithm:
         # Store the population
         self.individual_set = [];
 
+        # New individual callback
+        self.individual_callback = 0;
+        if aUpdateIndividualContribution:
+            self.individual_callback = aUpdateIndividualContribution;
+        
         # Keep track of the best individual
         self.individual_set.append(IND.Individual(aNumberOfGenes, aBoundarySet, aFitnessFunction));
 
@@ -74,23 +79,63 @@ class EvolutionaryAlgorithm:
     def deleteAdd(self, aMutationRate):
         print("steady state");
     
-        for i in range(len(self.individual_set)):
-            parent = []
-            child  = []
+        # Select bad individual
+        index_bad_individual  = self.TournmentSelection(1)
+        
+        # Remove the contribution of the bad individual
+        if self.individual_callback:
+            self.individual_callback(False, self.set_of_individuals[index_bad_individual])
+        
+        # Draw a random number between 0 and 1 minus the probability of elitism
+        chosen_operator = random.uniform(0.0, 1.0 - self.elitism_probability)
+        
+        # Crossover
+        if (chosen_operator < self.cross_over_probability):
 
-            # Select good Individual
-            good = self.TournmentSelection(0)
-            # Selecr bad individual
-            bad  = self.TournmentSelection(0)
+            # Select the parents from the population
+            parent1_index = parent2_index = self.TournmentSelection()
+
+            # Make sure parent 1 is different from parent2
+            while parent2_index == parent1_index:
+                parent2_index = self.TournmentSelection();
+
+            # Perform the crossover
+            self.individual_set[index_bad_individual] = self.BlendCrossover(parent1_index, parent2_index)
+
+            # Mutate the child
+            self.individual_set[index_bad_individual].gaussianMutation(aMutationRate)
+
+        # Mutation only
+        elif (chosen_operator < self.cross_over_probability +  self.mutation_probability ):
+
+            # Select the parents from the population
+            parent_index = self.TournmentSelection()
             
-            # Copy parent individual
-            parent = copy.deepcopy(self.individual_set[good])
-           
-            # Mutate the good individual
-            child = copy.deepcopy(parent.gaussianMutation(aMutationRate))
+            # Copy the parent into a child
+            self.individual_set[index_bad_individual] = self.individual_set[parent_index];
 
-            # Replace bad fly in the population with new one
-            self.individual_set[bad] = copy.deepcopy(child)
+            # Mutate the child
+            self.individual_set[index_bad_individual].gaussianMutation(aMutationRate)
+    
+        # New blood
+        else:
+            self.individual_set[index_bad_individual] = (IND.Individual(self.genes_number, self.boundary_set, self.local_fitness))
+
+            
+        # Add the contribution of the new individual
+        if self.individual_callback:
+            self.individual_callback(True, self.set_of_individuals[index_bad_individual])
+
+        # Compute the global fitness
+        if self.global_fitness:
+
+            set_of_individuals = [];
+            for ind in self.individual_set:
+                for gene in ind.genes:
+                    set_of_individuals.append(gene);
+
+            self.global_fitness = self.global_fitness_function(set_of_individuals);
+
         
     def run(self, aMutationRate):
 
@@ -135,11 +180,11 @@ class EvolutionaryAlgorithm:
             if (chosen_operator < self.cross_over_probability):
 
                 # Select the parents from the population
-                parent1_index = parent2_index = self.TournmentSelection(0)
+                parent1_index = parent2_index = self.TournmentSelection()
 
                 # Make sure parent 1 is different from parent2
                 while parent2_index == parent1_index:
-                    parent2_index = self.TournmentSelection(0);
+                    parent2_index = self.TournmentSelection();
 
                 # Perform the crossover
                 offspring_population.append(self.BlendCrossover(parent1_index, parent2_index));
@@ -151,7 +196,7 @@ class EvolutionaryAlgorithm:
             elif (chosen_operator < self.cross_over_probability +  self.mutation_probability ):
     
                 # Select the parents from the population
-                parent_index = self.TournmentSelection(0)
+                parent_index = self.TournmentSelection()
                 
                 # Copy the parent into a child
                 offspring_population.append(self.individual_set[parent_index]);
@@ -190,7 +235,7 @@ class EvolutionaryAlgorithm:
         # Return the best individual
         return self.best_individual;
 
-    def TournmentSelection(self, BestBad):
+    def TournmentSelection(self, BestBad = 0):
 
         max_ind = len(self.individual_set) - 1;
 

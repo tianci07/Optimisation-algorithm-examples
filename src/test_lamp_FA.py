@@ -145,7 +145,7 @@ for i in range(len(population)):
         np.add(final_image, black_image, final_image);
 
 
-cv2.imshow("Regenerate", final_image );
+cv2.imshow("Regenerate", final_image /final_image.max());
 
 
 # print global fitness
