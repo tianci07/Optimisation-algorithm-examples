@@ -87,17 +87,11 @@ def plot(anOptimiser):
 
     numframes = len(best_individual_x)
 
-    xdata1, ydata1, zdata1 = [], [], [];
-    xdata2, ydata2, zdata2 = [], [], [];
-
     scat1 = ax.scatter([], [], [], marker='o', c='r', s=30) # Best solution
     scat2 = ax.scatter([], [], [], marker='o', c='g', s=10) # All the current solutions
 
 
     def update(i):
-        global xdata1, ydata1, zdata1;
-        global xdata2, ydata2, zdata2;
-
         global best_individual_x;
         global best_individual_y;
         global best_individual_z;
