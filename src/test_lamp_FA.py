@@ -138,7 +138,7 @@ for i in range(len(population)):
     x = int(population[i].genes[0])
     y = int(population[i].genes[1])
     on_off = population[i].genes[2]
-    
+
     if on_off > 0.5:
         black_image = np.zeros((LP.room_height, LP.room_width, 1), np.float32)
         cv2.circle(black_image, (x,y), LP.lamp_radius, (1, 1, 1), -1)
