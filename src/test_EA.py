@@ -28,16 +28,16 @@ for i in range(g_number_of_genes):
     boundaries.append([-5,5]);
 
 def fitnessFunction(aSolution):
-    sum = 0.0;
+    fitness = 0.0;
     #
     #for i in range(g_number_of_dimensions):
     #    sum += aSolution[i] * aSolution[i];
     #
-    sum += math.exp(-(math.pow(aSolution[0], 2) + math.pow(aSolution[1], 2)));
-    sum += 2.0 * math.exp(-(math.pow(aSolution[0]-1.7, 2) + math.pow(aSolution[1]-1.7, 2)));
-    sum *= -1.0;
+    fitness += math.exp(-(math.pow(aSolution[0], 2) + math.pow(aSolution[1], 2)));
+    fitness += 2.0 * math.exp(-(math.pow(aSolution[0]-1.7, 2) + math.pow(aSolution[1]-1.7, 2)));
+    fitness *= -1.0;
     #
-    return -sum;
+    return -fitness;
 
 optimiser = EA.EvolutionaryAlgorithm(g_number_of_genes, boundaries, fitnessFunction, g_number_of_individuals)
 
