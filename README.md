@@ -1,5 +1,7 @@
 # Optimisation-algorithm-examples
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/9425724732034858aeabdf8223e03fca)](https://app.codacy.com/app/Shatha1978/Optimisation-algorithm-examples?utm_source=github.com&utm_medium=referral&utm_content=Shatha1978/Optimisation-algorithm-examples&utm_campaign=Badge_Grade_Dashboard)
+
 
 A small set of iterative optimisation algorithms to illustrate the paper entitled "???" submited to [Swarm and Evolutionary Computation](https://www.journals.elsevier.com/swarm-and-evolutionary-computation "Swarm and Evolutionary Computation's homepage").
 
