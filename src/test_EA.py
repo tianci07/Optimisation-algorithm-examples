@@ -61,10 +61,6 @@ def plot(anOptimiser):
     Y = [];
     Z = [];
 
-    linear_x = [];
-    linear_y = [];
-    linear_z = [];
-
     for y in frange(boundaries[0][0], boundaries[0][1], 0.05):
         #
         Temp_X = [];

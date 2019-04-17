@@ -14,7 +14,7 @@ from mpl_toolkits.mplot3d import Axes3D
 from matplotlib import animation
 
 from PSO import PSO
-import Particle
+
 
 g_number_of_particle   = 10;
 g_iterations           = 20;
@@ -57,10 +57,6 @@ def plot(anOptimiser):
     X = [];
     Y = [];
     Z = [];
-
-    linear_x = [];
-    linear_y = [];
-    linear_z = [];
 
     for y in frange(boundaries[0][0], boundaries[0][1], 0.05):
         #

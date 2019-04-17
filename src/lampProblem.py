@@ -39,7 +39,7 @@ def createLampMap(aSetOfLamps):
     for i in range(number_of_lamps):
         x = int(aSetOfLamps[     i * 3 + 0])
         y = int(aSetOfLamps[     i * 3 + 1])
-        on_off = aSetOfLamps[i * 3 + 2];
+        #on_off = aSetOfLamps[i * 3 + 2];
 
         if True:
         #if on_off > 0.5:

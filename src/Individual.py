@@ -1,8 +1,6 @@
 import random
 import math
-import numpy as np
 import copy
-import sys
 
 
 class Individual:

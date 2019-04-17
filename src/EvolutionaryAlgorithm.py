@@ -60,22 +60,7 @@ class EvolutionaryAlgorithm:
         # Store the best individual
         self.best_individual = self.individual_set[best_individual_index].copy();
 
-    '''
-    def BestIndividual(self):
-
-        best_individual = IND.Individual()
-        best_individual = self.individual_set[0]
-
-        # Find the best individual in the popoulation
-        for best_ind in self.individual_set:
-
-            if (best_individual.fitness > best_ind.fitness):
-
-                best_individual.copy(best_ind)
-
-        return best_individual
-        '''
-
+   
     def deleteAdd(self, aMutationRate):
         print("steady state");
     
