@@ -85,7 +85,7 @@ cv2.imwrite("current_population_0.png", LP.overlay_image)
 
 print(0, optimiser.global_fitness, best_population_fitness);
 
-steady_state = True;
+steady_state = False;
 
 # Compute g_iterations new generations
 for i in range(g_iterations):
@@ -94,28 +94,16 @@ for i in range(g_iterations):
     sigma = g_min_mutation_sigma + (g_iterations - 1 - i) / (g_iterations - 1) * (g_max_mutation_sigma - g_min_mutation_sigma);
     
     # Compute the new generation
-    if steady_state:
-        for j in range(g_number_of_individuals):
-            optimiser.deleteAdd(sigma);
+    optimiser.run(sigma);
 
-            # The new population is better than the previous one
-            if best_population_fitness < optimiser.global_fitness:
-                best_population_id      = i;
-                best_population_fitness = optimiser.global_fitness;
-                best_population         = copy.deepcopy(optimiser.individual_set);
-                best_population_image   = copy.deepcopy(LP.overlay_image);
-                cv2.imwrite("best_population_"    + str(i) + "_" + str(j) + ".png",  best_population_image)
-    else:
-        optimiser.run(sigma);
+    # The new population is better than the previous one
+    if best_population_fitness < optimiser.global_fitness:
+        best_population_id      = i;
+        best_population_fitness = optimiser.global_fitness;
+        best_population         = copy.deepcopy(optimiser.individual_set);
+        best_population_image   = copy.deepcopy(LP.overlay_image);
+        cv2.imwrite("best_population_"    + str(i) + ".png",  best_population_image)
 
-        # The new population is better than the previous one
-        if best_population_fitness < optimiser.global_fitness:
-            best_population_id      = i;
-            best_population_fitness = optimiser.global_fitness;
-            best_population         = copy.deepcopy(optimiser.individual_set);
-            best_population_image   = copy.deepcopy(LP.overlay_image);
-            cv2.imwrite("best_population_"    + str(i) + ".png",  best_population_image)
-    
     cv2.imwrite("current_population_" + str(i) + ".png",  LP.overlay_image)
 
     print(i, optimiser.global_fitness, best_population_id, best_population_fitness);
