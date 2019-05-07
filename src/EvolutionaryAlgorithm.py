@@ -60,67 +60,6 @@ class EvolutionaryAlgorithm:
         # Store the best individual
         self.best_individual = self.individual_set[best_individual_index].copy();
 
-   
-    def deleteAdd(self, aMutationRate):
-        print("steady state");
-    
-        # Select bad individual
-        index_bad_individual  = self.TournmentSelection(1)
-        
-        # Remove the contribution of the bad individual
-        if self.individual_callback:
-            self.individual_callback(False, self.set_of_individuals[index_bad_individual])
-        
-        # Draw a random number between 0 and 1 minus the probability of elitism
-        chosen_operator = random.uniform(0.0, 1.0 - self.elitism_probability)
-        
-        # Crossover
-        if (chosen_operator < self.cross_over_probability):
-
-            # Select the parents from the population
-            parent1_index = parent2_index = self.TournmentSelection()
-
-            # Make sure parent 1 is different from parent2
-            while parent2_index == parent1_index:
-                parent2_index = self.TournmentSelection();
-
-            # Perform the crossover
-            self.individual_set[index_bad_individual] = self.BlendCrossover(parent1_index, parent2_index)
-
-            # Mutate the child
-            self.individual_set[index_bad_individual].gaussianMutation(aMutationRate)
-
-        # Mutation only
-        elif (chosen_operator < self.cross_over_probability +  self.mutation_probability ):
-
-            # Select the parents from the population
-            parent_index = self.TournmentSelection()
-            
-            # Copy the parent into a child
-            self.individual_set[index_bad_individual] = self.individual_set[parent_index];
-
-            # Mutate the child
-            self.individual_set[index_bad_individual].gaussianMutation(aMutationRate)
-    
-        # New blood
-        else:
-            self.individual_set[index_bad_individual] = (IND.Individual(self.genes_number, self.boundary_set, self.local_fitness))
-
-            
-        # Add the contribution of the new individual
-        if self.individual_callback:
-            self.individual_callback(True, self.set_of_individuals[index_bad_individual])
-
-        # Compute the global fitness
-        if self.global_fitness:
-
-            set_of_individuals = [];
-            for ind in self.individual_set:
-                for gene in ind.genes:
-                    set_of_individuals.append(gene);
-
-            self.global_fitness = self.global_fitness_function(set_of_individuals);
-
         
     def run(self, aMutationRate):
 
