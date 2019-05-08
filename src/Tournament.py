@@ -2,9 +2,8 @@ import random
 import math
 import copy
 import Individual as IND
-import EvolutionaryAlgorithm as EV
 
-class :TournmentSelection
+class TournmentSelection:
 
     def Select(self, aIndividualSet):
 

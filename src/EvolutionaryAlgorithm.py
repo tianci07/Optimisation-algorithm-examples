@@ -4,6 +4,7 @@ import Individual as IND
 import numpy as np
 import math
 import copy
+import TournmentSelection as TS
 
 class EvolutionaryAlgorithm:
 
@@ -104,11 +105,11 @@ class EvolutionaryAlgorithm:
             if (chosen_operator < self.cross_over_probability):
 
                 # Select the parents from the population
-                parent1_index = parent2_index = self.TournmentSelection()
+                parent1_index = parent2_index = TS.Select(self.individual_set)
 
                 # Make sure parent 1 is different from parent2
                 while parent2_index == parent1_index:
-                    parent2_index = self.TournmentSelection();
+                    parent2_index = TS.Select(self.individual_set);
 
                 # Perform the crossover
                 offspring_population.append(self.BlendCrossover(parent1_index, parent2_index));
@@ -120,7 +121,7 @@ class EvolutionaryAlgorithm:
             elif (chosen_operator < self.cross_over_probability +  self.mutation_probability ):
     
                 # Select the parents from the population
-                parent_index = self.TournmentSelection()
+                parent_index = TS.Select(self.individual_set)
                 
                 # Copy the parent into a child
                 offspring_population.append(self.individual_set[parent_index]);
