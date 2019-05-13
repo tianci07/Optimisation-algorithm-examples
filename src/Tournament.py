@@ -1,13 +1,19 @@
 import random
 import math
 import copy
-import Individual as IND
+import Individual as ID
+import EvolutionaryAlgorithm as EA
 
 class TournmentSelection:
 
-    def Select(self, aIndividualSet):
+    def __init__(self):
+        
+        self.individual_set = EA.EvolutionaryAlgorithm()
+    
 
-        max_ind = len(aIndividualSet) - 1;
+    def Select(self, self.individual_set):
+
+        max_ind = len(self.individual_set) - 1;
         
         # Choose the first individual randomly
         best = random.randint(0, max_ind)
@@ -19,21 +25,21 @@ class TournmentSelection:
         # (maxiumisation)
         # good individual
         if BestBad == 0:
-            if (aIndividualSet[index].fitness > aIndividualSet[best].fitness):
+            if (self.individual_set[index].fitness > self.individual_set[best].fitness):
                 best = index
             
-            elif (aIndividualSet[index].fitness < aIndividualSet[best].fitness):
+            elif (self.individual_set[index].fitness < self.individual_set[best].fitness):
                 best = index
 
         # bad individual
         else:
-            if (aIndividualSet[index].fitness < aIndividualSet[best].fitness):
+            if (self.individual_set[index].fitness < self.individual_set[best].fitness):
                 best = index
             
-            elif (aIndividualSet[index].fitness > aIndividualSet[best].fitness):
+            elif (self.individual_set[index].fitness > self.individual_set[best].fitness):
                 best = index
         
         # Return the index of the best individual
-        return (best)
+        return (best);
 
 
