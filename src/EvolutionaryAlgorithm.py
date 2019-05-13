@@ -4,12 +4,15 @@ import Individual as IND
 import numpy as np
 import math
 import copy
-import TournmentSelection as TS
+import Tournament as TS
 
 class EvolutionaryAlgorithm:
 
     def __init__(self, aNumberOfGenes, aBoundarySet, aFitnessFunction, aNumberOfIndividuals, aGlobalFitnessFunction = 0, aUpdateIndividualContribution = 0):
 
+        # Selection operator
+        self.selection_operator = TS.TournamentSelection();
+        
         # Probability of operators
         self.elitism_probability     = 0.1;
         self.cross_over_probability  = 0.7;
@@ -105,11 +108,11 @@ class EvolutionaryAlgorithm:
             if (chosen_operator < self.cross_over_probability):
 
                 # Select the parents from the population
-                parent1_index = parent2_index = TS.Select(self.individual_set)
+                parent1_index = parent2_index = self.selection_operator.select(self.individual_set)
 
                 # Make sure parent 1 is different from parent2
                 while parent2_index == parent1_index:
-                    parent2_index = TS.Select(self.individual_set);
+                    parent2_index = self.selection_operator.select(self.individual_set);
 
                 # Perform the crossover
                 offspring_population.append(self.BlendCrossover(parent1_index, parent2_index));
@@ -121,7 +124,7 @@ class EvolutionaryAlgorithm:
             elif (chosen_operator < self.cross_over_probability +  self.mutation_probability ):
     
                 # Select the parents from the population
-                parent_index = TS.Select(self.individual_set)
+                parent_index = self.selection_operator.select(self.individual_set)
                 
                 # Copy the parent into a child
                 offspring_population.append(self.individual_set[parent_index]);
@@ -160,36 +163,7 @@ class EvolutionaryAlgorithm:
         # Return the best individual
         return self.best_individual;
 
-    def TournmentSelection(self, BestBad = 0):
 
-        max_ind = len(self.individual_set) - 1;
-
-        # Choose the first individual randomly
-        best = random.randint(0, max_ind)
-
-        # Choose the second individual randomly
-        index = random.randint(0, max_ind)
-
-        # Find the best individual depened on the fitness
-        # (maxiumisation)
-        # good individual
-        if BestBad == 0:
-            if (self.individual_set[index].fitness > self.individual_set[best].fitness):
-                best = index
-
-            elif (self.individual_set[index].fitness < self.individual_set[best].fitness):
-                best = index
-        
-        # bad individual
-        else:
-          if (self.individual_set[index].fitness < self.individual_set[best].fitness):
-            best = index
-          
-          elif (self.individual_set[index].fitness > self.individual_set[best].fitness):
-            best = index
-                  
-        # Return the index of the best individual
-        return (best)
 
     def BlendCrossover(self, aParent1Index, aParent2Index):
 

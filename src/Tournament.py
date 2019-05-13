@@ -1,45 +1,51 @@
 import random
 import math
 import copy
+import numpy
 import Individual as ID
 import EvolutionaryAlgorithm as EA
 
-class TournmentSelection:
+class TournamentSelection:
 
-    def __init__(self):
+    def __init__(self, aTournamentSize = 2):
+        self.tournament_size = aTournamentSize;
+
+    def setTournamentSize():
+        self.tournament_size = aTournamentSize;
         
-        self.individual_set = EA.EvolutionaryAlgorithm()
+    def getTournamentSize():
+        return self.tournament_size;
     
-
-    def Select(self, self.individual_set):
-
-        max_ind = len(self.individual_set) - 1;
+    def select(self, anIndividualSet):
+        return self.selectGood(anIndividualSet);
         
-        # Choose the first individual randomly
-        best = random.randint(0, max_ind)
-        
-        # Choose the second individual randomly
-        index = random.randint(0, max_ind)
+    def selectGood(self, anIndividualSet):
+        return self.__select__(anIndividualSet, True);
 
-        # Find the best individual depened on the fitness
+    def selectBad(self, anIndividualSet):
+        return self.__select__(anIndividualSet, False);
+    
+    def preProcess(self, anIndividualSet):
+        return
+        
+    def __select__(self, anIndividualSet, aFlag): # aFlag == True for selecting good individuals,
+                                                  # aFlag == False for selecting bad individuals,
+        
+        max_ind = len(anIndividualSet) - 1;
+
+        fitness_set = [];
+        for i in range(self.tournament_size):
+            index = random.randint(0, max_ind)
+            fitness = anIndividualSet[index].fitness
+            fitness_set.append(fitness)
+        
+        # Find the best individual depending on the fitness
         # (maxiumisation)
         # good individual
-        if BestBad == 0:
-            if (self.individual_set[index].fitness > self.individual_set[best].fitness):
-                best = index
-            
-            elif (self.individual_set[index].fitness < self.individual_set[best].fitness):
-                best = index
-
+        if aFlag == True:
+            return numpy.argmax(fitness_set)
         # bad individual
         else:
-            if (self.individual_set[index].fitness < self.individual_set[best].fitness):
-                best = index
-            
-            elif (self.individual_set[index].fitness > self.individual_set[best].fitness):
-                best = index
-        
-        # Return the index of the best individual
-        return (best);
+            return numpy.argmin(fitness_set)
 
 
