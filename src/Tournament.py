@@ -4,10 +4,13 @@ import copy
 import numpy
 import Individual as ID
 import EvolutionaryAlgorithm as EA
+import SelectionOperator
 
-class TournamentSelection:
+
+class TournamentSelection(SelectionOperator.SelectionOperator):
 
     def __init__(self, aTournamentSize = 2):
+        super().__init__("Tournament selection");
         self.tournament_size = aTournamentSize;
 
     def setTournamentSize():
@@ -16,17 +19,12 @@ class TournamentSelection:
     def getTournamentSize():
         return self.tournament_size;
     
-    def select(self, anIndividualSet):
-        return self.selectGood(anIndividualSet);
-        
-    def selectGood(self, anIndividualSet):
-        return self.__select__(anIndividualSet, True);
 
-    def selectBad(self, anIndividualSet):
-        return self.__select__(anIndividualSet, False);
-    
     def preProcess(self, anIndividualSet):
         return
+    
+    def __str__(self):
+        return super().__str__() + "\t" + "tournament_size:\t" + str(self.tournament_size);
         
     def __select__(self, anIndividualSet, aFlag): # aFlag == True for selecting good individuals,
                                                   # aFlag == False for selecting bad individuals,

@@ -3,6 +3,7 @@
 #import cProfile
 
 import math;
+import traceback
 
 import numpy as np
 
@@ -14,6 +15,7 @@ from mpl_toolkits.mplot3d import Axes3D
 from matplotlib import animation
 
 import EvolutionaryAlgorithm  as EA
+import Tournament  as TS
 import Individual
 
 g_number_of_individuals = 10;
@@ -40,6 +42,10 @@ def fitnessFunction(aSolution):
     return -fitness;
 
 optimiser = EA.EvolutionaryAlgorithm(g_number_of_genes, boundaries, fitnessFunction, g_number_of_individuals)
+print(optimiser.selection_operator)
+tournament = TS.TournamentSelection(2);
+optimiser.setSelectionOperator(tournament);
+print(optimiser.selection_operator)
 
 
 def frange(start, stop, step):
@@ -117,38 +123,42 @@ def plot(anOptimiser):
     plt.show()
 
 
-best_individual_x = [];
-best_individual_y = [];
-best_individual_z = [];
+try:
+    best_individual_x = [];
+    best_individual_y = [];
+    best_individual_z = [];
 
-set_individual_set_x = [];
-set_individual_set_y = [];
-set_individual_set_z = [];
+    set_individual_set_x = [];
+    set_individual_set_y = [];
+    set_individual_set_z = [];
 
-for i in range(g_iterations):
-    sigma = g_min_mutation_sigma + (g_iterations - 1 - i) / (g_iterations - 1) * (g_max_mutation_sigma - g_min_mutation_sigma);
-    optimiser.run(sigma);
+    for i in range(g_iterations):
+        sigma = g_min_mutation_sigma + (g_iterations - 1 - i) / (g_iterations - 1) * (g_max_mutation_sigma - g_min_mutation_sigma);
+        optimiser.run(sigma);
 
-    # Store the best individual
-    best_individual_x.append(optimiser.best_individual.genes[0])
-    best_individual_y.append(optimiser.best_individual.genes[1])
-    best_individual_z.append(-optimiser.best_individual.fitness)
+        # Store the best individual
+        best_individual_x.append(optimiser.best_individual.genes[0])
+        best_individual_y.append(optimiser.best_individual.genes[1])
+        best_individual_z.append(-optimiser.best_individual.fitness)
 
-    # Store the current swarm
-    individual_set_x = [];
-    individual_set_y = [];
-    individual_set_z = [];
+        # Store the current swarm
+        individual_set_x = [];
+        individual_set_y = [];
+        individual_set_z = [];
 
-    for individual in optimiser.individual_set:
-        individual_set_x.append(individual.genes[0])
-        individual_set_y.append(individual.genes[1])
-        individual_set_z.append(-individual.fitness)
+        for individual in optimiser.individual_set:
+            individual_set_x.append(individual.genes[0])
+            individual_set_y.append(individual.genes[1])
+            individual_set_z.append(-individual.fitness)
 
-    set_individual_set_x.append(individual_set_x);
-    set_individual_set_y.append(individual_set_y);
-    set_individual_set_z.append(individual_set_z);
+        set_individual_set_x.append(individual_set_x);
+        set_individual_set_y.append(individual_set_y);
+        set_individual_set_z.append(individual_set_z);
 
-print(optimiser)
-print(optimiser.best_individual)
+    print(optimiser)
+    print(optimiser.best_individual)
 
-plot(optimiser)
+    plot(optimiser)
+    
+except:
+    traceback.print_exc()

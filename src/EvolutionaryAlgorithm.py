@@ -4,14 +4,14 @@ import Individual as IND
 import numpy as np
 import math
 import copy
-import Tournament as TS
+import SelectionOperator
 
 class EvolutionaryAlgorithm:
 
     def __init__(self, aNumberOfGenes, aBoundarySet, aFitnessFunction, aNumberOfIndividuals, aGlobalFitnessFunction = 0, aUpdateIndividualContribution = 0):
 
         # Selection operator
-        self.selection_operator = TS.TournamentSelection();
+        self.selection_operator = SelectionOperator.SelectionOperator();
         
         # Probability of operators
         self.elitism_probability     = 0.1;
@@ -64,6 +64,9 @@ class EvolutionaryAlgorithm:
         # Store the best individual
         self.best_individual = self.individual_set[best_individual_index].copy();
 
+    
+    def setSelectionOperator(self, aSelectionOperator):
+        self.selection_operator = aSelectionOperator;
         
     def run(self, aMutationRate):
 
