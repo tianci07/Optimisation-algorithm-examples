@@ -5,7 +5,7 @@ import copy
 
 class Individual:
 
-    def __init__(self, aNumberOfGenes, aBoundarySet, aFitnessFunction, aGeneSet = [], aFitness = -float('inf')):
+    def __init__(self, aNumberOfGenes, aBoundarySet, aFitnessFunction, aGeneSet = None, aFitness = -float('inf')):
 
         # Set the genes
         self.genes = [];
@@ -19,7 +19,7 @@ class Individual:
         # Set boundaries
         self.boundary_set = copy.deepcopy(aBoundarySet)
 
-        if len(aGeneSet) == aNumberOfGenes:
+        if aGeneSet != None:
             self.genes = copy.deepcopy(aGeneSet);
         else:
             # Initialise the Individual's genes and fitness

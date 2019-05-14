@@ -4,7 +4,7 @@ import copy
 
 class Particle:
 
-    def __init__(self, aNumberOfDimentions, aBoundarySet, aCostFunction, aPSO, aPosition = [], aVelocity = []):
+    def __init__(self, aNumberOfDimentions, aBoundarySet, aCostFunction, aPSO, aPosition = None, aVelocity = None):
 
         self.position = []
         self.velocity = []
@@ -22,13 +22,18 @@ class Particle:
         # Store the PSO
         self.pso = aPSO;
 
-        if len(aPosition) == aNumberOfDimentions and len(aVelocity) == aNumberOfDimentions:
-            self.position = copy.deepcopy(aPosition);
-            self.velocity = copy.deepcopy(aVelocity);
+        # Copy the particle position and velocity
+        if aPosition != None and aVelocity != None:
+            if len(aPosition) == aNumberOfDimentions and len(aVelocity) == aNumberOfDimentions:
+                self.position = copy.deepcopy(aPosition);
+                self.velocity = copy.deepcopy(aVelocity);
 
+        # Initialise the particle's position and velocity
+        if len(self.position) == 0 or len(self.velocity) == 0:
 
-        else:
-            # Initialise the particle's position and velocity
+            self.position = []
+            self.velocity = []
+
             for i in range(aNumberOfDimentions):
                 # Get the boundaries
                 min_i = self.boundary_set[i][0];
