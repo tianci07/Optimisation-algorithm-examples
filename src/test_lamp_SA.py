@@ -14,13 +14,7 @@ from matplotlib import animation
 import cv2
 
 import SimulatedAnnealing as SA;
-import EvolutionaryAlgorithm as EA;
 import lampProblem as LP;
-
-g_number_of_individuals = 5;
-g_iterations            = 20;
-g_max_mutation_sigma = 0.25;
-g_min_mutation_sigma = 0.01;
 
 number_of_lamps = 10;
 
@@ -36,20 +30,13 @@ for i in range(number_of_lamps):
     boundaries.append([0,1]);
 
 
+optimiser = SA.SimulatedAnnealing(len(boundaries), boundaries, LP.fitnessFunction, 5000, 0.04);
+optimiser.run(False, False);
 
-optimiser = EA.EvolutionaryAlgorithm(len(boundaries), boundaries, LP.fitnessFunction, g_number_of_individuals);
-
-
-for i in range(g_iterations):
-    sigma = g_min_mutation_sigma + (g_iterations - 1 - i) / (g_iterations - 1) * (g_max_mutation_sigma - g_min_mutation_sigma);
-    optimiser.run(sigma);
-    
-    # Store the best individual
-    best_individual = optimiser.best_individual.genes;
-    LP.fitnessFunction(best_individual);
-    cv2.imshow("Best individual so far", LP.overlay_image);
-    cv2.waitKey(1);
-    print(optimiser.best_individual);
-    
+# Store the best individual
+LP.fitnessFunction(optimiser.best_solution);
+cv2.imshow("Best solution", LP.overlay_image);
+cv2.waitKey(0);
 print(optimiser)
+print(optimiser.best_solution);
 
