@@ -11,10 +11,10 @@ class TournamentSelection(SelectionOperator):
         super().__init__("Tournament selection");
         self.tournament_size = aTournamentSize;
 
-    def setTournamentSize(aTournamentSize):
+    def setTournamentSize(self, aTournamentSize):
         self.tournament_size = aTournamentSize;
 
-    def getTournamentSize():
+    def getTournamentSize(self):
         return self.tournament_size;
 
     def preProcess(self, anIndividualSet):
