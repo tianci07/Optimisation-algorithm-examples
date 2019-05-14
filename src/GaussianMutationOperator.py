@@ -24,7 +24,7 @@ class GaussianMutationOperator(GeneticOperator.GeneticOperator):
     def apply(self, anEA):
 
         self.use_count += 1;
-        
+
         # Select the parents from the population
         parent_index = anEA.selection_operator.select(anEA.individual_set)
 
@@ -35,5 +35,12 @@ class GaussianMutationOperator(GeneticOperator.GeneticOperator):
         return self.mutate(child);
 
     def mutate(self, anIndividual):
-        anIndividual.gaussianMutation(aMutationRate);
+
+        for i in range(len(anIndividual.genes)):
+            anIndividual.genes[i] = random.gauss(anIndividual.genes[i], aMutationRate);
+            anIndividual.genes[i] = max(anIndividual.boundary_set[i][0], anIndividual.genes[i]);
+            anIndividual.genes[i] = min(anIndividual.boundary_set[i][1], anIndividual.genes[i]);
+
+        anIndividual.computeFitnessFunction();
+
         return anIndividual;
