@@ -6,7 +6,9 @@ import numpy as np
 
 import matplotlib
 matplotlib.use("TkAgg")
+
 import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
 from matplotlib import animation
 
 import SimulatedAnnealing as SA;

@@ -1,6 +1,4 @@
 import GeneticOperator
-import Individual as IND
-
 
 class ElitismOperator(GeneticOperator.GeneticOperator):
 
