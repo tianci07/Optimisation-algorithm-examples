@@ -152,7 +152,8 @@ try:
 
     for i in range(g_iterations):
         sigma = g_min_mutation_sigma + (g_iterations - 1 - i) / (g_iterations - 1) * (g_max_mutation_sigma - g_min_mutation_sigma);
-        optimiser.run(sigma);
+        gaussian_mutation.setMutationVariance(sigma);
+        optimiser.run();
 
         # Store the best individual
         best_individual_x.append(optimiser.best_individual.genes[0])
