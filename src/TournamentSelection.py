@@ -2,12 +2,10 @@ import random
 import math
 import copy
 import numpy
-import Individual as ID
-import EvolutionaryAlgorithm as EA
-import SelectionOperator
 
+from SelectionOperator import *
 
-class TournamentSelection(SelectionOperator.SelectionOperator):
+class TournamentSelection(SelectionOperator):
 
     def __init__(self, aTournamentSize = 2):
         super().__init__("Tournament selection");
