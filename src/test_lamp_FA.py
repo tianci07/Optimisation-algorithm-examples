@@ -30,7 +30,7 @@ LP.W = 2;
 boundaries = [];
 boundaries.append([0,LP.room_width-1]);
 boundaries.append([0,LP.room_height-1]);
-boundaries.append([0,1]);
+boundaries.append([1,1]);
 
 
 def localFitnessFunction(aSetOfGenes):

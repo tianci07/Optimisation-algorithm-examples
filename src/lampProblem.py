@@ -37,12 +37,11 @@ def createLampMap(aSetOfLamps):
 
     # print the position of all the lamps
     for i in range(number_of_lamps):
-        x = int(aSetOfLamps[     i * 3 + 0])
-        y = int(aSetOfLamps[     i * 3 + 1])
+        x = int(aSetOfLamps[ i * 3 + 0])
+        y = int(aSetOfLamps[ i * 3 + 1])
         on_off = aSetOfLamps[i * 3 + 2];
 
-        if True:
-        #if on_off > 0.5:
+        if on_off > 0.5:
             # Draw circles corresponding to the lamps
             addLampToImage(x, y, 1);
 
@@ -50,18 +49,17 @@ def createLampMap(aSetOfLamps):
     temp_image = np.copy(overlay_image);
 
     for i in range(number_of_lamps):
-        x = int(aSetOfLamps[     i * 3 + 0])
-        y = int(aSetOfLamps[     i * 3 + 1])
+        x = int(aSetOfLamps[ i * 3 + 0])
+        y = int(aSetOfLamps[ i * 3 + 1])
         on_off = aSetOfLamps[i * 3 + 2];
 
-        if True:
-        #if on_off > 0.5:
+        if on_off > 0.5:
             # Plot the center of all the lamp (small radius) in black
             cv2.circle(temp_image, (x,y), 2, (0,0,0), -1)
 
     # Save the image (use image_counter in the file name)
-    filename = "lamp_" + str(image_counter) + ".png";
-    image_counter += 1;
+    #filename = "lamp_" + str(image_counter) + ".png";
+    #image_counter += 1;
     #cv2.imwrite(filename, temp_image)
 
     #cv2.imshow("Window", overlay_image)
