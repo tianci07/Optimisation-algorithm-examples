@@ -53,9 +53,9 @@ tournament = TS.TournamentSelection(2);
 optimiser.setSelectionOperator(tournament);
 print(optimiser.selection_operator)
 
-new_blood = NewBloodOperator(0.3);
-gaussian_mutation = GaussianMutationOperator(0.0, 0.4);
-blend_cross_over = BlendCrossoverOperator(0.7);
+new_blood = NewBloodOperator(0.2);
+gaussian_mutation = GaussianMutationOperator(0.1, 0.4);
+blend_cross_over = BlendCrossoverOperator(0.7, gaussian_mutation);
 
 optimiser.addGeneticOperator(new_blood);
 optimiser.addGeneticOperator(gaussian_mutation);
