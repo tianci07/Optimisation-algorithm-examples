@@ -18,6 +18,7 @@ import EvolutionaryAlgorithm  as EA
 
 from TournamentSelection      import *
 from RouletteWheel            import *
+from RankSelection            import *
 
 from ElitismOperator          import *
 from BlendCrossoverOperator   import *
@@ -51,9 +52,9 @@ def fitnessFunction(aSolution):
     return -fitness;
 
 optimiser = EA.EvolutionaryAlgorithm(g_number_of_genes, boundaries, fitnessFunction, g_number_of_individuals)
-print(optimiser.selection_operator)
-optimiser.setSelectionOperator(TournamentSelection(2));
-optimiser.setSelectionOperator(RouletteWheel());
+#optimiser.setSelectionOperator(TournamentSelection(2));
+#optimiser.setSelectionOperator(RouletteWheel());
+optimiser.setSelectionOperator(RankSelection());
 print(optimiser.selection_operator)
 
 elitism = ElitismOperator(0.1);
