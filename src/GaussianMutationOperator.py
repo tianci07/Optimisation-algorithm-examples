@@ -1,3 +1,5 @@
+import random
+
 import GeneticOperator
 import Individual as IND
 
@@ -37,7 +39,7 @@ class GaussianMutationOperator(GeneticOperator.GeneticOperator):
     def mutate(self, anIndividual):
 
         for i in range(len(anIndividual.genes)):
-            anIndividual.genes[i] = random.gauss(anIndividual.genes[i], aMutationRate);
+            anIndividual.genes[i] = random.gauss(anIndividual.genes[i], self.mutation_variance);
             anIndividual.genes[i] = max(anIndividual.boundary_set[i][0], anIndividual.genes[i]);
             anIndividual.genes[i] = min(anIndividual.boundary_set[i][1], anIndividual.genes[i]);
 
