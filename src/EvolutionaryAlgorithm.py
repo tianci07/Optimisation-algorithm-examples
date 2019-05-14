@@ -155,25 +155,6 @@ class EvolutionaryAlgorithm:
         return self.best_individual;
 
 
-
-    def BlendCrossover(self, aParent1Index, aParent2Index):
-
-        child_gene = [];
-
-        for p1_gene, p2_gene in zip(self.individual_set[aParent1Index].genes, self.individual_set[aParent2Index].genes):
-
-            alpha = random.uniform(0.0, 1.0);
-            child_gene.append(alpha * p1_gene + (1.0 - alpha) * p2_gene);
-
-
-        return IND.Individual(
-                len(child_gene),
-                self.individual_set[aParent1Index].boundary_set,
-                self.individual_set[aParent1Index].fitness_function,
-                child_gene
-        );
-
-
     def __repr__(self):
         value = ""
 

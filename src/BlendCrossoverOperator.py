@@ -1,3 +1,5 @@
+import random
+
 import GeneticOperator
 import Individual as IND
 
@@ -18,7 +20,7 @@ class BlendCrossoverOperator(GeneticOperator.GeneticOperator):
     def apply(self, anEA):
 
         self.use_count += 1;
-        
+
         # Select the parents from the population
         parent1_index = parent2_index = anEA.selection_operator.select(anEA.individual_set)
 
@@ -27,7 +29,19 @@ class BlendCrossoverOperator(GeneticOperator.GeneticOperator):
             parent2_index = anEA.selection_operator.select(anEA.individual_set);
 
         # Perform the crossover
-        child = anEA.BlendCrossover(parent1_index, parent2_index);
+        child_gene = [];
+
+        for p1_gene, p2_gene in zip(anEA.individual_set[parent1_index].genes, anEA.individual_set[parent2_index].genes):
+
+            alpha = random.uniform(0.0, 1.0);
+            child_gene.append(alpha * p1_gene + (1.0 - alpha) * p2_gene);
+
+        child = IND.Individual(
+                len(child_gene),
+                anEA.individual_set[parent1_index].boundary_set,
+                anEA.individual_set[parent1_index].fitness_function,
+                child_gene
+        );
 
         # Mutate the child
         if self.mutation_operator != None:
