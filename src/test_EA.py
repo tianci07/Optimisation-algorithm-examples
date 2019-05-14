@@ -16,6 +16,12 @@ from matplotlib import animation
 
 import EvolutionaryAlgorithm  as EA
 import Tournament  as TS
+
+from BlendCrossoverOperator import *
+from GaussianMutationOperator import *
+from NewBloodOperator import *
+
+
 import Individual
 
 g_number_of_individuals = 10;
@@ -47,6 +53,13 @@ tournament = TS.TournamentSelection(2);
 optimiser.setSelectionOperator(tournament);
 print(optimiser.selection_operator)
 
+new_blood = NewBloodOperator(0.3);
+gaussian_mutation = GaussianMutationOperator(0.0, 0.4);
+blend_cross_over = BlendCrossoverOperator(0.7);
+
+optimiser.addGeneticOperator(new_blood);
+optimiser.addGeneticOperator(gaussian_mutation);
+optimiser.addGeneticOperator(blend_cross_over);
 
 def frange(start, stop, step):
     i = start
@@ -157,8 +170,11 @@ try:
 
     print(optimiser)
     print(optimiser.best_individual)
+    print(new_blood);
+    print(gaussian_mutation);
+    print(blend_cross_over);
 
     plot(optimiser)
-    
+
 except:
     traceback.print_exc()

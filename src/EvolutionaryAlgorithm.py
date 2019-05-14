@@ -12,13 +12,13 @@ class EvolutionaryAlgorithm:
 
         # Selection operator
         self.selection_operator = SelectionOperator.SelectionOperator();
-        
+
+        # Genetic operators
+        self.genetic_opterator_set = [];
+
         # Probability of operators
         self.elitism_probability     = 0.1;
-        self.cross_over_probability  = 0.7;
-        self.mutation_probability    = 0.0;
-        self.new_blood_probability   = 0.2;
-        
+
         #Set the individual operater
         self.genes_number = aNumberOfGenes
         self.boundary_set = aBoundarySet
@@ -31,7 +31,7 @@ class EvolutionaryAlgorithm:
         self.individual_callback = 0;
         if aUpdateIndividualContribution:
             self.individual_callback = aUpdateIndividualContribution;
-        
+
         # Keep track of the best individual
         self.individual_set.append(IND.Individual(aNumberOfGenes, aBoundarySet, aFitnessFunction));
 
@@ -42,7 +42,7 @@ class EvolutionaryAlgorithm:
         # Compute the global fitness
         self.global_fitness = 0;
         self.global_fitness_function = 0;
-        
+
         if aGlobalFitnessFunction:
 
             set_of_individuals = [];
@@ -64,36 +64,41 @@ class EvolutionaryAlgorithm:
         # Store the best individual
         self.best_individual = self.individual_set[best_individual_index].copy();
 
-    
+    def addGeneticOperator(self, aGeneticOperator):
+        self.genetic_opterator_set.append(aGeneticOperator);
+
+    def clearGeneticOperatorSet(self):
+        self.genetic_opterator_set = [];
+
     def setSelectionOperator(self, aSelectionOperator):
         self.selection_operator = aSelectionOperator;
-        
+
     def run(self, aMutationRate):
 
         offspring_population = [];
         negative_fitness_parents = []
 
         best_individual_index = 0;
-        
+
         # Sort index of individuals based on their fitness
         # (we use the negative of the fitness so that np.argsort returns
         # the array of indices in the right order)
         for i in range(len(self.individual_set)):
             negative_fitness_parents.append(-self.individual_set[i].fitness)
             #print("fitness  ",self.individual_set[i].fitness)
-        
+
         # Sort the array of negative fitnesses
         index_sorted = np.argsort((negative_fitness_parents))
-        
+
         # Retrieve the number of individuals to be created by elitism
         number_of_individuals_by_elitism = math.floor(self.elitism_probability * len(self.individual_set))
-        
+
         # Make sure we keep the best individual
         # EVEN if self.elitism_probability is null
         # (we don't want to lose the best one)
         if number_of_individuals_by_elitism == 0:
             number_of_individuals_by_elitism =  1
-        
+
         #print(number_of_individuals_by_elitism)
 
         # Copy the best parents into the population of children
@@ -101,43 +106,26 @@ class EvolutionaryAlgorithm:
             individual = self.individual_set[index_sorted[i]]
             offspring_population.append(individual.copy())
 
+        probability_sum = self.elitism_probability;
+        for genetic_opterator in self.genetic_opterator_set:
+            probability_sum += genetic_opterator.getProbability();
+
         # Evolutionary loop
         while (len(offspring_population) < len(self.individual_set)):
 
             # Draw a random number between 0 and 1 minus the probability of elitism
-            chosen_operator = random.uniform(0.0, 1.0 - self.elitism_probability)
-            
-            # Crossover
-            if (chosen_operator < self.cross_over_probability):
+            chosen_operator = random.uniform(0.0, probability_sum - self.elitism_probability)
 
-                # Select the parents from the population
-                parent1_index = parent2_index = self.selection_operator.select(self.individual_set)
+            accummulator = 0.0;
+            current_number_of_children = len(offspring_population)
 
-                # Make sure parent 1 is different from parent2
-                while parent2_index == parent1_index:
-                    parent2_index = self.selection_operator.select(self.individual_set);
+            for genetic_opterator in self.genetic_opterator_set:
+                if current_number_of_children == len(offspring_population):
 
-                # Perform the crossover
-                offspring_population.append(self.BlendCrossover(parent1_index, parent2_index));
+                    accummulator += genetic_opterator.getProbability();
 
-                # Mutate the child
-                offspring_population[-1].gaussianMutation(aMutationRate)
-
-            # Mutation only
-            elif (chosen_operator < self.cross_over_probability +  self.mutation_probability ):
-    
-                # Select the parents from the population
-                parent_index = self.selection_operator.select(self.individual_set)
-                
-                # Copy the parent into a child
-                offspring_population.append(self.individual_set[parent_index]);
-
-                # Mutate the child
-                offspring_population[-1].gaussianMutation(aMutationRate)
-                
-            # New blood
-            else:
-                offspring_population.append(IND.Individual(self.genes_number, self.boundary_set, self.local_fitness))
+                    if (chosen_operator < accummulator):
+                        offspring_population.append(genetic_opterator.apply(self));
 
         # Compute the global fitness
         if self.global_fitness:
