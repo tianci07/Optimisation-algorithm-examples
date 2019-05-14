@@ -1,6 +1,4 @@
 import random
-import math
-import copy
 import numpy as np
 
 from SelectionOperator import *
