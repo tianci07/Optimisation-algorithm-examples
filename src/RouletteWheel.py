@@ -1,7 +1,7 @@
 import random
 import math
 import copy
-import numpy as np
+
 import Individual as ID
 import EvolutionaryAlgorithm as EA
 
@@ -13,7 +13,7 @@ class RouletWheeiSelection:
         #Compute fitnesses sumation
         for i in range(len(aIndividualSet)):
             sum_fitness += aIndividualSet[i].fitness
-            
+
         #Compute the probability for each individual
         sum_probability = 0.0
         for i in range(len(aIndividualSet)):
@@ -28,6 +28,3 @@ class RouletWheeiSelection:
                 #Return the best individual
                 return(aIndividualSet[i])
                 break
-
-
-
