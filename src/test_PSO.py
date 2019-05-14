@@ -19,13 +19,21 @@ from PSO import PSO
 g_number_of_particle   = 10;
 g_iterations           = 20;
 
+xdata1, ydata1, zdata1 = [], [], [];
+xdata2, ydata2, zdata2 = [], [], [];
 
 
 
 g_number_of_dimensions = 2;
+
 boundaries = [];
 for i in range(g_number_of_dimensions):
     boundaries.append([-5,5]);
+
+
+
+
+
 
 def frange(start, stop, step):
     i = start
@@ -50,6 +58,9 @@ def plot(anOptimiser):
     global best_particle_x;
     global best_particle_y;
     global best_particle_z;
+
+    global xdata1, ydata1, zdata1;
+    global xdata2, ydata2, zdata2;
 
     fig = plt.figure()
     ax = fig.add_subplot(111, projection='3d')
