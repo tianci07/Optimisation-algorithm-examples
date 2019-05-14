@@ -17,6 +17,8 @@ from matplotlib import animation
 import EvolutionaryAlgorithm  as EA
 
 from TournamentSelection      import *
+from RouletteWheel            import *
+
 from ElitismOperator          import *
 from BlendCrossoverOperator   import *
 from GaussianMutationOperator import *
@@ -51,6 +53,7 @@ def fitnessFunction(aSolution):
 optimiser = EA.EvolutionaryAlgorithm(g_number_of_genes, boundaries, fitnessFunction, g_number_of_individuals)
 print(optimiser.selection_operator)
 optimiser.setSelectionOperator(TournamentSelection(2));
+optimiser.setSelectionOperator(RouletteWheel());
 print(optimiser.selection_operator)
 
 elitism = ElitismOperator(0.1);

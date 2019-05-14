@@ -77,6 +77,11 @@ class EvolutionaryAlgorithm:
 
     def run(self, aMutationRate):
 
+        if self.selection_operator == None:
+            raise NotImplementedError("A selection operator has to be added")
+
+        self.selection_operator.preProcess(self.individual_set);
+
         offspring_population = [];
         negative_fitness_parents = []
 

@@ -1,30 +1,37 @@
 import random
 import math
 import copy
+import numpy
 
-import Individual as ID
-import EvolutionaryAlgorithm as EA
+from SelectionOperator import *
 
-class RouletWheeiSelection:
+class RouletteWheel(SelectionOperator):
 
-    def Select(self, aIndividualSet):
-        
+    def __init__(self):
+        super().__init__("Roulette wheel selection");
+        self.probability_set = [];
+
+    def preProcess(self, anIndividualSet):
+        # Compute fitness sumation
         sum_fitness = 0.0
-        #Compute fitnesses sumation
-        for i in range(len(aIndividualSet)):
-            sum_fitness += aIndividualSet[i].fitness
+        for individual in anIndividualSet:
+            sum_fitness += individual.fitness
 
-        #Compute the probability for each individual
+        # Compute the probability for each individual
+        self.probability_set = [];
         sum_probability = 0.0
-        for i in range(len(aIndividualSet)):
-            probability = sum_probability + (aIndividualSet[i].fitness / sum_fitness)
-            sum_probability += probability
+        for individual in anIndividualSet:
+            self.probability_set.append(sum_probability + (individual.fitness / sum_fitness))
+            sum_probability += self.probability_set[-1]
+
+    def __select__(self, anIndividualSet, aFlag): # aFlag == True for selecting good individuals,
+                                                  # aFlag == False for selecting bad individuals,
+
+        # Random number between(0 - 1)
+        random_number = random.uniform(0.0, 1.0)
 
         # Select the individual depending on the probability
-        for i in range(len(aIndividualSet)):
-            #Random number between(0 - 1)
-            random_number = random.uniform(0.0, 1.0)
-            if (random_number > probability[i]) and (random_number < probability[i+1]):
+        for probability in self.probability_set:
+            if random_number < probability:
                 #Return the best individual
-                return(aIndividualSet[i])
-                break
+                return(self.probability_set.index(probability))
