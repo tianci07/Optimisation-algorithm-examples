@@ -4,17 +4,15 @@ import copy;
 
 import numpy as np
 
-import matplotlib
-matplotlib.use("TkAgg")
-
-import matplotlib.pyplot as plt
-from mpl_toolkits.mplot3d import Axes3D
-from matplotlib import animation
-
 import cv2
 
-import SimulatedAnnealing as SA;
 import EvolutionaryAlgorithm as EA;
+from TournamentSelection      import *
+from ElitismOperator          import *
+from BlendCrossoverOperator   import *
+from GaussianMutationOperator import *
+from NewBloodOperator         import *
+
 import lampProblem as LP;
 
 g_number_of_individuals = 10;
@@ -46,7 +44,7 @@ def localFitnessFunction(aSetOfGenes):
     #if aSetOfGenes[2] > 0.5:
         # Remove fly from image
         LP.addLampToImage(int(aSetOfGenes[0]), int(aSetOfGenes[1]), -1);
-    
+
     global_fitness_without_fly = LP.computeFitnessFunction()
 
     if True:
@@ -54,7 +52,7 @@ def localFitnessFunction(aSetOfGenes):
         LP.addLampToImage(int(aSetOfGenes[0]), int(aSetOfGenes[1]), 1);
 
         local_fitness = LP.global_fitness - global_fitness_without_fly;
-        
+
         #print(global_fitness_without_fly, LP.global_fitness, local_fitness)
 
     return local_fitness;
@@ -63,11 +61,21 @@ def localFitnessFunction(aSetOfGenes):
 
 
 optimiser = EA.EvolutionaryAlgorithm(len(boundaries), boundaries, localFitnessFunction, g_number_of_individuals, LP.fitnessFunction);
+tournament = TournamentSelection(2);
+optimiser.setSelectionOperator(tournament);
+print(optimiser.selection_operator)
 
-optimiser.elitism_probability     = 0.0;
-optimiser.cross_over_probability  = 0.1;
-optimiser.mutation_probability    = 0.5;
-optimiser.new_blood_probability   = 0.3;
+elitism = ElitismOperator(0.0);
+new_blood = NewBloodOperator(0.3);
+gaussian_mutation = GaussianMutationOperator(0.5, 0.4);
+blend_cross_over = BlendCrossoverOperator(0.1, gaussian_mutation);
+
+optimiser.addGeneticOperator(new_blood);
+optimiser.addGeneticOperator(gaussian_mutation);
+optimiser.addGeneticOperator(blend_cross_over);
+optimiser.addGeneticOperator(elitism);
+
+
 
 #print(LP.global_fitness, optimiser)
 
@@ -92,7 +100,7 @@ for i in range(g_iterations):
 
     # Update sigma (it linearly decreases over time)
     sigma = g_min_mutation_sigma + (g_iterations - 1 - i) / (g_iterations - 1) * (g_max_mutation_sigma - g_min_mutation_sigma);
-    
+
     # Compute the new generation
     optimiser.run(sigma);
 
@@ -107,9 +115,9 @@ for i in range(g_iterations):
     cv2.imwrite("current_population_" + str(i) + ".png",  LP.overlay_image)
 
     print(i, optimiser.global_fitness, best_population_id, best_population_fitness);
-    
+
     cv2.waitKey(1);
-    
+
 
 # print the best population
 for ind in best_population:
@@ -120,11 +128,11 @@ for ind in best_population:
 final_image = np.zeros((LP.room_height, LP.room_width, 1), np.float32)
 population  = copy.deepcopy(optimiser.individual_set);
 
-for i in range(len(population)):
+for individual in population:
 
-    x = int(population[i].genes[0])
-    y = int(population[i].genes[1])
-    on_off = population[i].genes[2]
+    x = int(individual.genes[0])
+    y = int(individual.genes[1])
+    on_off = individual.genes[2]
 
     if on_off > 0.5:
         black_image = np.zeros((LP.room_height, LP.room_width, 1), np.float32)
@@ -137,6 +145,10 @@ cv2.imshow("Regenerate", final_image /final_image.max());
 
 # print global fitness
 print(LP.global_fitness)
+print(elitism)
+print(new_blood);
+print(gaussian_mutation);
+print(blend_cross_over);
 
 # Save the image
 cv2.imwrite("Final_image.png",  final_image)

@@ -6,16 +6,10 @@ import numpy as np
 
 import matplotlib
 matplotlib.use("TkAgg")
-
 import matplotlib.pyplot as plt
 from matplotlib import animation
-from mpl_toolkits.mplot3d import Axes3D
-
 
 import SimulatedAnnealing as SA;
-
-
-
 
 xdata1, ydata1, zdata1 = [], [], [];
 xdata2, ydata2, zdata2 = [], [], [];
