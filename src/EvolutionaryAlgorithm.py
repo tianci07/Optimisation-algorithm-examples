@@ -15,9 +15,7 @@ class EvolutionaryAlgorithm:
 
         # Genetic operators
         self.genetic_opterator_set = [];
-
-        # Probability of operators
-        self.elitism_probability     = 0.1;
+        self.elitism_operator = None;
 
         #Set the individual operater
         self.genes_number = aNumberOfGenes
@@ -65,10 +63,14 @@ class EvolutionaryAlgorithm:
         self.best_individual = self.individual_set[best_individual_index].copy();
 
     def addGeneticOperator(self, aGeneticOperator):
-        self.genetic_opterator_set.append(aGeneticOperator);
+        if aGeneticOperator.getName() == "Elitism operator":
+            self.elitism_operator = aGeneticOperator
+        else:
+            self.genetic_opterator_set.append(aGeneticOperator);
 
     def clearGeneticOperatorSet(self):
         self.genetic_opterator_set = [];
+        self.elitism_operator = None;
 
     def setSelectionOperator(self, aSelectionOperator):
         self.selection_operator = aSelectionOperator;
@@ -91,7 +93,11 @@ class EvolutionaryAlgorithm:
         index_sorted = np.argsort((negative_fitness_parents))
 
         # Retrieve the number of individuals to be created by elitism
-        number_of_individuals_by_elitism = math.floor(self.elitism_probability * len(self.individual_set))
+        number_of_individuals_by_elitism = 0;
+
+
+        if self.elitism_operator != None:
+            math.floor(self.elitism_operator.getProbability() * len(self.individual_set))
 
         # Make sure we keep the best individual
         # EVEN if self.elitism_probability is null
@@ -105,8 +111,10 @@ class EvolutionaryAlgorithm:
         for i in range(number_of_individuals_by_elitism):
             individual = self.individual_set[index_sorted[i]]
             offspring_population.append(individual.copy())
+            if self.elitism_operator != None:
+                self.elitism_operator.use_count += 1;
 
-        probability_sum = self.elitism_probability;
+        probability_sum = 0.0;
         for genetic_opterator in self.genetic_opterator_set:
             probability_sum += genetic_opterator.getProbability();
 
@@ -114,18 +122,19 @@ class EvolutionaryAlgorithm:
         while (len(offspring_population) < len(self.individual_set)):
 
             # Draw a random number between 0 and 1 minus the probability of elitism
-            chosen_operator = random.uniform(0.0, probability_sum - self.elitism_probability)
+            chosen_operator = random.uniform(0.0, probability_sum)
 
             accummulator = 0.0;
             current_number_of_children = len(offspring_population)
 
             for genetic_opterator in self.genetic_opterator_set:
-                if current_number_of_children == len(offspring_population):
+                if genetic_opterator.getName() != "Elitism operator":
+                    if current_number_of_children == len(offspring_population):
 
-                    accummulator += genetic_opterator.getProbability();
+                        accummulator += genetic_opterator.getProbability();
 
-                    if (chosen_operator < accummulator):
-                        offspring_population.append(genetic_opterator.apply(self));
+                        if (chosen_operator < accummulator):
+                            offspring_population.append(genetic_opterator.apply(self));
 
         # Compute the global fitness
         if self.global_fitness:

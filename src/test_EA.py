@@ -17,9 +17,10 @@ from matplotlib import animation
 import EvolutionaryAlgorithm  as EA
 import Tournament  as TS
 
-from BlendCrossoverOperator import *
+from ElitismOperator          import *
+from BlendCrossoverOperator   import *
 from GaussianMutationOperator import *
-from NewBloodOperator import *
+from NewBloodOperator         import *
 
 
 import Individual
@@ -53,13 +54,15 @@ tournament = TS.TournamentSelection(2);
 optimiser.setSelectionOperator(tournament);
 print(optimiser.selection_operator)
 
-new_blood = NewBloodOperator(0.2);
+elitism = ElitismOperator(0.1);
+new_blood = NewBloodOperator(0.3);
 gaussian_mutation = GaussianMutationOperator(0.1, 0.4);
-blend_cross_over = BlendCrossoverOperator(0.7, gaussian_mutation);
+blend_cross_over = BlendCrossoverOperator(0.5, gaussian_mutation);
 
 optimiser.addGeneticOperator(new_blood);
 optimiser.addGeneticOperator(gaussian_mutation);
 optimiser.addGeneticOperator(blend_cross_over);
+optimiser.addGeneticOperator(elitism);
 
 def frange(start, stop, step):
     i = start
@@ -170,6 +173,7 @@ try:
 
     print(optimiser)
     print(optimiser.best_individual)
+    print(elitism)
     print(new_blood);
     print(gaussian_mutation);
     print(blend_cross_over);
