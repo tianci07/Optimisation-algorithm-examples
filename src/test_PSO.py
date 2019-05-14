@@ -34,16 +34,16 @@ def frange(start, stop, step):
          i += step
 
 def costFunction(aSolution):
-    sum = 0.0;
+    cost = 0.0;
     #
     #for i in range(g_number_of_dimensions):
     #    sum += aSolution[i] * aSolution[i];
     #
-    sum += math.exp(-(math.pow(aSolution[0], 2) + math.pow(aSolution[1], 2)));
-    sum += 2.0 * math.exp(-(math.pow(aSolution[0]-1.7, 2) + math.pow(aSolution[1]-1.7, 2)));
-    sum *= -1.0;
+    cost += math.exp(-(math.pow(aSolution[0], 2) + math.pow(aSolution[1], 2)));
+    cost += 2.0 * math.exp(-(math.pow(aSolution[0]-1.7, 2) + math.pow(aSolution[1]-1.7, 2)));
+    cost *= -1.0;
     #
-    return sum;
+    return cost;
 
 
 def plot(anOptimiser):
