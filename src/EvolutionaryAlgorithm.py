@@ -149,10 +149,11 @@ class EvolutionaryAlgorithm:
         # Compute the fitness value of all the individual
         # And keep track of who is the best individual
         best_individual_index = 0;
-        for i in range(len(offspring_population)):
-            offspring_population[i].computeFitnessFunction();
-            if (offspring_population[best_individual_index].fitness < offspring_population[i].fitness):
-                best_individual_index = i;
+
+        for child in offspring_population:
+            child.computeFitnessFunction();
+            if (offspring_population[best_individual_index].fitness < child.fitness):
+                best_individual_index = offspring_population.index(child);
 
         # Replace the parents by the offspring
         self.individual_set = offspring_population;
