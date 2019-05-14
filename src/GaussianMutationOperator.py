@@ -1,7 +1,6 @@
 import random
 
 import GeneticOperator
-import Individual as IND
 
 
 class GaussianMutationOperator(GeneticOperator.GeneticOperator):
