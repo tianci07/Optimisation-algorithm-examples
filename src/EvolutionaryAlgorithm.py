@@ -5,9 +5,13 @@ import numpy as np
 import math
 import SelectionOperator
 
-class EvolutionaryAlgorithm:
+from Optimiser import *
+
+class EvolutionaryAlgorithm(Optimiser):
 
     def __init__(self, aNumberOfGenes, aBoundarySet, aFitnessFunction, aNumberOfIndividuals, aGlobalFitnessFunction = 0, aUpdateIndividualContribution = 0):
+
+        super().__init__(aBoundarySet, aFitnessFunction);
 
         # Get a SystemRandom instance out of random package
         self.system_random = random.SystemRandom();
@@ -21,11 +25,9 @@ class EvolutionaryAlgorithm:
 
         #Set the individual operater
         self.genes_number = aNumberOfGenes
-        self.boundary_set = aBoundarySet
-        self.local_fitness = aFitnessFunction
 
         # Store the population
-        self.individual_set = [];
+        self.current_solution_set = [];
 
         # New individual callback
         self.individual_callback = 0;
@@ -33,11 +35,11 @@ class EvolutionaryAlgorithm:
             self.individual_callback = aUpdateIndividualContribution;
 
         # Keep track of the best individual
-        self.individual_set.append(IND.Individual(aNumberOfGenes, aBoundarySet, aFitnessFunction));
+        self.current_solution_set.append(IND.Individual(aNumberOfGenes, aBoundarySet, aFitnessFunction));
 
         # Create the population
-        while (len(self.individual_set) < aNumberOfIndividuals):
-            self.individual_set.append(IND.Individual(aNumberOfGenes, aBoundarySet, aFitnessFunction))
+        while (len(self.current_solution_set) < aNumberOfIndividuals):
+            self.current_solution_set.append(IND.Individual(aNumberOfGenes, aBoundarySet, aFitnessFunction))
 
         # Compute the global fitness
         self.global_fitness = 0;
@@ -46,7 +48,7 @@ class EvolutionaryAlgorithm:
         if aGlobalFitnessFunction:
 
             set_of_individuals = [];
-            for ind in self.individual_set:
+            for ind in self.current_solution_set:
                 for gene in ind.genes:
                     set_of_individuals.append(gene);
 
@@ -56,13 +58,13 @@ class EvolutionaryAlgorithm:
         # Compute the fitness value of all the individual
         # And keep track of who is the best individual
         best_individual_index = 0;
-        for i in range(len(self.individual_set)):
-            self.individual_set[i].computeFitnessFunction();
-            if (self.individual_set[best_individual_index].fitness < self.individual_set[i].fitness):
+        for i in range(len(self.current_solution_set)):
+            self.current_solution_set[i].computeFitnessFunction();
+            if (self.current_solution_set[best_individual_index].fitness < self.current_solution_set[i].fitness):
                 best_individual_index = i;
 
         # Store the best individual
-        self.best_individual = self.individual_set[best_individual_index].copy();
+        self.best_solution = self.current_solution_set[best_individual_index].copy();
 
     def addGeneticOperator(self, aGeneticOperator):
         if aGeneticOperator.getName() == "Elitism operator":
@@ -82,7 +84,7 @@ class EvolutionaryAlgorithm:
         if self.selection_operator == None:
             raise NotImplementedError("A selection operator has to be added")
 
-        self.selection_operator.preProcess(self.individual_set);
+        self.selection_operator.preProcess(self.current_solution_set);
 
         offspring_population = [];
         negative_fitness_parents = []
@@ -92,9 +94,9 @@ class EvolutionaryAlgorithm:
         # Sort index of individuals based on their fitness
         # (we use the negative of the fitness so that np.argsort returns
         # the array of indices in the right order)
-        for i in range(len(self.individual_set)):
-            negative_fitness_parents.append(-self.individual_set[i].fitness)
-            #print("fitness  ",self.individual_set[i].fitness)
+        for i in range(len(self.current_solution_set)):
+            negative_fitness_parents.append(-self.current_solution_set[i].fitness)
+            #print("fitness  ",self.current_solution_set[i].fitness)
 
         # Sort the array of negative fitnesses
         index_sorted = np.argsort((negative_fitness_parents))
@@ -104,7 +106,7 @@ class EvolutionaryAlgorithm:
 
 
         if self.elitism_operator != None:
-            math.floor(self.elitism_operator.getProbability() * len(self.individual_set))
+            math.floor(self.elitism_operator.getProbability() * len(self.current_solution_set))
 
         # Make sure we keep the best individual
         # EVEN if self.elitism_probability is null
@@ -116,7 +118,7 @@ class EvolutionaryAlgorithm:
 
         # Copy the best parents into the population of children
         for i in range(number_of_individuals_by_elitism):
-            individual = self.individual_set[index_sorted[i]]
+            individual = self.current_solution_set[index_sorted[i]]
             offspring_population.append(individual.copy())
             if self.elitism_operator != None:
                 self.elitism_operator.use_count += 1;
@@ -126,7 +128,7 @@ class EvolutionaryAlgorithm:
             probability_sum += genetic_opterator.getProbability();
 
         # Evolutionary loop
-        while (len(offspring_population) < len(self.individual_set)):
+        while (len(offspring_population) < len(self.current_solution_set)):
 
             # Draw a random number between 0 and 1 minus the probability of elitism
             chosen_operator = self.system_random.uniform(0.0, probability_sum)
@@ -163,20 +165,10 @@ class EvolutionaryAlgorithm:
                 best_individual_index = offspring_population.index(child);
 
         # Replace the parents by the offspring
-        self.individual_set = offspring_population;
+        self.current_solution_set = offspring_population;
 
         # Store the best individual
-        self.best_individual = self.individual_set[best_individual_index].copy();
+        self.best_solution = self.current_solution_set[best_individual_index].copy();
 
         # Return the best individual
-        return self.best_individual;
-
-
-    def __repr__(self):
-        value = ""
-
-        for ind in self.individual_set:
-            value += ind.__repr__();
-            value += '\n';
-
-        return value;
+        return self.best_solution;

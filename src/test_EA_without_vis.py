@@ -87,4 +87,4 @@ for i in range(g_iterations):
     printCurrentStates(i + 1, optimiser);
 
 # Get the solution to the optimisation problem
-print("Best individual:\t", optimiser.best_individual);
+print("Best individual:\t", optimiser.best_solution);

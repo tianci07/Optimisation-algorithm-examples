@@ -21,4 +21,4 @@ class NewBloodOperator(GeneticOperator.GeneticOperator):
         return (IND.Individual(
             anEA.genes_number,
             anEA.boundary_set,
-            anEA.local_fitness))
+            anEA.objective_function))
