@@ -60,7 +60,7 @@ class Optimiser:
         # Plot the current population
         scat2 = ax.scatter([], [], [], marker='o', c='g', s=10)
 
-        return fig, ax, scat1, scat2;
+        return fig, scat1, scat2;
 
     # Print the current state in the console
     def printCurrentStates(self, anIteration):
@@ -99,18 +99,25 @@ class Optimiser:
             zdata2.append(individual.getObjective());
         self.scat2._offsets3d = (xdata2, ydata2, zdata2)
 
-    def plotAnimation(self, aNumberOfIterations, aCallback = None):
+    def plotAnimation(self, aNumberOfIterations, aCallback = None, aFileName = ""):
 
         self.visualisation_callback = aCallback;
 
         if len(self.boundary_set) == 2:
             # Create a figure (Matplotlib)
-            fig, ax, self.scat1, self.scat2 = self.createFigure();
+            fig, self.scat1, self.scat2 = self.createFigure();
 
             # Run the visualisation
             numframes = aNumberOfIterations + 1;
-            ani = animation.FuncAnimation(fig, self.update, frames=range(numframes), repeat=False)
-            plt.show()
+            ani = animation.FuncAnimation(fig, self.update, frames=range(numframes), repeat=False);
+
+            # Set up formatting for the movie files
+            if aFileName != "":
+                Writer = animation.writers['ffmpeg']
+                writer = Writer(fps=15, metadata=dict(artist='Me'), bitrate=1800)
+                ani.save('test.mp4', writer=writer)
+            else:
+                plt.show();
         else:
             raise NotImplementedError("Visualisation for " + str(len(self.boundary_set)) + "-D problems is not implemented")
 
