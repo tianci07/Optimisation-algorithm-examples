@@ -141,11 +141,8 @@ class SimulatedAnnealing:
             print(header);
             print(self.iterationDetails(iteration));
 
-        self.temperature_set.append(self.current_temperature);
-        self.current_solution_set.append(self.current_solution);
-        self.best_solution_set.append(self.best_solution);
-        self.current_energy_set.append(self.current_energy);
-        self.best_energy_set.append(self.best_energy);
+        # Log the current states
+        logCurrentState(self);
 
         # Loop until system has cooled
         while self.current_temperature > 1.0:
@@ -180,17 +177,23 @@ class SimulatedAnnealing:
             if aVerboseFlag:
                 print(self.iterationDetails(iteration));
 
-            self.temperature_set.append(self.current_temperature);
-            self.current_solution_set.append(self.current_solution);
-            self.best_solution_set.append(self.best_solution);
-            self.current_energy_set.append(self.current_energy);
-            self.best_energy_set.append(self.best_energy);
+            # Log the current states
+            self.logCurrentState();
 
             # Cool the system
             self.current_temperature *= 1.0 - self.cooling_rate;
 
         self.current_solution = copy.deepcopy(self.best_solution);
         self.current_energy = self.best_energy;
+
+    ## \brief Log the current states to save the history (can be used to visualise how the algorithm behaved over time)
+    # \param self
+    def logCurrentState(self):
+        self.temperature_set.append(self.current_temperature);
+        self.current_solution_set.append(self.current_solution);
+        self.best_solution_set.append(self.best_solution);
+        self.current_energy_set.append(self.current_energy);
+        self.best_energy_set.append(self.best_energy);
 
     ## \brief Print the current solution and the best solution so far.
     # \param self
