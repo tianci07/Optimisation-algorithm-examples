@@ -1,6 +1,4 @@
 import random
-import math
-import copy
 import numpy
 
 from SelectionOperator import *
@@ -10,6 +8,9 @@ class TournamentSelection(SelectionOperator):
     def __init__(self, aTournamentSize = 2):
         super().__init__("Tournament selection");
         self.tournament_size = aTournamentSize;
+
+        # Get a SystemRandom instance out of random package
+        self.system_random = random.SystemRandom();
 
     def setTournamentSize(self, aTournamentSize):
         self.tournament_size = aTournamentSize;
@@ -30,7 +31,7 @@ class TournamentSelection(SelectionOperator):
 
         fitness_set = [];
         while len(fitness_set) < self.tournament_size:
-            index = random.randint(0, max_ind)
+            index = self.system_random.randint(0, max_ind)
             fitness = anIndividualSet[index].fitness
             fitness_set.append(fitness)
 
