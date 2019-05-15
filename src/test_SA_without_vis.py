@@ -4,9 +4,10 @@ import math;
 from SimulatedAnnealing import *;
 
 g_number_of_dimensions = 2;
-boundaries = [];
+
+g_boundaries = [];
 for i in range(g_number_of_dimensions):
-    boundaries.append([-5,5]);
+    g_boundaries.append([-5,5]);
 
 def costFunction(aSolution):
 
@@ -21,6 +22,10 @@ def costFunction(aSolution):
 
     return cost;
 
-optimiser = SimulatedAnnealing(g_number_of_dimensions, boundaries, costFunction, 5000, 0.04);
-optimiser.run(False, False);
-print(optimiser)
+optimiser = SimulatedAnnealing(g_number_of_dimensions, g_boundaries, costFunction, 5000, 0.04);
+
+# Run the optimisation loop
+optimiser.run();
+
+# Print the current state in the console
+optimiser.printCurrentStates("");

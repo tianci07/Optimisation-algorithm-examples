@@ -12,8 +12,37 @@ import math; # For exp
 import copy; # For deepcopy
 import random; # For uniform
 
+from Optimiser import *
+
+class Solution:
+    def __init__(self, aParameterSet = None):
+
+        self.parameter_set = [];
+
+        if aParameterSet != None:
+            self.parameter_set = copy.deepcopy(aParameterSet);
+
+        self.energy = float('inf');
+
+    def getParameter(self, i):
+        if i >= len(self.parameter_set):
+            raise IndexError;
+        else:
+            return self.parameter_set[i];
+
+    def getObjective(self):
+        return self.energy;
+
+    def __repr__(self):
+        value = "Parameters: ";
+        value += ' '.join(str(e) for e in self.parameter_set)
+        value += "\tEnergy: ";
+        value += str(self.energy);
+        return value;
+
+
 ## \class This class implements the simulated annealing optimisation method
-class SimulatedAnnealing:
+class SimulatedAnnealing(Optimiser):
 
     ## \brief Constructor.
     # \param self
@@ -24,6 +53,8 @@ class SimulatedAnnealing:
     # \param aCoolingRate: The cooling rate (i.e. how fast the temperature will decrease) (default value: 0.003)
     def __init__(self, aNumberOfDimensions, aBoundarySet, aCostFunction, aTemperature = 10000, aCoolingRate = 0.003):
 
+        super().__init__(aBoundarySet, aCostFunction);
+
         # Initialise attributes
         self.initStates()
 
@@ -32,32 +63,25 @@ class SimulatedAnnealing:
 
         # and copy input parameters
         self.number_of_dimensions = aNumberOfDimensions;
-        self.boundary_set = copy.deepcopy(aBoundarySet);
-        self.cost_function = aCostFunction;
         self.initial_temperature = aTemperature;
         self.cooling_rate = aCoolingRate;
 
         # Create the current solution from random
-        self.current_solution = [];
+        parameter_set = [];
         for i in range(aNumberOfDimensions):
-            self.current_solution.append(self.system_random.uniform(self.boundary_set[i][0], self.boundary_set[i][1]));
+            parameter_set.append(self.system_random.uniform(self.boundary_set[i][0], self.boundary_set[i][1]));
+        self.current_solution = Solution(parameter_set);
 
     ## \brief Initialise attributes.
     # \param self
     def initStates(self):
-        self.best_energy = float("inf");
-        self.best_solution = [];
-
         self.min_energy =  float("inf");
         self.max_energy = -float("inf");
 
         self.temperature_set = [];
 
-        self.current_solution_set = [];
         self.best_solution_set = [];
 
-        self.current_energy_set = [];
-        self.best_energy_set = [];
 
     ## \brief Compute the energy corresponding to a given solution.
     # \param self
@@ -65,7 +89,7 @@ class SimulatedAnnealing:
     # \return the corresponding energy
     def computeEnergy(self, aSolution):
         # Compute the cost function
-        energy = self.cost_function(aSolution);
+        energy = self.objective_function(aSolution);
 
         # Keep track of the min/max cost values
         self.min_energy = min(self.min_energy, energy);
@@ -81,11 +105,11 @@ class SimulatedAnnealing:
     def acceptanceProbability(self, aNewEnergy):
 
         # The new soluation is better (lower energy), keep it
-        if aNewEnergy < self.current_energy:
+        if aNewEnergy < self.current_solution.getObjective():
             return 1.0;
         # The new soluation is worse, calculate an acceptance probability
         else:
-            return math.exp((self.current_energy - aNewEnergy) / self.current_temperature);
+            return math.exp((self.current_solution.getObjective() - aNewEnergy) / self.current_temperature);
 
     ## \brief Get a neighbour in the vicinity of a given solution.
     # \param self
@@ -122,11 +146,10 @@ class SimulatedAnnealing:
         self.initStates();
 
         # Compute its energy using the cost function
-        self.current_energy = self.computeEnergy(self.current_solution);
+        self.current_solution.energy = self.computeEnergy(self.current_solution.parameter_set);
 
         # This is also the best solution so far
         self.best_solution = copy.deepcopy(self.current_solution);
-        self.best_energy = self.current_energy;
 
         iteration = 0;
         if aVerboseFlag:
@@ -142,35 +165,31 @@ class SimulatedAnnealing:
             print(self.iterationDetails(iteration));
 
         # Log the current states
-        logCurrentState(self);
+        self.logCurrentState();
 
         # Loop until system has cooled
         while self.current_temperature > 1.0:
 
             if aRetartFlag:
                 if iteration != 0:
-                    if (self.current_energy - self.min_energy) / (self.max_energy - self.min_energy) > 0.9:
+                    if (self.current_solution.getObjective() - self.min_energy) / (self.max_energy - self.min_energy) > 0.9:
                         #print("Restart")
                         self.current_solution = self.best_solution;
-                        self.current_energy   = self.best_energy;
 
             # Create a new solution depending on the current solution,
             # i.e. a neighbour
-            neighbour = self.getRandomNeighbour(self.current_solution);
+            neighbour = Solution(self.getRandomNeighbour(self.current_solution));
 
             # Get its energy (cost function)
-            neighbour_energy = self.computeEnergy(neighbour);
+            neighbour.energy = self.computeEnergy(neighbour.parameter_set);
 
             # Accept the neighbour or not depending on the acceptance probability
-            if self.acceptanceProbability(neighbour_energy) > self.system_random.uniform(0, 1):
+            if self.acceptanceProbability(neighbour.getObjective()) > self.system_random.uniform(0, 1):
                 self.current_solution = copy.deepcopy(neighbour);
-                self.current_energy = neighbour_energy;
 
             # The neighbour is better thant the current element
-            if self.best_energy > self.current_energy:
-                #print("Best energy was ", self.best_energy, "it is now ", self.current_energy)
+            if self.best_solution.getObjective() > self.current_solution.getObjective():
                 self.best_solution = copy.deepcopy(self.current_solution);
-                self.best_energy = self.current_energy;
 
             iteration = iteration + 1;
 
@@ -184,7 +203,6 @@ class SimulatedAnnealing:
             self.current_temperature *= 1.0 - self.cooling_rate;
 
         self.current_solution = copy.deepcopy(self.best_solution);
-        self.current_energy = self.best_energy;
 
     ## \brief Log the current states to save the history (can be used to visualise how the algorithm behaved over time)
     # \param self
@@ -192,8 +210,6 @@ class SimulatedAnnealing:
         self.temperature_set.append(self.current_temperature);
         self.current_solution_set.append(self.current_solution);
         self.best_solution_set.append(self.best_solution);
-        self.current_energy_set.append(self.current_energy);
-        self.best_energy_set.append(self.best_energy);
 
     ## \brief Print the current solution and the best solution so far.
     # \param self
@@ -201,17 +217,10 @@ class SimulatedAnnealing:
     def iterationDetails(self, iteration):
         return (str(iteration) + ', ' +
             str(self.current_temperature) + ', ' +
-            ' '.join(str(e) for e in self.best_solution) + ', ' +
-            str(self.best_energy) + ', ' +
-            ' '.join(str(e) for e in self.current_solution) + ', ' +
-            str(self.current_energy));
+            self.best_solution.__repr__());
 
     ## \brief Print the best solution.
     # \param self
     # \return a string that includes the best solution parameters and its corresponding cost
     def __repr__(self):
-        value = "Best solution: ";
-        value += ' '.join(str(e) for e in self.best_solution)
-        value += "\tCorresponding cost: ";
-        value += str(self.best_energy);
-        return value;
+        return self.best_solution.__repr__();
