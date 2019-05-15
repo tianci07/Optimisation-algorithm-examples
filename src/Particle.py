@@ -104,6 +104,15 @@ class Particle:
 
         self.computeCostFunction();
 
+    def getParameter(self, i):
+        if i >= len(self.position):
+            raise IndexError;
+        else:
+            return self.position[i];
+
+    def getObjective(self):
+        return self.cost;
+
     def __repr__(self):
         value = "Position: ";
         value += ' '.join(str(e) for e in self.position)

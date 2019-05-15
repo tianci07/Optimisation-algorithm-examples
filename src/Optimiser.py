@@ -85,17 +85,17 @@ class Optimiser:
 
         # Best solution in red
         xdata1, ydata1, zdata1 = [], [], [];
-        xdata1.append(self.best_solution.genes[0]);
-        ydata1.append(self.best_solution.genes[1]);
-        zdata1.append(self.best_solution.fitness);
+        xdata1.append(self.best_solution.getParameter(0));
+        ydata1.append(self.best_solution.getParameter(1));
+        zdata1.append(self.best_solution.getObjective());
         self.scat1._offsets3d = (xdata1, ydata1, zdata1)
 
         # All the current solution
         xdata2, ydata2, zdata2 = [], [], [];
         for individual in self.current_solution_set:
-            xdata2.append(individual.genes[0]);
-            ydata2.append(individual.genes[1]);
-            zdata2.append(individual.fitness);
+            xdata2.append(individual.getParameter(0));
+            ydata2.append(individual.getParameter(1));
+            zdata2.append(individual.getObjective());
         self.scat2._offsets3d = (xdata2, ydata2, zdata2)
 
     def plotAnimation(self, aNumberOfIterations, aCallback = None):

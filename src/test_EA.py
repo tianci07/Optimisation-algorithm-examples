@@ -42,15 +42,9 @@ def fitnessFunction(aSolution):
     #
     return -fitness;
 
-# Print the current state in the console
-def printCurrentStates(anIteration, anOptimiser):
-    print("Iteration:\t", anIteration);
-    print(optimiser);
-    print();
-
 def visualisationCallback():
     global g_current_sigma;
-    
+
     # Update the mutation variance so that it varies linearly from g_max_mutation_sigma to
     # g_min_mutation_sigma
     g_current_sigma -= (g_max_mutation_sigma - g_min_mutation_sigma) / (g_iterations - 1);

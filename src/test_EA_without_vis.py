@@ -41,12 +41,6 @@ def fitnessFunction(aSolution):
     #
     return -fitness;
 
-# Print the current state in the console
-def printCurrentStates(anIteration, anOptimiser):
-    print("Iteration:\t", anIteration);
-    print(optimiser);
-    print();
-
 # Create an EA
 optimiser = EvolutionaryAlgorithm(g_number_of_genes, g_boundaries, fitnessFunction, g_number_of_individuals)
 
@@ -68,7 +62,7 @@ optimiser.addGeneticOperator(blend_cross_over);
 optimiser.addGeneticOperator(elitism);
 
 # Print the current state in the console
-printCurrentStates(0, optimiser)
+optimiser.printCurrentStates(0);
 
 # Run the optimisation loop g_iterations times,
 # with the mutation variance varying linearly from g_max_mutation_sigma to
@@ -84,7 +78,7 @@ for i in range(g_iterations):
     optimiser.run();
 
     # Print the current state in the console
-    printCurrentStates(i + 1, optimiser);
+    optimiser.printCurrentStates(i + 1);
 
 # Get the solution to the optimisation problem
 print("Best individual:\t", optimiser.best_solution);

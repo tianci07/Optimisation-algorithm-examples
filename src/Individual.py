@@ -52,6 +52,14 @@ class Individual:
 
         return self.fitness;
 
+    def getParameter(self, i):
+        if i >= len(self.genes):
+            raise IndexError;
+        else:
+            return self.genes[i];
+
+    def getObjective(self):
+        return self.fitness;
 
     def __repr__(self):
 
