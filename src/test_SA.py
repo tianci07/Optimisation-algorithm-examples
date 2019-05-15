@@ -25,4 +25,4 @@ def costFunction(aSolution):
 optimiser = SimulatedAnnealing(g_number_of_dimensions, g_boundaries, costFunction, 5000, 0.04);
 
 # Optimisation and visualisation
-optimiser.plotAnimation(1);
+optimiser.plotAnimation(-1);
