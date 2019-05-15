@@ -144,16 +144,16 @@ for i in range(g_iterations):
     optimiser.run();
 
     # Store the best particle
-    best_particle_x.append(optimiser.best_particle.position[0])
-    best_particle_y.append(optimiser.best_particle.position[1])
-    best_particle_z.append(optimiser.best_particle.cost)
+    best_particle_x.append(optimiser.best_solution.position[0])
+    best_particle_y.append(optimiser.best_solution.position[1])
+    best_particle_z.append(optimiser.best_solution.cost)
 
     # Store the current swarm
     particle_set_x = [];
     particle_set_y = [];
     particle_set_z = [];
 
-    for particle in optimiser.particle_set:
+    for particle in optimiser.current_solution_set:
         particle_set_x.append(particle.position[0])
         particle_set_y.append(particle.position[1])
         particle_set_z.append(particle.cost)
@@ -165,6 +165,6 @@ for i in range(g_iterations):
 
 
 print(optimiser)
-print(optimiser.best_particle)
+print(optimiser.best_solution)
 
 plot(optimiser)

@@ -83,7 +83,7 @@ class Particle:
 
         new_velocity = [];
 
-        for pos_i, part_best_pos_i, swarm_best_pos_i, vel_i in zip(self.position, self.best_known_position, self.pso.best_particle.position, self.velocity):
+        for pos_i, part_best_pos_i, swarm_best_pos_i, vel_i in zip(self.position, self.best_known_position, self.pso.best_solution.position, self.velocity):
             vel_i = w * vel_i + Particle.system_random.uniform(0.0, c) * (part_best_pos_i - pos_i) + Particle.system_random.uniform(0.0, c) * (swarm_best_pos_i - pos_i)
 
             new_velocity.append(vel_i);
