@@ -27,6 +27,9 @@ class SimulatedAnnealing:
         # Initialise attributes
         self.initStates()
 
+        # Get a SystemRandom instance out of random package
+        self.system_random = random.SystemRandom();
+
         # and copy input parameters
         self.number_of_dimensions = aNumberOfDimensions;
         self.boundary_set = copy.deepcopy(aBoundarySet);
@@ -37,7 +40,7 @@ class SimulatedAnnealing:
         # Create the current solution from random
         self.current_solution = [];
         for i in range(aNumberOfDimensions):
-            self.current_solution.append(random.uniform(self.boundary_set[i][0], self.boundary_set[i][1]));
+            self.current_solution.append(self.system_random.uniform(self.boundary_set[i][0], self.boundary_set[i][1]));
 
     ## \brief Initialise attributes.
     # \param self
@@ -162,7 +165,7 @@ class SimulatedAnnealing:
             neighbour_energy = self.computeEnergy(neighbour);
 
             # Accept the neighbour or not depending on the acceptance probability
-            if self.acceptanceProbability(neighbour_energy) > random.uniform(0, 1):
+            if self.acceptanceProbability(neighbour_energy) > self.system_random.uniform(0, 1):
                 self.current_solution = copy.deepcopy(neighbour);
                 self.current_energy = neighbour_energy;
 
