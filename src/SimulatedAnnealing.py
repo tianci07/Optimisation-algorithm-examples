@@ -25,6 +25,23 @@ class SimulatedAnnealing:
     def __init__(self, aNumberOfDimensions, aBoundarySet, aCostFunction, aTemperature = 10000, aCoolingRate = 0.003):
 
         # Initialise attributes
+        self.initStates()
+
+        # and copy input parameters
+        self.number_of_dimensions = aNumberOfDimensions;
+        self.boundary_set = copy.deepcopy(aBoundarySet);
+        self.cost_function = aCostFunction;
+        self.initial_temperature = aTemperature;
+        self.cooling_rate = aCoolingRate;
+
+        # Create the current solution from random
+        self.current_solution = [];
+        for i in range(aNumberOfDimensions):
+            self.current_solution.append(random.uniform(self.boundary_set[i][0], self.boundary_set[i][1]));
+
+    ## \brief Initialise attributes.
+    # \param self
+    def initStates(self):
         self.best_energy = float("inf");
         self.best_solution = [];
 
@@ -38,18 +55,6 @@ class SimulatedAnnealing:
 
         self.current_energy_set = [];
         self.best_energy_set = [];
-
-        # and copy input parameters
-        self.number_of_dimensions = aNumberOfDimensions;
-        self.boundary_set = copy.deepcopy(aBoundarySet);
-        self.cost_function = aCostFunction;
-        self.initial_temperature = aTemperature;
-        self.cooling_rate = aCoolingRate;
-
-        # Create the current solution from random
-        self.current_solution = [];
-        for i in range(aNumberOfDimensions):
-            self.current_solution.append(random.uniform(self.boundary_set[i][0], self.boundary_set[i][1]));
 
     ## \brief Compute the energy corresponding to a given solution.
     # \param self
@@ -111,16 +116,7 @@ class SimulatedAnnealing:
 
         self.current_temperature = self.initial_temperature;
 
-        self.min_energy =  float("inf");
-        self.max_energy = -float("inf");
-
-        self.temperature_set = [];
-
-        self.current_solution_set = [];
-        self.best_solution_set = [];
-
-        self.current_energy_set = [];
-        self.best_energy_set = [];
+        self.initStates();
 
         # Compute its energy using the cost function
         self.current_energy = self.computeEnergy(self.current_solution);
@@ -140,7 +136,7 @@ class SimulatedAnnealing:
                 header += " current_solution[" + str(i) + "]";
             header += " current_solution_energy";
             print(header);
-            print (iteration, self.current_temperature, ' '.join(str(e) for e in self.best_solution), self.best_energy, ' '.join(str(e) for e in self.current_solution), self.current_energy)
+            print(self.iterationDetails(iteration));
 
         self.temperature_set.append(self.current_temperature);
         self.current_solution_set.append(self.current_solution);
@@ -179,7 +175,7 @@ class SimulatedAnnealing:
             iteration = iteration + 1;
 
             if aVerboseFlag:
-                print (iteration, self.current_temperature, ' '.join(str(e) for e in self.best_solution), self.best_energy, ' '.join(str(e) for e in self.current_solution), self.current_energy)
+                print(self.iterationDetails(iteration));
 
             self.temperature_set.append(self.current_temperature);
             self.current_solution_set.append(self.current_solution);
@@ -192,6 +188,17 @@ class SimulatedAnnealing:
 
         self.current_solution = copy.deepcopy(self.best_solution);
         self.current_energy = self.best_energy;
+
+    ## \brief Print the current solution and the best solution so far.
+    # \param self
+    # \return a string that includes the current solution and the best solution so far (parameters and corresponding costs)
+    def iterationDetails(self, iteration):
+        return (str(iteration) + ', ' +
+            str(self.current_temperature) + ', ' +
+            ' '.join(str(e) for e in self.best_solution) + ', ' +
+            str(self.best_energy) + ', ' +
+            ' '.join(str(e) for e in self.current_solution) + ', ' +
+            str(self.current_energy));
 
     ## \brief Print the best solution.
     # \param self
