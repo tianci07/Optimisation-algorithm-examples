@@ -84,11 +84,12 @@ class Optimiser:
                 self.visualisation_callback();
 
         # Best solution in red
-        xdata1, ydata1, zdata1 = [], [], [];
-        xdata1.append(self.best_solution.getParameter(0));
-        ydata1.append(self.best_solution.getParameter(1));
-        zdata1.append(self.best_solution.getObjective());
-        self.scat1._offsets3d = (xdata1, ydata1, zdata1)
+        if self.best_solution != None:
+            xdata1, ydata1, zdata1 = [], [], [];
+            xdata1.append(self.best_solution.getParameter(0));
+            ydata1.append(self.best_solution.getParameter(1));
+            zdata1.append(self.best_solution.getObjective());
+            self.scat1._offsets3d = (xdata1, ydata1, zdata1)
 
         # All the current solution
         xdata2, ydata2, zdata2 = [], [], [];

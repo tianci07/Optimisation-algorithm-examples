@@ -49,7 +49,7 @@ class Particle:
                 self.velocity.append((Particle.system_random.uniform(min_i, max_i) - self.position[i]) / 2.0);
 
         # Compute the cost function
-        self.computeCostFunction();
+        self.computeObjectiveFunction();
 
     def copy(self):
 
@@ -61,7 +61,7 @@ class Particle:
                 self.position,
                 self.velocity));
 
-    def computeCostFunction(self):
+    def computeObjectiveFunction(self):
         # Compute the cost function
         self.cost = self.cost_function(self.position)
 
@@ -102,7 +102,7 @@ class Particle:
 
         self.position = copy.deepcopy(new_position)
 
-        self.computeCostFunction();
+        self.computeObjectiveFunction();
 
     def getParameter(self, i):
         if i >= len(self.position):
