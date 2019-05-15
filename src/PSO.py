@@ -32,7 +32,7 @@ class PSO(Optimiser):
         #self.best_solution_set.append(copy.deepcopy(best_particle))
         self.best_solution = self.current_solution_set[best_particle_index].copy();
 
-    def run(self):
+    def runIteration(self):
 
         # Keep track of the best particle
         best_cost = self.best_solution.cost;

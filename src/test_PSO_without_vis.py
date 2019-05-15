@@ -39,7 +39,7 @@ optimiser.printCurrentStates(0);
 # Optimisation
 for i in range(g_iterations):
     # Run the optimisation loop
-    optimiser.run();
+    optimiser.runIteration();
 
     # Print the current state in the console
     optimiser.printCurrentStates(i + 1);

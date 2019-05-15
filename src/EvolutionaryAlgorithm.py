@@ -79,7 +79,7 @@ class EvolutionaryAlgorithm(Optimiser):
     def setSelectionOperator(self, aSelectionOperator):
         self.selection_operator = aSelectionOperator;
 
-    def run(self):
+    def runIteration(self):
 
         if self.selection_operator == None:
             raise NotImplementedError("A selection operator has to be added")

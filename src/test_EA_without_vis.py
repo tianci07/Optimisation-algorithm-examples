@@ -75,7 +75,7 @@ for i in range(g_iterations):
     gaussian_mutation.setMutationVariance(sigma);
 
     # Run the optimisation loop
-    optimiser.run();
+    optimiser.runIteration();
 
     # Print the current state in the console
     optimiser.printCurrentStates(i + 1);

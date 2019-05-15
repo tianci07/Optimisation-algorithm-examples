@@ -15,7 +15,7 @@ class Optimiser:
         self.current_solution_set   = [];
         self.visualisation_callback = None;
 
-    def run(self):
+    def runIteration(self):
         raise NotImplementedError("Subclasses should implement this!")
 
     def frange(self, start, stop, step):
@@ -75,7 +75,7 @@ class Optimiser:
         # This is not the initial population
         if i != 0:
             # Run the optimisation loop
-            self.run();
+            self.runIteration();
 
             # Print the current state in the console
             self.printCurrentStates(i);
