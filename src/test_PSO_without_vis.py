@@ -3,10 +3,6 @@
 #import cProfile
 
 import math;
-
-import numpy as np
-
-
 from PSO import PSO
 
 
