@@ -5,6 +5,9 @@ import copy
 
 class Individual:
 
+    # Get a SystemRandom instance out of random package
+    system_random = random.SystemRandom();
+
     def __init__(self, aNumberOfGenes, aBoundarySet, aFitnessFunction, aGeneSet = None, aFitness = -float('inf')):
 
         # Set the genes
@@ -29,7 +32,7 @@ class Individual:
                 max_i = self.boundary_set[i][1];
 
                 # Get random value to each gene
-                self.genes.append(random.uniform(min_i, max_i));
+                self.genes.append(Individual.system_random.uniform(min_i, max_i));
 
 
     def copy(self):
