@@ -78,6 +78,10 @@ class SimulatedAnnealing(Optimiser):
         self.min_energy =  float("inf");
         self.max_energy = -float("inf");
 
+        self.temperature_set = [];
+
+        self.best_solution_set = [];
+
         self.current_temperature = self.initial_temperature;
 
         # Compute its energy using the cost function
@@ -139,7 +143,9 @@ class SimulatedAnnealing(Optimiser):
     def getRandomNeighbor(self, aSolution):
         return self.getRandomNeighbour(aSolution);
 
-    def runIteration(self, aVerboseFlag = False):
+    ## \brief Run one iteration of the SA algorithm.
+    # \param self
+    def runIteration(self):
         if self.current_temperature > 1.0:
             # Create a new solution depending on the current solution,
             # i.e. a neighbour
