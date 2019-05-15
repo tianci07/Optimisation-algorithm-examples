@@ -55,16 +55,8 @@ class SimulatedAnnealing(Optimiser):
 
         super().__init__(aBoundarySet, aCostFunction);
 
-        # Initialise attributes
-        self.initStates()
-
         # Get a SystemRandom instance out of random package
         self.system_random = random.SystemRandom();
-
-        # and copy input parameters
-        self.number_of_dimensions = aNumberOfDimensions;
-        self.initial_temperature = aTemperature;
-        self.cooling_rate = aCoolingRate;
 
         # Create the current solution from random
         parameter_set = [];
@@ -72,15 +64,27 @@ class SimulatedAnnealing(Optimiser):
             parameter_set.append(self.system_random.uniform(self.boundary_set[i][0], self.boundary_set[i][1]));
         self.current_solution = Solution(parameter_set);
 
+        # and copy input parameters
+        self.number_of_dimensions = aNumberOfDimensions;
+        self.initial_temperature = aTemperature;
+        self.cooling_rate = aCoolingRate;
+
+        # Initialise attributes
+        self.initStates()
+
     ## \brief Initialise attributes.
     # \param self
     def initStates(self):
         self.min_energy =  float("inf");
         self.max_energy = -float("inf");
 
-        self.temperature_set = [];
+        self.current_temperature = self.initial_temperature;
 
-        self.best_solution_set = [];
+        # Compute its energy using the cost function
+        self.current_solution.energy = self.computeEnergy(self.current_solution.parameter_set);
+
+        # This is also the best solution so far
+        self.best_solution = copy.deepcopy(self.current_solution);
 
 
     ## \brief Compute the energy corresponding to a given solution.
@@ -135,21 +139,37 @@ class SimulatedAnnealing(Optimiser):
     def getRandomNeighbor(self, aSolution):
         return self.getRandomNeighbour(aSolution);
 
+    def runIteration(self, aVerboseFlag = False):
+        if self.current_temperature > 1.0:
+            # Create a new solution depending on the current solution,
+            # i.e. a neighbour
+            neighbour = Solution(self.getRandomNeighbour(self.current_solution));
+
+            # Get its energy (cost function)
+            neighbour.energy = self.computeEnergy(neighbour.parameter_set);
+
+            # Accept the neighbour or not depending on the acceptance probability
+            if self.acceptanceProbability(neighbour.getObjective()) > self.system_random.uniform(0, 1):
+                self.current_solution = copy.deepcopy(neighbour);
+
+            # The neighbour is better thant the current element
+            if self.best_solution.getObjective() > self.current_solution.getObjective():
+                self.best_solution = copy.deepcopy(self.current_solution);
+
+            # Log the current states
+            self.logCurrentState();
+
+            # Cool the system
+            self.current_temperature *= 1.0 - self.cooling_rate;
+
+
     ## \brief Run the optimisation.
     # \param self
     # \param aRetartFlag: True if the algorithm has to run twice, False if it has to run only once (default value: False)
     # \param aVerboseFlag: True if intermediate results are printing in the terminal, False to print no intermediate results (default value: False)
     def run(self, aRetartFlag = False, aVerboseFlag = False):
 
-        self.current_temperature = self.initial_temperature;
-
         self.initStates();
-
-        # Compute its energy using the cost function
-        self.current_solution.energy = self.computeEnergy(self.current_solution.parameter_set);
-
-        # This is also the best solution so far
-        self.best_solution = copy.deepcopy(self.current_solution);
 
         iteration = 0;
         if aVerboseFlag:
@@ -174,33 +194,14 @@ class SimulatedAnnealing(Optimiser):
                 if iteration != 0:
                     if (self.current_solution.getObjective() - self.min_energy) / (self.max_energy - self.min_energy) > 0.9:
                         #print("Restart")
-                        self.current_solution = self.best_solution;
+                        self.current_solution = copy.deepcopy(self.best_solution);
 
-            # Create a new solution depending on the current solution,
-            # i.e. a neighbour
-            neighbour = Solution(self.getRandomNeighbour(self.current_solution));
-
-            # Get its energy (cost function)
-            neighbour.energy = self.computeEnergy(neighbour.parameter_set);
-
-            # Accept the neighbour or not depending on the acceptance probability
-            if self.acceptanceProbability(neighbour.getObjective()) > self.system_random.uniform(0, 1):
-                self.current_solution = copy.deepcopy(neighbour);
-
-            # The neighbour is better thant the current element
-            if self.best_solution.getObjective() > self.current_solution.getObjective():
-                self.best_solution = copy.deepcopy(self.current_solution);
-
+            # Run one iteration of the loop
+            self.runIteration(aVerboseFlag);
             iteration = iteration + 1;
 
             if aVerboseFlag:
                 print(self.iterationDetails(iteration));
-
-            # Log the current states
-            self.logCurrentState();
-
-            # Cool the system
-            self.current_temperature *= 1.0 - self.cooling_rate;
 
         self.current_solution = copy.deepcopy(self.best_solution);
 
