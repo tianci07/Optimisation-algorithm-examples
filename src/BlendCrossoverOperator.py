@@ -17,6 +17,9 @@ class BlendCrossoverOperator(GeneticOperator.GeneticOperator):
         # Save the mutation operator
         self.mutation_operator = aMutationOperator;
 
+        # Get a SystemRandom instance out of random package
+        self.system_random = random.SystemRandom();
+
     def apply(self, anEA):
 
         self.use_count += 1;
@@ -33,7 +36,7 @@ class BlendCrossoverOperator(GeneticOperator.GeneticOperator):
 
         for p1_gene, p2_gene in zip(anEA.individual_set[parent1_index].genes, anEA.individual_set[parent2_index].genes):
 
-            alpha = random.uniform(0.0, 1.0);
+            alpha = self.system_random.uniform(0.0, 1.0);
             child_gene.append(alpha * p1_gene + (1.0 - alpha) * p2_gene);
 
         child = IND.Individual(

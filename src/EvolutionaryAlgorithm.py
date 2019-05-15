@@ -10,6 +10,9 @@ class EvolutionaryAlgorithm:
 
     def __init__(self, aNumberOfGenes, aBoundarySet, aFitnessFunction, aNumberOfIndividuals, aGlobalFitnessFunction = 0, aUpdateIndividualContribution = 0):
 
+        # Get a SystemRandom instance out of random package
+        self.system_random = random.SystemRandom();
+
         # Selection operator
         self.selection_operator = SelectionOperator.SelectionOperator();
 
@@ -127,7 +130,7 @@ class EvolutionaryAlgorithm:
         while (len(offspring_population) < len(self.individual_set)):
 
             # Draw a random number between 0 and 1 minus the probability of elitism
-            chosen_operator = random.uniform(0.0, probability_sum)
+            chosen_operator = self.system_random.uniform(0.0, probability_sum)
 
             accummulator = 0.0;
             current_number_of_children = len(offspring_population)

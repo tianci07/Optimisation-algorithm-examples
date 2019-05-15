@@ -10,6 +10,9 @@ class RankSelection(SelectionOperator):
         self.rank_set = [];
         self.sum_rank = 0;
 
+        # Get a SystemRandom instance out of random package
+        self.system_random = random.SystemRandom();
+
     def preProcess(self, anIndividualSet):
         self.rank_set = [];
 
@@ -30,7 +33,7 @@ class RankSelection(SelectionOperator):
                                                   # aFlag == False for selecting bad individuals,
 
         # Random number between(0 - self.sum_rank)
-        random_number = random.uniform(0, self.sum_rank)
+        random_number = self.system_random.uniform(0, self.sum_rank)
 
         # Select the individual depending on the probability
         accumulator = 0;
