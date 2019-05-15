@@ -1,5 +1,5 @@
 import random
-
+import copy
 import GeneticOperator
 
 
@@ -30,7 +30,7 @@ class GaussianMutationOperator(GeneticOperator.GeneticOperator):
         parent_index = anEA.selection_operator.select(anEA.individual_set)
 
         # Copy the parent into a child
-        child = anEA.individual_set[parent_index];
+        child = copy.deepcopy(anEA.individual_set[parent_index]);
 
         # Mutate the child and return it
         return self.mutate(child);
