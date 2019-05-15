@@ -59,7 +59,7 @@ class EvolutionaryAlgorithm(Optimiser):
         # And keep track of who is the best individual
         best_individual_index = 0;
         for i in range(len(self.current_solution_set)):
-            self.current_solution_set[i].computeFitnessFunction();
+            self.current_solution_set[i].computeObjectiveFunction();
             if (self.current_solution_set[best_individual_index].fitness < self.current_solution_set[i].fitness):
                 best_individual_index = i;
 
@@ -160,7 +160,7 @@ class EvolutionaryAlgorithm(Optimiser):
         best_individual_index = 0;
 
         for child in offspring_population:
-            child.computeFitnessFunction();
+            child.computeObjectiveFunction();
             if (offspring_population[best_individual_index].fitness < child.fitness):
                 best_individual_index = offspring_population.index(child);
 
