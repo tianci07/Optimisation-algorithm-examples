@@ -3,7 +3,6 @@ import random
 import Individual as IND
 import numpy as np
 import math
-import copy
 import SelectionOperator
 
 class EvolutionaryAlgorithm:
