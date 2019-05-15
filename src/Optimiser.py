@@ -7,6 +7,12 @@ import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 from matplotlib import animation
 
+def frange(start, stop, step):
+    i = start
+    while i < stop:
+         yield i
+         i += step
+
 class Optimiser:
     def __init__(self, aBoundarySet, anObjectiveFunction):
         self.boundary_set           = aBoundarySet;
@@ -18,12 +24,6 @@ class Optimiser:
     def runIteration(self):
         raise NotImplementedError("Subclasses should implement this!")
 
-    def frange(self, start, stop, step):
-        i = start
-        while i < stop:
-             yield i
-             i += step
-
     def createFigure(self):
         # Create the figure and axes
         fig = plt.figure();
@@ -34,13 +34,13 @@ class Optimiser:
         Y = [];
         Z = [];
 
-        for y in self.frange(self.boundary_set[0][0], self.boundary_set[0][1], 0.05):
+        for y in frange(self.boundary_set[0][0], self.boundary_set[0][1], 0.05):
             #
             Temp_X = [];
             Temp_Y = [];
             Temp_Z = [];
             #
-            for x in self.frange(self.boundary_set[1][0], self.boundary_set[1][1], 0.05):
+            for x in frange(self.boundary_set[1][0], self.boundary_set[1][1], 0.05):
                 genes = [x, y];
                 objective_value = self.objective_function(genes);
                 Temp_X.append(x);
