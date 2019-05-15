@@ -140,7 +140,7 @@ class EvolutionaryAlgorithm:
 
                         accummulator += genetic_opterator.getProbability();
 
-                        if (chosen_operator < accummulator):
+                        if (chosen_operator <= accummulator):
                             offspring_population.append(genetic_opterator.apply(self));
 
         # Compute the global fitness
