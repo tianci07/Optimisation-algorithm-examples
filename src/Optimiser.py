@@ -19,6 +19,7 @@ class Optimiser:
         self.best_solution          = None;
         self.current_solution_set   = [];
         self.visualisation_callback = None;
+        self.verbose = False;
 
     def runIteration(self):
         raise NotImplementedError("Subclasses should implement this!")
@@ -72,7 +73,8 @@ class Optimiser:
 
     def update(self, i):
         # Print the current state in the console
-        self.printCurrentStates(i);
+        if self.verbose:
+            self.printCurrentStates(i);
 
         # This is not the initial population
         if i != 0:
@@ -80,7 +82,8 @@ class Optimiser:
             self.runIteration();
 
             # Print the current state in the console
-            self.printCurrentStates(i);
+            if self.verbose:
+                self.printCurrentStates(i);
 
             if self.visualisation_callback != None:
                 self.visualisation_callback();

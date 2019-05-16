@@ -2,9 +2,7 @@
 
 #import cProfile
 
-import math;
-
-
+from AckleyFunction import *
 from EvolutionaryAlgorithm import *
 
 # Selection operators
@@ -18,31 +16,15 @@ from BlendCrossoverOperator   import *
 from GaussianMutationOperator import *
 from NewBloodOperator         import *
 
-g_number_of_individuals = 10;
-g_iterations            = 20;
-g_number_of_genes       = 2;
+g_number_of_individuals = 20;
+g_iterations            = 40;
 
-g_max_mutation_sigma = 0.5;
+g_max_mutation_sigma = 0.1;
 g_min_mutation_sigma = 0.01;
 
-g_boundaries = [];
-for i in range(g_number_of_genes):
-    g_boundaries.append([-5,5]);
-
-def fitnessFunction(aSolution):
-    fitness = 0.0;
-    #
-    #for i in range(g_number_of_dimensions):
-    #    sum += aSolution[i] * aSolution[i];
-    #
-    fitness += math.exp(-(math.pow(aSolution[0], 2) + math.pow(aSolution[1], 2)));
-    fitness += 2.0 * math.exp(-(math.pow(aSolution[0]-1.7, 2) + math.pow(aSolution[1]-1.7, 2)));
-    fitness *= -1.0;
-    #
-    return -fitness;
 
 # Create an EA
-optimiser = EvolutionaryAlgorithm(g_number_of_genes, g_boundaries, fitnessFunction, g_number_of_individuals)
+optimiser = EvolutionaryAlgorithm(AckleyFunction(), g_number_of_individuals)
 
 # Set the selection operator
 #optimiser.setSelectionOperator(TournamentSelection(2));
@@ -81,4 +63,4 @@ for i in range(g_iterations):
     optimiser.printCurrentStates(i + 1);
 
 # Get the solution to the optimisation problem
-print("Best individual:\t", optimiser.best_solution);
+print("Solution:\t", optimiser.best_solution);
