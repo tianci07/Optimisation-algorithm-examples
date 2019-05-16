@@ -46,26 +46,23 @@ class SimulatedAnnealing(Optimiser):
 
     ## \brief Constructor.
     # \param self
-    # \param aNumberOfDimensions: The number of dimensions of the search space
-    # \param aBoundarySet: For each dimension, the range of possible values
     # \param aCostFunction: The cost function to minimise
     # \param aTemperature: The initial temperature of the system (default value: 10,000)
     # \param aCoolingRate: The cooling rate (i.e. how fast the temperature will decrease) (default value: 0.003)
-    def __init__(self, aNumberOfDimensions, aBoundarySet, aCostFunction, aTemperature = 10000, aCoolingRate = 0.003):
+    def __init__(self, aCostFunction, aTemperature = 10000, aCoolingRate = 0.003):
 
-        super().__init__(aBoundarySet, aCostFunction);
+        super().__init__(aCostFunction);
 
         # Get a SystemRandom instance out of random package
         self.system_random = random.SystemRandom();
 
         # Create the current solution from random
         parameter_set = [];
-        for i in range(aNumberOfDimensions):
-            parameter_set.append(self.system_random.uniform(self.boundary_set[i][0], self.boundary_set[i][1]));
+        for i in range(self.objective_function.number_of_dimensions):
+            parameter_set.append(self.system_random.uniform(self.objective_function.boundary_set[i][0], self.objective_function.boundary_set[i][1]));
         self.current_solution = Solution(parameter_set);
 
         # and copy input parameters
-        self.number_of_dimensions = aNumberOfDimensions;
         self.initial_temperature = aTemperature;
         self.cooling_rate = aCoolingRate;
 
@@ -97,7 +94,7 @@ class SimulatedAnnealing(Optimiser):
     # \return the corresponding energy
     def computeEnergy(self, aSolution):
         # Compute the cost function
-        energy = self.objective_function(aSolution);
+        energy = self.objective_function.evaluate(aSolution, 1);
 
         # Keep track of the min/max cost values
         self.min_energy = min(self.min_energy, energy);
@@ -128,9 +125,9 @@ class SimulatedAnnealing(Optimiser):
         new_solution = [];
 
         # Process each dimension of the search space
-        for i in range(self.number_of_dimensions):
-            min_val = self.boundary_set[i][0];
-            max_val = self.boundary_set[i][1];
+        for i in range(self.objective_function.number_of_dimensions):
+            min_val = self.objective_function.boundary_set[i][0];
+            max_val = self.objective_function.boundary_set[i][1];
             range_val = max_val - min_val;
             new_solution.append(random.gauss(min_val + range_val / 2, range_val * 0.1));
 
@@ -142,6 +139,9 @@ class SimulatedAnnealing(Optimiser):
     # \return a neighbour
     def getRandomNeighbor(self, aSolution):
         return self.getRandomNeighbour(aSolution);
+
+    def evaluate(self, aParameterSet):
+        return self.objective_function.evaluate(aParameterSet, 1);
 
     ## \brief Run one iteration of the SA algorithm.
     # \param self
@@ -181,10 +181,10 @@ class SimulatedAnnealing(Optimiser):
         if aVerboseFlag:
             header  = "iteration";
             header += " temperature";
-            for i in range(self.number_of_dimensions):
+            for i in range(self.objective_function.number_of_dimensions):
                 header += " best_solution[" + str(i) + "]";
             header += " best_solution_energy";
-            for i in range(self.number_of_dimensions):
+            for i in range(self.objective_function.number_of_dimensions):
                 header += " current_solution[" + str(i) + "]";
             header += " current_solution_energy";
             print(header);
@@ -203,7 +203,7 @@ class SimulatedAnnealing(Optimiser):
                         self.current_solution = copy.deepcopy(self.best_solution);
 
             # Run one iteration of the loop
-            self.runIteration(aVerboseFlag);
+            self.runIteration();
             iteration = iteration + 1;
 
             if aVerboseFlag:

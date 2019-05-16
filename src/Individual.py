@@ -48,7 +48,7 @@ class Individual:
     def computeObjectiveFunction(self):
 
         # Compute the fitness function
-        self.fitness = self.fitness_function(self.genes);
+        self.fitness = self.fitness_function.evaluate(self.genes, 2);
 
         return self.fitness;
 

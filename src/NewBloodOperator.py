@@ -19,6 +19,6 @@ class NewBloodOperator(GeneticOperator.GeneticOperator):
         # Return a new individual whose genes are randomly
         # generated using a uniform distribution
         return (IND.Individual(
-            anEA.genes_number,
-            anEA.boundary_set,
+            anEA.objective_function.number_of_dimensions,
+            anEA.objective_function.boundary_set,
             anEA.objective_function))

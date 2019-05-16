@@ -9,9 +9,9 @@ from Optimiser import *
 
 class EvolutionaryAlgorithm(Optimiser):
 
-    def __init__(self, aNumberOfGenes, aBoundarySet, aFitnessFunction, aNumberOfIndividuals, aGlobalFitnessFunction = 0, aUpdateIndividualContribution = 0):
+    def __init__(self, aFitnessFunction, aNumberOfIndividuals, aGlobalFitnessFunction = 0, aUpdateIndividualContribution = 0):
 
-        super().__init__(aBoundarySet, aFitnessFunction);
+        super().__init__(aFitnessFunction);
 
         # Get a SystemRandom instance out of random package
         self.system_random = random.SystemRandom();
@@ -23,9 +23,6 @@ class EvolutionaryAlgorithm(Optimiser):
         self.genetic_opterator_set = [];
         self.elitism_operator = None;
 
-        #Set the individual operater
-        self.genes_number = aNumberOfGenes
-
         # Store the population
         self.current_solution_set = [];
 
@@ -35,11 +32,11 @@ class EvolutionaryAlgorithm(Optimiser):
             self.individual_callback = aUpdateIndividualContribution;
 
         # Keep track of the best individual
-        self.current_solution_set.append(IND.Individual(aNumberOfGenes, aBoundarySet, aFitnessFunction));
+        self.current_solution_set.append(IND.Individual(self.objective_function.number_of_dimensions, self.objective_function.boundary_set, aFitnessFunction));
 
         # Create the population
         while (len(self.current_solution_set) < aNumberOfIndividuals):
-            self.current_solution_set.append(IND.Individual(aNumberOfGenes, aBoundarySet, aFitnessFunction))
+            self.current_solution_set.append(IND.Individual(self.objective_function.number_of_dimensions, self.objective_function.boundary_set, aFitnessFunction))
 
         # Compute the global fitness
         self.global_fitness = 0;
@@ -78,6 +75,9 @@ class EvolutionaryAlgorithm(Optimiser):
 
     def setSelectionOperator(self, aSelectionOperator):
         self.selection_operator = aSelectionOperator;
+
+    def evaluate(self, aParameterSet):
+        return self.objective_function.evaluate(aParameterSet, 2);
 
     def runIteration(self):
 

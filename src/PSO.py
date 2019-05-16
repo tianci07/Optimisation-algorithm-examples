@@ -3,25 +3,22 @@ from Particle import *
 
 class PSO(Optimiser):
 
-    def __init__(self, aNumberOfDimensions, aBoundarySet, aCostFunction, aNumberOfParticles):
+    def __init__(self, aCostFunction, aNumberOfParticles):
 
-        super().__init__(aBoundarySet, aCostFunction);
+        super().__init__(aCostFunction);
 
         # Save the best particle at each iteration
         #self.best_solution_set = [];
 
-        # and copy input parameters
-        self.number_of_dimensions = aNumberOfDimensions;
-
         # Add a particle
-        self.current_solution_set.append(Particle(aNumberOfDimensions, aBoundarySet, aCostFunction, self))
+        self.current_solution_set.append(Particle(self.objective_function.number_of_dimensions, self.objective_function.boundary_set, aCostFunction, self))
 
         # Keep track of the best particle
         best_particle_index = 0;
 
         # Create the particles
         while len(self.current_solution_set) < aNumberOfParticles:
-            self.current_solution_set.append(Particle(aNumberOfDimensions, aBoundarySet, aCostFunction, self))
+            self.current_solution_set.append(Particle(self.objective_function.number_of_dimensions, self.objective_function.boundary_set, aCostFunction, self))
 
             # The new particle is better
             # Minimisation
@@ -31,6 +28,9 @@ class PSO(Optimiser):
         # Store the best particle
         #self.best_solution_set.append(copy.deepcopy(best_particle))
         self.best_solution = self.current_solution_set[best_particle_index].copy();
+
+    def evaluate(self, aParameterSet):
+        return self.objective_function.evaluate(aParameterSet, 1);
 
     def runIteration(self):
 

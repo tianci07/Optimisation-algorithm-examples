@@ -14,14 +14,16 @@ def frange(start, stop, step):
          i += step
 
 class Optimiser:
-    def __init__(self, aBoundarySet, anObjectiveFunction):
-        self.boundary_set           = aBoundarySet;
+    def __init__(self, anObjectiveFunction):
         self.objective_function     = anObjectiveFunction;
         self.best_solution          = None;
         self.current_solution_set   = [];
         self.visualisation_callback = None;
 
     def runIteration(self):
+        raise NotImplementedError("Subclasses should implement this!")
+
+    def evaluate(self, aParameterSet):
         raise NotImplementedError("Subclasses should implement this!")
 
     def createFigure(self):
@@ -34,15 +36,15 @@ class Optimiser:
         Y = [];
         Z = [];
 
-        for y in frange(self.boundary_set[0][0], self.boundary_set[0][1], 0.05):
+        for y in frange(self.objective_function.boundary_set[0][0], self.objective_function.boundary_set[0][1], 0.05):
             #
             Temp_X = [];
             Temp_Y = [];
             Temp_Z = [];
             #
-            for x in frange(self.boundary_set[1][0], self.boundary_set[1][1], 0.05):
+            for x in frange(self.objective_function.boundary_set[1][0], self.objective_function.boundary_set[1][1], 0.05):
                 genes = [x, y];
-                objective_value = self.objective_function(genes);
+                objective_value = self.evaluate(genes);
                 Temp_X.append(x);
                 Temp_Y.append(y);
                 Temp_Z.append(objective_value);
@@ -103,7 +105,7 @@ class Optimiser:
 
         self.visualisation_callback = aCallback;
 
-        if len(self.boundary_set) == 2:
+        if len(self.objective_function.boundary_set) == 2:
             # Create a figure (Matplotlib)
             fig, self.scat1, self.scat2 = self.createFigure();
 
@@ -119,7 +121,7 @@ class Optimiser:
             else:
                 plt.show();
         else:
-            raise NotImplementedError("Visualisation for " + str(len(self.boundary_set)) + "-D problems is not implemented")
+            raise NotImplementedError("Visualisation for " + str(len(self.objective_function.boundary_set)) + "-D problems is not implemented")
 
     def __repr__(self):
         value = ""

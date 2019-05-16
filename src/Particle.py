@@ -63,7 +63,7 @@ class Particle:
 
     def computeObjectiveFunction(self):
         # Compute the cost function
-        self.cost = self.cost_function(self.position)
+        self.cost = self.cost_function.evaluate(self.position, 1)
 
         # Update the particle's best known position if needed
         if self.best_known_cost > self.cost:
