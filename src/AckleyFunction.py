@@ -18,6 +18,8 @@ class AckleyFunction(ObjectiveFunction):
                          self.objectiveFunction,
                          1);
 
+        self.global_optimum = [0, 0];
+
     def objectiveFunction(self, aSolution):
 
         # Function:
