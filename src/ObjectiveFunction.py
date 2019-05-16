@@ -12,11 +12,11 @@ class ObjectiveFunction:
         self.boundary_set = copy.deepcopy(aBoundarySet);
         self.number_of_dimensions = aNumberOfDimensions;
         self.objective_function = anObjectiveFunction;
-        self.g_number_of_evaluation = 0;
+        self.number_of_evaluation = 0;
         self.flag = aFlag;
 
     def evaluate(self, aParameterSet, aFlag):
-        self.g_number_of_evaluation += 1;
+        self.number_of_evaluation += 1;
 
         objective_value = self.objective_function(aParameterSet);
         if aFlag != self.flag:
