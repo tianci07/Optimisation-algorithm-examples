@@ -54,6 +54,8 @@ class Optimiser:
             Y.append(Temp_Y);
             Z.append(Temp_Z);
 
+        self.objective_function.number_of_evaluation = 0;
+        
         # Plot a basic wireframe.
         ax.plot_wireframe(np.array(X), np.array(Y), np.array(Z), rstride=10, cstride=10)
 
