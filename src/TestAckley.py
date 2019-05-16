@@ -2,6 +2,8 @@
 
 import math
 
+from scipy import optimize
+
 from AckleyFunction import *
 
 from PSO import *
@@ -21,6 +23,35 @@ from NewBloodOperator         import *
 
 
 test_problem = AckleyFunction();
+
+methods = ['Nelder-Mead',
+    'Powell',
+    'CG',
+    'BFGS',
+    'L-BFGS-B',
+    'TNC',
+    'COBYLA',
+    'SLSQP'];
+
+number_of_evaluation_set = [];
+solution_set = [];
+initial_guess = test_problem.initialGuess();
+
+for method in methods:
+    test_problem.number_of_evaluation = 0;
+
+    if method == 'Nelder-Mead' or method == 'Powell' or method == 'COBYLA':
+        result = optimize.minimize(test_problem.minimisationFunction,
+            initial_guess,
+            method=method);
+    else:
+        result = optimize.minimize(test_problem.minimisationFunction,
+            initial_guess,
+            method=method,
+            jac='2-point');
+
+    number_of_evaluation_set.append(test_problem.number_of_evaluation);
+    solution_set.append(result.x);
 
 
 # Parameters for EA
@@ -84,12 +115,19 @@ optimiser.plotAnimation(211);
 SA_number_of_evaluation = test_problem.number_of_evaluation
 SA_solution = optimiser.best_solution;
 
+
+for method, number_of_evaluation, solution in zip(methods, number_of_evaluation_set, solution_set):
+    print(method, ".number_of_evaluation:\t", number_of_evaluation)
+    print(method, " solution:\t", solution, "\tdistance:\t", test_problem.getDistanceToGlobalOptimum(solution));
+    print()
+
+
 print("EA.number_of_evaluation:\t", EA_number_of_evaluation)
-print("EA solution:\t", EA_solution);
+print("EA solution:\t", EA_solution, "\tdistance:\t", test_problem.getDistanceToGlobalOptimum(EA_solution.genes));
 print()
 print("PSO.number_of_evaluation:\t", PSO_number_of_evaluation)
-print("PSO solution:\t", PSO_solution);
+print("PSO solution:\t", PSO_solution, "\tdistance:\t", test_problem.getDistanceToGlobalOptimum(PSO_solution.position));
 print()
 print("SA.number_of_evaluation:\t", SA_number_of_evaluation)
-print("SA solution:\t", SA_solution);
+print("SA solution:\t", SA_solution, "\tdistance:\t", test_problem.getDistanceToGlobalOptimum(SA_solution.parameter_set));
 print()
