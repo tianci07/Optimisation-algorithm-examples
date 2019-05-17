@@ -7,6 +7,16 @@ from ObjectiveFunction import *
 def areaEnlightened(overlay_image):
     return np.array(overlay_image).sum();
 
+def areaOverlap(overlay_image):
+
+    areaOver = 0
+    for i in range(overlay_image.shape[0]):
+        for j in range(overlay_image.shape[1]):
+
+            if (overlay_image[i,j] > 1.5):
+                areaOver += overlay_image[i,j][0]
+
+    return areaOver;
 
 class LampProblem(ObjectiveFunction):
     def __init__(self, aRoomWidth, aRoomHeight, aLampRadius, W, aNumberOfLamps):
@@ -41,8 +51,8 @@ class LampProblem(ObjectiveFunction):
         return self.computeFitnessFunction(overlay_image, aSetOfLamps);
 
     def computeFitnessFunction(self, overlay_image, aSetOfLamps):
-        area_enlightened = self.areaEnlightened(overlay_image);
-        overlap          = self.areaOverlap(overlay_image);
+        area_enlightened = areaEnlightened(overlay_image);
+        overlap          = areaOverlap(overlay_image);
         fitness = (area_enlightened - self.W * overlap) / self.getArea();
 
         if self.verbose:
@@ -59,6 +69,12 @@ class LampProblem(ObjectiveFunction):
                     # Plot the center of all the lamp (small radius) in black
                     cv2.circle(temp_image, (x,y), 2, (0,0,0), -1)
 
+            self.vis_image[0:self.room_height,0:self.room_width] = temp_image / np.max(temp_image);
+
+            if self.global_fitness < fitness:
+                self.global_fitness = fitness;
+                self.vis_image[0:self.room_height,10+self.room_width:10+2*self.room_width] = temp_image / np.max(temp_image);
+
             # Save the image (use image_counter in the file name)
             filename = "lamp_" + str(self.image_counter) + ".png";
             self.image_counter += 1;
@@ -67,11 +83,7 @@ class LampProblem(ObjectiveFunction):
             temp_image *= 255;
             cv2.imwrite(filename, temp_image);
 
-            self.vis_image[0:self.room_height,0:self.room_width] = copy.deepcopy(temp_image);
 
-            if self.global_fitness < fitness:
-                self.global_fitness = fitness;
-                self.vis_image[0:self.room_height,10+self.room_width:10+2*self.room_width] = copy.deepcopy(temp_image);
 
             cv2.imshow('vis', self.vis_image);
 
@@ -83,17 +95,6 @@ class LampProblem(ObjectiveFunction):
 
 
         return fitness;
-
-    def areaOverlap(self, overlay_image):
-
-        areaOver = 0
-        for i in range(self.room_width):
-            for j in range(self.room_height):
-
-                if (overlay_image[i,j] > 1.5):
-                    areaOver += overlay_image[i,j][0]
-
-        return areaOver;
 
     def addLampToImage(self, overlay_image, x, y, l):
 
