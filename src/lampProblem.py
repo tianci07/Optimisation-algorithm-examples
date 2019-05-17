@@ -4,6 +4,9 @@ import copy
 
 from ObjectiveFunction import *
 
+def areaEnlightened(overlay_image):
+    return np.array(overlay_image).sum();
+
 
 class LampProblem(ObjectiveFunction):
     def __init__(self, aRoomWidth, aRoomHeight, aLampRadius, W, aNumberOfLamps):
@@ -80,9 +83,6 @@ class LampProblem(ObjectiveFunction):
 
 
         return fitness;
-
-    def areaEnlightened(self, overlay_image):
-        return np.array(overlay_image).sum();
 
     def areaOverlap(self, overlay_image):
 
