@@ -20,6 +20,7 @@ class ObjectiveFunction:
         self.number_of_evaluation = 0;
         self.flag = aFlag;
         self.global_optimum = None;
+        self.verbose = False;   # Use for debugging
 
     def initialGuess(self):
         if self.number_of_dimensions == 1:
