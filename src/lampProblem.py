@@ -17,6 +17,12 @@ def areaOverlap(overlay_image):
 
     return areaOver;
 
+def getLampDetails(aSetOfLamps, i):
+    x = int(aSetOfLamps[ i * 3 + 0])
+    y = int(aSetOfLamps[ i * 3 + 1])
+    on_off = (aSetOfLamps[i * 3 + 2] > 0.5);
+    return x, y, on_off;
+
 class LampProblem(ObjectiveFunction):
     def __init__(self, aRoomWidth, aRoomHeight, aLampRadius, W, aNumberOfLamps):
 
@@ -58,7 +64,7 @@ class LampProblem(ObjectiveFunction):
             temp_image = np.copy(overlay_image);
 
             for i in range(self.number_of_lamps):
-                x, y, on_off = self.getLampDetails(aSetOfLamps, i)
+                x, y, on_off = getLampDetails(aSetOfLamps, i)
 
                 if on_off:
                     # Plot the center of all the lamp (small radius) in black
@@ -100,12 +106,6 @@ class LampProblem(ObjectiveFunction):
         cv2.circle(black_image, (x,y), self.lamp_radius, (l, l, l), -1)
         np.add(overlay_image, black_image, overlay_image);
 
-    def getLampDetails(self, aSetOfLamps, i):
-        x = int(aSetOfLamps[ i * 3 + 0])
-        y = int(aSetOfLamps[ i * 3 + 1])
-        on_off = (aSetOfLamps[i * 3 + 2] > 0.5);
-        return x, y, on_off;
-
     def createLampMap(self, aSetOfLamps):
 
         # Create a black image (float32, greyscale) of room_width x room_height pixels
@@ -113,7 +113,7 @@ class LampProblem(ObjectiveFunction):
 
         # print the position of all the lamps
         for i in range(self.number_of_lamps):
-            x, y, on_off = self.getLampDetails(aSetOfLamps, i)
+            x, y, on_off = getLampDetails(aSetOfLamps, i)
 
             if on_off:
                 # Draw circles corresponding to the lamps
