@@ -1,96 +1,120 @@
-
 import numpy as np
 import cv2
+import copy
 
-room_width = 100;
-room_height = 100;
-lamp_radius = 15;
-W = 1;
-
-image_counter = 0;
-
-overlay_image = []
-
-global_fitness = -float('inf');
-
-def getArea():
-    return room_width * room_height;
-
-def addLampToImage(x, y, l):
-    global overlay_image;
-
-    # Draw circles corresponding to the lamps
-    black_image = np.zeros((room_height, room_width, 1), np.float32)
-    cv2.circle(black_image, (x,y), lamp_radius, (l, l, l), -1)
-    np.add(overlay_image, black_image, overlay_image);
+from ObjectiveFunction import *
 
 
+class LampProblem(ObjectiveFunction):
+    def __init__(self, aRoomWidth, aRoomHeight, aLampRadius, W, aNumberOfLamps):
 
-def createLampMap(aSetOfLamps):
-    global image_counter;
-    global overlay_image;
+        self.room_width  = aRoomWidth;
+        self.room_height = aRoomHeight;
+        self.lamp_radius = aLampRadius;
+        self.W = W;
 
-    number_of_lamps = int(len(aSetOfLamps) / 3);
+        self.global_fitness = -float('inf');
+        self.image_counter = 0; # Use for debugging
+        self.vis_image = np.zeros((self.room_height, self.room_width * 2 + 10, 1), np.float32)
 
-    # Create a black image (float32, greyscale) of room_width x room_height pixels
-    overlay_image = np.zeros((room_height, room_width, 1), np.float32)
+        self.number_of_lamps = aNumberOfLamps;
 
-    # print the position of all the lamps
-    for i in range(number_of_lamps):
-        x = int(aSetOfLamps[ i * 3 + 0])
-        y = int(aSetOfLamps[ i * 3 + 1])
-        on_off = aSetOfLamps[i * 3 + 2];
+        boundaries = [];
+        for i in range(self.number_of_lamps):
+            boundaries.append([0, self.room_width-1]);
+            boundaries.append([0, self.room_height-1]);
+            boundaries.append([0, 1]); # 0 = off, 1 = on
 
-        if on_off > 0.5:
-            # Draw circles corresponding to the lamps
-            addLampToImage(x, y, 1);
+        super().__init__(self.number_of_lamps * 3,
+                         boundaries,
+                         self.globalFitnessFunction,
+                         2);
 
-    # Copy the image into a temp image for debug
-    temp_image = np.copy(overlay_image);
+    def getArea(self):
+        return self.room_width * self.room_height;
 
-    for i in range(number_of_lamps):
-        x = int(aSetOfLamps[ i * 3 + 0])
-        y = int(aSetOfLamps[ i * 3 + 1])
-        on_off = aSetOfLamps[i * 3 + 2];
+    def globalFitnessFunction(self, aSetOfLamps):
+        overlay_image = self.createLampMap(aSetOfLamps);
+        return self.computeFitnessFunction(overlay_image, aSetOfLamps);
 
-        if on_off > 0.5:
-            # Plot the center of all the lamp (small radius) in black
-            cv2.circle(temp_image, (x,y), 2, (0,0,0), -1)
+    def computeFitnessFunction(self, overlay_image, aSetOfLamps):
+        area_enlightened = self.areaEnlightened(overlay_image);
+        overlap          = self.areaOverlap(overlay_image);
+        fitness = (area_enlightened - self.W * overlap) / self.getArea();
 
-    # Save the image (use image_counter in the file name)
-    #filename = "lamp_" + str(image_counter) + ".png";
-    #image_counter += 1;
-    #cv2.imwrite(filename, temp_image)
+        if self.verbose:
+            print(fitness, area_enlightened, overlap);
 
-    #cv2.imshow("Window", overlay_image)
-    #cv2.imshow("Window1", temp_image)
+            temp_image = np.copy(overlay_image);
 
-def areaEnlightened():
-    global overlay_image;
-    temp_image = np.array(overlay_image)
-    return temp_image.sum();
+            for i in range(self.number_of_lamps):
+                x = int(aSetOfLamps[ i * 3 + 0])
+                y = int(aSetOfLamps[ i * 3 + 1])
+                on_off = aSetOfLamps[i * 3 + 2];
 
-def areaOverlap():
+                if on_off > 0.5:
+                    # Plot the center of all the lamp (small radius) in black
+                    cv2.circle(temp_image, (x,y), 2, (0,0,0), -1)
 
-    global overlay_image
+            # Save the image (use image_counter in the file name)
+            filename = "lamp_" + str(self.image_counter) + ".png";
+            self.image_counter += 1;
+            temp_image -= np.min(temp_image);
+            temp_image /= np.max(temp_image);
+            temp_image *= 255;
+            cv2.imwrite(filename, temp_image);
 
-    areaOver = 0
-    for i in range(room_width):
-        for j in range(room_height):
+            self.vis_image[0:self.room_height,0:self.room_width] = copy.deepcopy(temp_image);
 
-            if (overlay_image[i,j] > 1.5):
-                areaOver += overlay_image[i,j][0]
+            if self.global_fitness < fitness:
+                self.global_fitness = fitness;
+                self.vis_image[0:self.room_height,10+self.room_width:10+2*self.room_width] = copy.deepcopy(temp_image);
 
-    return areaOver;
+            cv2.imshow('vis', self.vis_image);
 
-def computeFitnessFunction():
-    area_enlightened = areaEnlightened();
-    overlap          = areaOverlap();
+            new_window_name = "fitness (" + str(fitness) + "), " + "area_enlightened (" + str(area_enlightened) + "), " + "overlap (" + str(overlap) + ")";
 
-    return ((area_enlightened - W * overlap) / getArea());
+            cv2.setWindowTitle('vis', new_window_name);
 
-def fitnessFunction(aSetOfLamps):
-    global global_fitness;
-    createLampMap(aSetOfLamps);
-    global_fitness = computeFitnessFunction();
-    return global_fitness;
+            cv2.waitKey(1);
+
+
+        return fitness;
+
+    def areaEnlightened(self, overlay_image):
+        return np.array(overlay_image).sum();
+
+    def areaOverlap(self, overlay_image):
+
+        areaOver = 0
+        for i in range(self.room_width):
+            for j in range(self.room_height):
+
+                if (overlay_image[i,j] > 1.5):
+                    areaOver += overlay_image[i,j][0]
+
+        return areaOver;
+
+    def addLampToImage(self, overlay_image, x, y, l):
+
+        # Draw circles corresponding to the lamps
+        black_image = np.zeros((self.room_height, self.room_width, 1), np.float32)
+        cv2.circle(black_image, (x,y), self.lamp_radius, (l, l, l), -1)
+        np.add(overlay_image, black_image, overlay_image);
+
+    def createLampMap(self, aSetOfLamps):
+
+        # Create a black image (float32, greyscale) of room_width x room_height pixels
+        overlay_image = np.zeros((self.room_height, self.room_width, 1), np.float32)
+
+        # print the position of all the lamps
+        for i in range(self.number_of_lamps):
+            x = int(aSetOfLamps[ i * 3 + 0])
+            y = int(aSetOfLamps[ i * 3 + 1])
+            on_off = aSetOfLamps[i * 3 + 2];
+
+            if on_off > 0.5:
+                # Draw circles corresponding to the lamps
+                self.addLampToImage(overlay_image, x, y, 1);
+
+        return overlay_image;
