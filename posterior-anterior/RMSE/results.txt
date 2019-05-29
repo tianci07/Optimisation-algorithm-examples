@@ -1,0 +1,171 @@
+gvxrStatus:	Create window 0
+0 0 500 500
+OpenGL renderer:   GeForce GTX 1070 Ti/PCIe/SSE2
+OpenGL version:    4.6.0 NVIDIA 415.27
+OpenGL vender:     NVIDIA Corporation
+Use OpenGL 3.2 or above.
+0 0 512 512
+INIT RENDER
+MaxScene	3	0
+$ColladaAutoName$_0	0	0
+node-Bones	9	0
+node-Bo_Wrist	5	0
+node-Bo_Lit	1	0
+node-Bo_Lit_Meta	1	0
+node-Bo_Lit_Prox	1	0
+node-Bo_Lit_Midd	1	0
+node-Bo_Lit_Dist	0	0
+node-Bo_Thi	1	0
+node-Bo_Thi_Meta	1	0
+node-Bo_Thi_Prox	1	0
+node-Bo_Thi_Midd	1	0
+node-Bo_Thi_Dist	0	0
+node-Bo_Middle	1	0
+node-Bo_Mid_Meta	1	0
+node-Bo_Mid_Prox	1	0
+node-Bo_Mid_Midd	1	0
+node-Bo_Mid_Dist	0	0
+node-Bo_Index	1	0
+node-Bo_Ind_Meta	1	0
+node-Bo_Ind_Midd	1	0
+node-Bo_Ind_Prox	1	0
+node-Bo_Ind_Dist	0	0
+node-Thumb	1	0
+node-Bo_Thu_Meta	1	0
+node-Bo_Thu_Proxi	1	0
+node-Bone005	0	0
+node-Bo_Lunate_Helper	1	0
+node-Bo_Lunate	0	0
+node-Bo_Pisiform_Helper	1	0
+node-Bo_Pisiform	0	0
+node-Bo_Scaphoid_Helper	1	0
+node-Bo_Scaphoid	0	0
+node-Bo_Trapeziu_Helper	1	0
+node-Bo_Trapeziu	0	0
+node-Bo_Triangul_Helper	1	0
+node-Bo_Triangul	0	0
+node-Bo_Capitate_Helper	1	0
+node-Bo_Capitate	0	0
+node-Bo_Hamate_Helper	1	0
+node-Bo_Hamate	0	0
+node-Bo_Trapezio_Helper	1	0
+node-Bo_Trapezio	0	0
+node-Geometry	13	0
+node-Trapezio	0	1
+node-Hamate	0	1
+node-Trapeziu	0	1
+node-Pisiform	0	1
+node-Ind_Meta	1	1
+node-Ind_Prox	1	1
+node-Ind_Midd	1	1
+node-Ind_Dist	0	1
+node-Capitate	0	1
+node-Mid_Meta	1	1
+node-Mid_Prox	1	1
+node-Mid_Midd	1	1
+node-Mid_Dist	0	1
+node-Thi_Meta	1	1
+node-Thi_Prox	1	1
+node-Thi_Midd	1	1
+node-Thi_Dist	0	1
+node-Lit_Meta	1	1
+node-Lit_Prox	1	1
+node-Lit_Midd	1	1
+node-Lit_Dist	0	1
+node-Scaphoid	0	1
+node-Lunate	0	1
+node-Triangul	0	1
+node-Thu_Meta	1	1
+node-Thu_Prox	1	1
+node-Thu_Dist	0	1
+Minimising...
+Prediction: [552, 786, 7, 1, -7, -3, -5, -9, -7, 6, -8, -2, -5, 6, -2, 0, -6, -6, 0, -1, 8, -5, 6, 10, -2, -1, 3, 7, 3, -3, 6, -7, -6, -4, 3, 10, 8, 3, -4, -9, -2, 7, -1, 4, -1, -6, 3, 4, 3, -7]
+Target:  [-90, 20, 0, -10, 0, 0, 5, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+SOD and SDD errors:  [642, 766]
+Metrics: 
+ SSIM: 0.97991030 	 MAE: 0.03021741 	 RMSE: 0.08070681 	 RE: 0.00000038 	 ZNCC: 0.11387690
+Minimising...
+Prediction: [10, 13, -2, 3, -10, 4, 0, -8, 6, -4, -6, 0, -5, -6, -10, -9, 10, 7, -4, 9, -5, -10, 5, -9, 8, 0, 10, 8, 2, -6, -1, 2, 9, -7, 4, -10, -5, -6, 3, 9, -3, -1, 9, -6, -5, -10, 1, 5, 9, 10]
+Target:  [-90, 20, 0, -10, 0, 0, 5, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+SOD and SDD errors:  [100, 7]
+Metrics: 
+ SSIM: 0.98041932 	 MAE: 0.02874408 	 RMSE: 0.07912037 	 RE: 0.00000036 	 ZNCC: 0.12973949
+Minimising...
+Prediction: [9, 11, -1, 7, -10, -3, -2, -1, 1, 0, 7, -8, 8, -7, -4, 4, -3, -3, 9, 2, -7, 4, 4, 2, 4, -9, 4, -6, -4, 8, -6, -2, 6, -9, 8, -8, -1, -3, 0, -10, 3, -3, -10, -2, -2, 9, 2, 6, -7, 8]
+Target:  [-90, 20, 0, -10, 0, 0, 5, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+SOD and SDD errors:  [99, 9]
+Metrics: 
+ SSIM: 0.98071823 	 MAE: 0.02685574 	 RMSE: 0.07656394 	 RE: 0.00000034 	 ZNCC: 0.12368259
+Minimising...
+Prediction: [682, 973, 0, 4, -10, 6, -8, -9, -4, 8, 1, -5, 3, -6, -3, 10, 9, 10, -8, 1, 5, -5, -6, 1, 8, 0, -2, -9, 2, -10, -8, -5, -6, 2, 5, -1, -4, -10, 4, -2, -6, 3, 9, 6, 2, 7, 8, 6, -5, -5]
+Target:  [-90, 20, 0, -10, 0, 0, 5, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+SOD and SDD errors:  [772, 953]
+Metrics: 
+ SSIM: 0.98200965 	 MAE: 0.02196029 	 RMSE: 0.06926922 	 RE: 0.00000027 	 ZNCC: 0.15057424
+Minimising...
+Prediction: [7, 10, -3, 3, -9, -8, -2, 0, -4, 10, -9, -5, -3, 0, -7, -8, -8, -10, -7, 9, 5, 10, -1, -6, -10, 10, 8, -2, -3, 3, -2, -3, -2, -2, 6, 4, 2, -8, -10, -10, 0, -6, 10, 1, -8, 1, 4, -2, -4, 0]
+Target:  [-90, 20, 0, -10, 0, 0, 5, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+SOD and SDD errors:  [97, 10]
+Metrics: 
+ SSIM: 0.97843348 	 MAE: 0.03609894 	 RMSE: 0.08849694 	 RE: 0.00000045 	 ZNCC: 0.08352606
+Minimising...
+Prediction: [10, 14, 2, -1, -1, 5, -9, 10, 1, 10, -9, -10, 6, -3, 8, -1, -9, 4, 3, -10, -6, -8, -4, -5, -1, 8, -10, 3, -4, -8, -4, -3, 1, -2, -2, -3, -7, 2, -8, 0, 2, 10, -5, -10, 10, -10, 7, -5, -10, 9]
+Target:  [-90, 20, 0, -10, 0, 0, 5, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+SOD and SDD errors:  [100, 6]
+Metrics: 
+ SSIM: 0.98129757 	 MAE: 0.02468177 	 RMSE: 0.07294734 	 RE: 0.00000031 	 ZNCC: 0.15154926
+Minimising...
+Prediction: [13, 18, -3, 2, 8, -2, 3, 7, -9, -7, 7, -10, -7, -3, 6, 7, 4, 4, 1, -6, 2, 5, 1, -5, 0, -8, -5, 8, 5, -7, -10, -8, -10, -6, -2, -4, -7, -8, 10, -10, 9, -3, 7, 9, -8, 2, 2, -5, -6, -1]
+Target:  [-90, 20, 0, -10, 0, 0, 5, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+SOD and SDD errors:  [103, 2]
+Metrics: 
+ SSIM: 0.98235268 	 MAE: 0.02043033 	 RMSE: 0.06656467 	 RE: 0.00000026 	 ZNCC: 0.17429968
+Minimising...
+Prediction: [12, 17, -4, -3, 0, 5, -1, 6, -1, -10, 6, 6, -7, -8, 10, -3, -9, 2, -3, 8, -6, 8, 1, 4, -3, 1, 3, 8, -8, 7, 9, 9, -2, 7, -9, -8, 5, -4, 10, 4, 3, -8, 2, 1, 5, -2, -9, 2, 6, 0]
+Target:  [-90, 20, 0, -10, 0, 0, 5, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+SOD and SDD errors:  [102, 3]
+Metrics: 
+ SSIM: 0.98192663 	 MAE: 0.02206328 	 RMSE: 0.06891040 	 RE: 0.00000028 	 ZNCC: 0.17267319
+Minimising...
+Prediction: [8, 11, 9, 1, 5, 5, 8, -5, 2, -2, 5, 2, -8, -5, 9, 9, 7, -7, -2, 8, -9, 2, -8, 8, 0, 0, -7, -8, 6, -10, -8, -6, -10, 0, 9, 1, 4, 9, 2, 10, 3, -6, 1, -3, 5, 2, -8, -8, 7, 6]
+Target:  [-90, 20, 0, -10, 0, 0, 5, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+SOD and SDD errors:  [98, 9]
+Metrics: 
+ SSIM: 0.97918140 	 MAE: 0.03337695 	 RMSE: 0.08468101 	 RE: 0.00000042 	 ZNCC: 0.09789880
+Minimising...
+Prediction: [582, 831, -9, 6, 6, -4, -6, -7, 10, -2, 1, 2, -6, -3, -1, -6, -6, 9, -2, 7, -9, -3, -9, -8, -1, -8, -5, 10, -1, -2, 0, 4, -7, -9, -7, -9, -5, -2, -6, 9, -5, 1, -4, -2, 8, -9, 4, 7, -10, 5]
+Target:  [-90, 20, 0, -10, 0, 0, 5, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+SOD and SDD errors:  [672, 811]
+Metrics: 
+ SSIM: 0.98267971 	 MAE: 0.02031537 	 RMSE: 0.06663746 	 RE: 0.00000025 	 ZNCC: 0.17300605
+gvxrStatus:	Quit and destroy all the windows
+gvxrStatus:	Destroy all the windows
+gvxrStatus:	Destroy window 0(0x278e5c0)
+Delete node: root
+Delete node: node-Trapezio
+Delete node: node-Hamate
+Delete node: node-Trapeziu
+Delete node: node-Pisiform
+Delete node: node-Ind_Meta
+Delete node: node-Ind_Prox
+Delete node: node-Ind_Midd
+Delete node: node-Ind_Dist
+Delete node: node-Capitate
+Delete node: node-Mid_Meta
+Delete node: node-Mid_Prox
+Delete node: node-Mid_Midd
+Delete node: node-Mid_Dist
+Delete node: node-Thi_Meta
+Delete node: node-Thi_Prox
+Delete node: node-Thi_Midd
+Delete node: node-Thi_Dist
+Delete node: node-Lit_Meta
+Delete node: node-Lit_Prox
+Delete node: node-Lit_Midd
+Delete node: node-Lit_Dist
+Delete node: node-Scaphoid
+Delete node: node-Lunate
+Delete node: node-Triangul
+Delete node: node-Thu_Meta
+Delete node: node-Thu_Prox
+Delete node: node-Thu_Dist
